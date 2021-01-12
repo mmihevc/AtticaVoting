@@ -1,0 +1,18 @@
+{
+  "candidate1" : {
+    "name": "Maddie Mihevc",
+    "description": "Director of Community Engagement (DCE)"
+  },
+  "candidate2" : {
+    "name": "Derek Larkins",
+    "description": "Chief Technology Officer (CTO)"
+  },
+  "candidate3" : {
+    "name": "Waylon Jepsen",
+    "description": "Creative Director (CD)"
+  },
+  "candidate4" : {
+    "name": "Christian Fergunson",
+    "description": "Chief Strategy Officer (CSO)"
+  }
+}
