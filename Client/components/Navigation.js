@@ -4,6 +4,7 @@ import {AppBar, Divider, Drawer, IconButton, Link, Toolbar, Typography} from "@m
 import clsx from "clsx";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import {title} from '../static/constants'
 
 
 function Navigation(props) {
@@ -21,7 +22,7 @@ function Navigation(props) {
                     </IconButton>
 
                     <Typography variant="h6">
-                        ASCSU Student Elections
+                        {title}
                     </Typography>
                 </Toolbar>
             </AppBar>
