@@ -1,12 +1,12 @@
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography} from "@material-ui/core";
+import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography, Box} from "@material-ui/core";
 import candidateData from "../candidates.json";
 import React from "react";
 
-function Candidates(props) {
+
+function Candidate(props) {
 
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
-
         let image = '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
         return image;
     }
@@ -22,10 +22,13 @@ function Candidates(props) {
             )}
         </Grid>
     )
-
 }
 
+
+
+
 function CandidateCard(props) {
+
 
     return (
         <div style={{maxWidth: 345}}>
@@ -36,12 +39,11 @@ function CandidateCard(props) {
                     image={props.link}
                     title='candidate image'
                 />
-
                 <CardContent>
                     <Grid container justify='center'
                           alignItems='center' alignContent='center' direction='column'>
                         <Grid item>
-                            <Typography gutterBottom variant="h5" component="h2">{props.name}</Typography>
+                            <Typography gutterBottom variant="h5" component="h2" className='candidateName'>{props.name}</Typography>
                         </Grid>
                         <Grid item>
                             <CardActionArea>
@@ -52,7 +54,15 @@ function CandidateCard(props) {
                         </Grid>
                         <Grid item>
                             <CardActions>
-                                <Button variant='contained'>VOTE</Button>
+                                <Box pt={2}>
+                                    <Button variant='contained'
+                                            color='primary'
+                                            onClick={() => props.history.push('confirmation')}
+                                            className='voteButton'
+                                    >
+                                        VOTE
+                                    </Button>
+                                </Box>
                             </CardActions>
                         </Grid>
                     </Grid>
@@ -60,8 +70,7 @@ function CandidateCard(props) {
 
             </Card>
         </div>
-
     )
 }
 
-export default Candidates;
+export default Candidate;

@@ -1,25 +1,26 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useStyles, electionDescription} from '../static/constants'
 import Navigation from "./Navigation";
-import Candidates from "./Candidates";
-import {Grid, Typography} from "@material-ui/core";
+import Candidate from "./Candidate";
+import {Grid, Typography, Box} from "@material-ui/core";
 import clsx from "clsx";
 
-function Home() {
+
+function Home(props) {
     const classes = useStyles();
-    const [open, setOpen] = useState(false);
+
 
     return (
         <div className={classes.root}>
-            <Navigation open={open} setOpen={setOpen}/>
+            <Navigation {...props}/>
             <main
                 className={clsx(classes.content, {
-                    [classes.contentShift]: open,
+                    [classes.contentShift]: props.open,
                 })}
             >
                 <div className={classes.drawerHeader}/>
             <Description />
-            <Candidates open={open}/>
+            <Candidate {...props}/>
             </main>
         </div>
     );
@@ -28,12 +29,14 @@ function Home() {
 function Description() {
     return (
         <div>
-            <Grid container justify='center'
-                  alignItems='center' alignContent='center'>
-                <Typography>
-                    {electionDescription}
-                </Typography>
-            </Grid>
+            <Box pb={4} pt={3}>
+                <Grid container justify='center'
+                      alignItems='center' alignContent='center'>
+                    <Typography variant="h5">
+                        {electionDescription}
+                    </Typography>
+                </Grid>
+            </Box>
         </div>
     )
 }
