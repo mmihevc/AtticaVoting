@@ -1,6 +1,6 @@
 import React from "react";
 import {useStyles} from '../static/constants'
-import {AppBar, Divider, Drawer, IconButton, Link, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Divider, Drawer, IconButton, Link, Toolbar, Typography, Avatar, Box} from "@material-ui/core";
 import clsx from "clsx";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -24,6 +24,9 @@ function Navigation(props) {
                     <Typography variant="h6">
                         {title}
                     </Typography>
+                    <IconButton style={{marginLeft: 'auto'}} target="_blank" href='https://www.atticavoting.com/'>
+                        <Avatar alt='Attica Logo' src='../static/images/atticaLogo.jpg' variant='rounded'/>
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -41,7 +44,9 @@ function Navigation(props) {
                     </IconButton>
                 </div>
                 <Divider/>
-                <Link href='https://www.atticavoting.com/' target="_blank" rel="noreferrer">Attica Homepage</Link>
+                <Box pl={2}>
+                    <Link href='https://www.atticavoting.com/about' target="_blank" rel="noreferrer">About Attica</Link>
+                </Box>
             </Drawer>
         </div>
     )
