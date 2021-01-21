@@ -26,7 +26,7 @@ const {
 } = require("@hashgraph/sdk");
 
 /* utilities */
-const utils = require('utils.js');
+const utils = require('./utils.js');
 const initQuestions = utils.initQuestions;
 const connQuestions = utils.connectQuestions;
 const UInt8ToString = utils.UInt8ToString;
