@@ -6,7 +6,7 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const outputDirectory = "dist/public/";
 
 module.exports = {
-    entry: ["@babel/polyfill", "./index.js"],
+    entry: ["@babel/polyfill", "./Client/index.js"],
     devServer: { port: 3000, open: true, hot: true, proxy: { "/api/*": "http://localhost:8080" }, historyApiFallback: true },
     devtool: 'eval-source-map',
     module: {

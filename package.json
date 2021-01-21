@@ -5,7 +5,8 @@
   "scripts": {
     "startClient": "webpack-dev-server -d",
     "buildClient": "webpack -p",
-    "start": "npm run buildClient && npm run startClient"
+    "start": "npm run buildClient && npm run startClient",
+    "server": "webpack --mode production && node ./Server/server.js"
   },
   "repository": {
     "type": "git",
