@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {
-    Typography, Box, Grid, Link, TableContainer, Paper, Table, withStyles, TableCell, TableBody, TableRow
+    Typography, Box, Grid, Link, TableContainer, Paper, Table, TableBody, Button
 } from "@material-ui/core";
 import Navigation from "./Navigation";
 import clsx from "clsx";
@@ -73,7 +73,7 @@ function ReceiptTable() {
                         <TableBody>
                             <StyledTableRow >
                                 <StyledTableCell component="th" scope="row">
-                                    TopicID
+                                    <Button>TopicID</Button>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
                                     0
