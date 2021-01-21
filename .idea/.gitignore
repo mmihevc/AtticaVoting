@@ -6,6 +6,3 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
-/Server/config/config.js
-/Server/config/key
-/Server/config/key.pub
