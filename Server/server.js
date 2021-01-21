@@ -97,7 +97,7 @@ submissions) and formats the message to be submitted to HCS.
  */
 function runServer() {
     log('runServer()', 'Server Starting...', logStatus);
-    loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
+    //loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
     webServer.listen(8443, () => {
         log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
     });
