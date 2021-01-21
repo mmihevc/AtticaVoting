@@ -144,7 +144,7 @@ function configureServer() {
         res.setHeader('Access-Control-Allow-Credentials', true);
         next();
     });
-    app.use(express.static("../dist/public"));
+    app.use(express.static("dist/public"));
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
