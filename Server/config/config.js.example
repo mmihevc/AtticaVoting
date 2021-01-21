@@ -1,0 +1,27 @@
+/*
+-------------------------------------------------------------------------
+This is where you will input your Hedera account ID and private key if
+you are hosting and wish the program to take this information automatically
+rather then manually. Note: you must rename the file to config.js
+-------------------------------------------------------------------------
+ */
+
+const hederaConfig = {
+    "account": "0.0.12345",
+    "key": "*Hedera Private Key Here*"
+}
+
+const dragonGlassConfig = {
+    "XAPIKEY": "*Dragon Glass API Key Here*"
+}
+
+const securityConfig = {
+    "pub": "./key.pub",
+    "priv": "./key"
+}
+
+module.exports = {
+    hederaConfig,
+    dragonGlassConfig,
+    securityConfig
+};

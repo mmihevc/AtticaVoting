@@ -1,9 +1,9 @@
 /* include express.js & socket.io */
 const express = require("express");
 const app = express();
-//const http = require("http").createServer(app);
+const http = require("http");
 //const io = require("socket.io")(http);
-const https = require("https");
+//const https = require("https");
 const socket = require("socket.io");
 //const cors = require("cors");
 
@@ -26,7 +26,7 @@ const {
 } = require("@hashgraph/sdk");
 
 /* utilities */
-const utils = require('../utils.js');
+const utils = require('utils.js');
 const initQuestions = utils.initQuestions;
 const connQuestions = utils.connectQuestions;
 const UInt8ToString = utils.UInt8ToString;
@@ -37,11 +37,11 @@ const convert = (from, to) => str => Buffer.from(str, from).toString(to);
 const hexToStr = convert('hex', 'utf8');
 
 /* config */
-const config = require('../config/config.js');
+const config = require('./config/config.js');
 const hederaConfig = config.hederaConfig;
 const tallyConfig = config.dragonGlassConfig;
 
-const newElectionConfig = require('../Client/candidates.json').electionConfig;
+const newElectionConfig = require('./config/electionConfig.json');
 
 /* security */
 const security = require("./security.js");
@@ -62,7 +62,7 @@ let electionId = 0;
 let startDate;
 let endDate;
 
-var httpsServer, io;
+var webServer, io;
 
 /* configure our env based on prompted input */
 async function init() {
@@ -98,8 +98,8 @@ submissions) and formats the message to be submitted to HCS.
 function runServer() {
     log('runServer()', 'Server Starting...', logStatus);
     loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
-    httpsServer.listen(8443, () => {
-        log('runServer()', `httpsServer listening on ${httpsServer.address().port}`, logStatus);
+    webServer.listen(8443, () => {
+        log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
     });
     subscribeToMirror();
     io.on("connection", function(client) {
@@ -131,11 +131,11 @@ function runServer() {
 }
 
 function configureServer() {
-    const options = {
+    /*const options = {
         key: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/privkey.pem'),
         cert: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/cert.pem'),
         ca: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/chain.pem')
-    };
+    };*/
 
     app.use(function (req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -144,10 +144,11 @@ function configureServer() {
         res.setHeader('Access-Control-Allow-Credentials', true);
         next();
     });
-    app.use(express.static("public"));
+    app.use(express.static("../dist/public"));
 
-    httpsServer = https.createServer(options, app);
-    io = socket.listen(httpsServer, options);
+    //webServer = https.createServer(options, app);
+    webServer = http.createServer(app);
+    io = socket.listen(webServer, options);
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
