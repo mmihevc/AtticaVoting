@@ -148,7 +148,7 @@ function configureServer() {
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
-    io = socket.listen(webServer, options);
+    io = socket.listen(webServer);
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
