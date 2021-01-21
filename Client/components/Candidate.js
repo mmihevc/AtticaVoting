@@ -1,6 +1,7 @@
 import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography, Box} from "@material-ui/core";
 import candidateData from "../candidates.json";
 import React from "react";
+import {useHistory} from "react-router";
 
 
 function Candidate(props) {
@@ -28,8 +29,7 @@ function Candidate(props) {
 
 
 function CandidateCard(props) {
-
-
+    const history = useHistory();
     return (
         <div style={{maxWidth: 345}}>
             <Card variant='elevation'>
@@ -57,7 +57,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => props.history.push('confirmation')}
+                                            onClick={() => history.push('confirmation')}
                                             className='voteButton'
                                     >
                                         VOTE

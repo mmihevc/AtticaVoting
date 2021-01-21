@@ -4,8 +4,8 @@ import {
 } from "@material-ui/core";
 import Navigation from "./Navigation";
 import clsx from "clsx";
-import {useStyles} from "../static/constants";
-import {Style} from "@material-ui/icons";
+import {useStyles, StyledTableRow, StyledTableCell} from "../static/constants";
+
 
 function Confirmation(props) {
     const classes = useStyles();
@@ -13,7 +13,7 @@ function Confirmation(props) {
 
     return (
         <div className={classes.root}>
-            <Navigation {...props} />
+            <Navigation {...props} open={props.open} setOpen={props.setOpen}/>
             <main
                 className={clsx(classes.content, {
                     [classes.contentShift]: props.open,
@@ -44,11 +44,11 @@ function ConfirmationMessage(props) {
                     </Grid>
                     <Grid item>
                         <Box pt={4}>
-                            <Typography variant='h6'>
+                            <Typography variant='h5'>
                                 If you would like to view the receipt for your vote click
                                 <Link onClick={() => props.setReceiptTable(!props.receiptTable)}
                                       color="primary" style={{ textDecoration: 'none' }}
-                                >  here  </Link>
+                                > here </Link>
                                 or if you would like to learn more about
                                 Distributed Ledger Technology click
                                 <Link onClick={() => props.history.push('dlinfo')} color="primary" style={{ textDecoration: 'none' }}> here </Link>
@@ -62,36 +62,6 @@ function ConfirmationMessage(props) {
 }
 
 
-const StyledTableCell = withStyles((theme) => ({
-    head: {
-        backgroundColor: theme.palette.common.black,
-        color: theme.palette.common.white,
-    },
-    body: {
-        fontSize: 14,
-    },
-}))(TableCell);
-
-function createData(name, value) {
-    return {name, value};
-}
-
-const StyledTableRow = withStyles((theme) => ({
-    root: {
-        '&:nth-of-type(odd)': {
-            backgroundColor: theme.palette.action.hover,
-        },
-    },
-}))(TableRow);
-
-const rows = [
-    createData('TopicId', '0'),
-    createData('Sequence', '0'),
-    createData('Running Hash', '0'),
-    createData('Message', '0'),
-
-]
-
 function ReceiptTable() {
     const classes = useStyles();
 
@@ -101,21 +71,59 @@ function ReceiptTable() {
                 <TableContainer component={Paper}>
                     <Table className={classes.table}>
                         <TableBody>
-                            {rows.map((row) => (
-                                <StyledTableRow key={row.name}>
-                                    <StyledTableCell component="th" scope="row">
-                                        {row.name}
-                                    </StyledTableCell>
-                                    <StyledTableCell align="right">
-                                        {row.value}
-                                    </StyledTableCell>
-                                </StyledTableRow>
-                            ))}
+                            <StyledTableRow >
+                                <StyledTableCell component="th" scope="row">
+                                    TopicID
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    0
+                                </StyledTableCell>
+                            </StyledTableRow>
+                            <StyledTableRow>
+                                <StyledTableCell component="th" scope="row">
+                                    Sequence
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    0
+                                </StyledTableCell>
+                            </StyledTableRow>
+                            <StyledTableRow>
+                                <StyledTableCell component="th" scope="row">
+                                    Running Hash
+                                </StyledTableCell>
+                                <StyledTableCell align="right">
+                                    0
+                                </StyledTableCell>
+                            </StyledTableRow>
+                            <StyledTableRow>
+                                <StyledTableCell component="th" scope="row">
+                                    Message
+                                </StyledTableCell>
+
+                                <StyledTableCell align="right">
+                                    0
+                                </StyledTableCell>
+                            </StyledTableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
             </Box>
+            <ReceiptTableMessage/>
+        </>
+    )
+}
 
+function ReceiptTableMessage () {
+    return (
+        <>
+            <Box pt={3}>
+                <Grid container justify='center'
+                      alignItems='center' alignContent='center'>
+                    <Typography variant='h6'>
+                        Click on each term to learn more about what each term means
+                    </Typography>
+                </Grid>
+            </Box>
         </>
     )
 }
