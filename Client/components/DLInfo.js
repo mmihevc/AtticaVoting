@@ -8,7 +8,7 @@ function DLInfo(props) {
 
     return (
         <div className={classes.root}>
-            <Navigation {...props}/>
+            <Navigation {...props} open={props.open} setOpen={props.setOpen}/>
             <main
                 className={clsx(classes.content, {
                     [classes.contentShift]: props.open,
