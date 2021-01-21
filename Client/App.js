@@ -7,7 +7,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Home from '../Client/components/Home'
 import Confirmation from '../Client/components/Confirmation'
 import DLInfo from '../Client/components/DLInfo'
-import Candidate from "./components/Candidate";
 import {useHistory} from "react-router";
 
 const Router = props => {

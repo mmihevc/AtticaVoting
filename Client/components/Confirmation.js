@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {
-    Typography, Box, Grid, Link, TableContainer, Paper, Table, withStyles, TableCell, TableBody, TableRow
+    Typography, Box, Grid, Link, TableContainer, Paper, Table, TableBody, Button, Collapse
 } from "@material-ui/core";
 import Navigation from "./Navigation";
 import clsx from "clsx";
@@ -64,6 +64,10 @@ function ConfirmationMessage(props) {
 
 function ReceiptTable() {
     const classes = useStyles();
+    const [topicExpand, setTopicExpanded] = useState(false);
+    const [sequenceExpand, setSequenceExpand] = useState(false);
+    const [hashExpand, setHashExpand] = useState(false);
+    const [messageExpand, setMessageExpand] = useState(false);
 
     return (
         <>
@@ -73,7 +77,22 @@ function ReceiptTable() {
                         <TableBody>
                             <StyledTableRow >
                                 <StyledTableCell component="th" scope="row">
-                                    TopicID
+                                    <Button
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: topicExpand,
+                                        })}
+                                        onClick={() => setTopicExpanded(!topicExpand)}
+                                        aria-expanded={topicExpand}
+                                        aria-label="show more">
+                                        Topic ID
+                                    </Button>
+                                    <Box pt={1}>
+                                        <Collapse in={topicExpand} timeout="auto" unmountOnExit>
+                                            <Typography>
+                                                It worked!
+                                            </Typography>
+                                        </Collapse>
+                                    </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
                                     0
@@ -81,7 +100,22 @@ function ReceiptTable() {
                             </StyledTableRow>
                             <StyledTableRow>
                                 <StyledTableCell component="th" scope="row">
-                                    Sequence
+                                    <Button
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: sequenceExpand,
+                                        })}
+                                        onClick={() => setSequenceExpand(!sequenceExpand)}
+                                        aria-expanded={sequenceExpand}
+                                        aria-label="show more">
+                                        Sequence
+                                    </Button>
+                                    <Box pt={1}>
+                                        <Collapse in={sequenceExpand} timeout="auto" unmountOnExit>
+                                            <Typography>
+                                                It worked!
+                                            </Typography>
+                                        </Collapse>
+                                    </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
                                     0
@@ -89,7 +123,22 @@ function ReceiptTable() {
                             </StyledTableRow>
                             <StyledTableRow>
                                 <StyledTableCell component="th" scope="row">
-                                    Running Hash
+                                    <Button
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: hashExpand,
+                                        })}
+                                        onClick={() => setHashExpand(!hashExpand)}
+                                        aria-expanded={hashExpand}
+                                        aria-label="show more">
+                                        Running Hash
+                                    </Button>
+                                    <Box pt={1}>
+                                        <Collapse in={hashExpand} timeout="auto" unmountOnExit>
+                                            <Typography>
+                                                It worked!
+                                            </Typography>
+                                        </Collapse>
+                                    </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
                                     0
@@ -97,9 +146,23 @@ function ReceiptTable() {
                             </StyledTableRow>
                             <StyledTableRow>
                                 <StyledTableCell component="th" scope="row">
-                                    Message
+                                    <Button
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: messageExpand,
+                                        })}
+                                        onClick={() => setMessageExpand(!messageExpand)}
+                                        aria-expanded={messageExpand}
+                                        aria-label="show more">
+                                        Message
+                                    </Button>
+                                    <Box pt={1}>
+                                        <Collapse in={messageExpand} timeout="auto" unmountOnExit>
+                                            <Typography>
+                                                It worked!
+                                            </Typography>
+                                        </Collapse>
+                                    </Box>
                                 </StyledTableCell>
-
                                 <StyledTableCell align="right">
                                     0
                                 </StyledTableCell>
