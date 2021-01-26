@@ -145,6 +145,7 @@ function configureServer() {
         next();
     });
     app.use(express.static("dist/public"));
+    app.use(express.static("Client/static"));
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
