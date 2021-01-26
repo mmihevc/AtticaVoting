@@ -138,7 +138,7 @@ function configureServer() {
         cert: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/cert.pem'),
         ca: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/chain.pem')
     };*/
-    app.use('router', routing);
+    app.use('/', routing);
 
     app.use(function (req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', '*');
@@ -149,8 +149,6 @@ function configureServer() {
     });
     app.use(express.static("dist/public"));
     app.use(express.static("Client/static"));
-
-    app.use('/', routing);
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
