@@ -46,6 +46,8 @@ const newElectionConfig = require('./config/electionConfig.json');
 /* security */
 const security = require("./security.js");
 
+const routing = require('./routing');
+
 /* init variables */
 const mirrorNodeAddress = new MirrorClient(
     "hcs.testnet.mirrornode.hedera.com:5600"
@@ -146,6 +148,8 @@ function configureServer() {
     });
     app.use(express.static("dist/public"));
     app.use(express.static("Client/static"));
+
+    app.use('router', routing);
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
