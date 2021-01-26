@@ -150,7 +150,7 @@ function configureServer() {
     app.use(express.static("dist/public"));
     app.use(express.static("Client/static"));
 
-    app.use('router', routing);
+    app.use('/main', routing);
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
