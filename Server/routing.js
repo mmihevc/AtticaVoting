@@ -9,10 +9,12 @@ const {
 
 router.get('/', (req, res) => {
     // SAML Login Redirect
+    console.log('DEBUG: / get request');
     res.redirect('/ballot'); //TEMP
 });
 
 router.get('/ballot', (req, res) => {
+    console.log('DEBUG: /ballot get request');
     res.sendFile('/index.html');
 });
 
