@@ -6,7 +6,7 @@ import {sendPostRequest} from "../hooks/API";
 
 
 function Candidate(props) {
-
+    console.log(props)
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
         let image = '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
@@ -27,15 +27,15 @@ function Candidate(props) {
 }
 
 
-
-
-
 function CandidateCard(props) {
     const history = useHistory();
 
     function handleVote() {
         sendPostRequest('submit', {'candidateName': props.name}).then(
             r => {
+                if (r == null) {
+                    props.produceSnackBar('Server error', 'error');
+                }
                 if (r.data.success) {
                     props.produceSnackBar('Vote Submitted', 'info');
                     props.setTopic(r.data.topicId);
