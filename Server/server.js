@@ -15,16 +15,16 @@ const fs = require("fs");
 const rp = require('request-promise');
 const bodyParser = require('body-parser');
 
-/* Hedera.js */
-const {
-    Client,
-    ConsensusSubmitMessageTransaction,
-    ConsensusTopicId,
-    ConsensusTopicCreateTransaction,
-    MirrorClient,
-    MirrorConsensusTopicQuery,
-    Ed25519PrivateKey
-} = require("@hashgraph/sdk");
+// /* Hedera.js */
+// const {
+//     Client,
+//     ConsensusSubmitMessageTransaction,
+//     ConsensusTopicId,
+//     ConsensusTopicCreateTransaction,
+//     MirrorClient,
+//     MirrorConsensusTopicQuery,
+//     Ed25519PrivateKey
+// } = require("@hashgraph/sdk");
 
 /* utilities */
 const utils = require('./utils.js');
@@ -66,6 +66,7 @@ let uidList = [[],[]];
 let electionId = 0;
 let startDate;
 let endDate;
+let HederaObj;
 
 var webServer, io;
 
@@ -74,7 +75,7 @@ async function init() {
     inquirer.prompt(initQuestions).then(async function(answers) {
         try {
             logStatus = answers.status;
-            configureAccount(answers.account, answers.key, HederaClient);
+            HederaObj = new HederaClass(answers.account, answers.key);
             configureServer();
             if (answers.start.includes("start")) {
                 configureTopicMemo();
@@ -155,9 +156,16 @@ function configureServer() {
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
-    io = socket.listen(webServer);
 
-    API.map(({path, callback}) => app.post('/api' + path, callback));
+    app.post('/api/submit', (req,res) => {
+        const vote = req.body.candidateName;
+
+        console.log(`Vote for '${vote}' received!`);
+
+        res.send({success: true, topicId: '0.0.1234', runningHash: '12345567890abcdef', message: `I voted for ${vote}`});
+    });
+
+    io = socket.listen(webServer);
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
@@ -217,18 +225,18 @@ ConsensusSubmitMessageTransaction and sends the messages to the
 configured TopicID
 -------------------------------------------------------------------------
  */
-async function sendHCSMessage(msg) {
-    try {
-        new ConsensusSubmitMessageTransaction()
-            .setTopicId(topicId)
-            .setMessage(msg)
-            .execute(HederaClient);
-        log("ConsensusSubmitMessageTransaction()", msg, logStatus);
-    } catch (error) {
-        log("ERROR: ConsensusSubmitMessageTransaction()", error, logStatus);
-        process.exit(1);
-    }
-}
+// async function sendHCSMessage(msg) {
+//     try {
+//         new ConsensusSubmitMessageTransaction()
+//             .setTopicId(topicId)
+//             .setMessage(msg)
+//             .execute(HederaClient);
+//         log("ConsensusSubmitMessageTransaction()", msg, logStatus);
+//     } catch (error) {
+//         log("ERROR: ConsensusSubmitMessageTransaction()", error, logStatus);
+//         process.exit(1);
+//     }
+// }
 
 /*
 -------------------------------------------------------------------------
@@ -238,26 +246,26 @@ Helper function given by Hedera's Cooper Kunz. Function subscribes to
 the topic through the mirror consensus nodes.
 -------------------------------------------------------------------------
  */
-function subscribeToMirror() {
-    try {
-        new MirrorConsensusTopicQuery()
-            .setTopicId(topicId)
-            .subscribe(mirrorNodeAddress, res => {
-                //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
-                let encMsg = new TextDecoder("utf-8").decode(res["message"]);
-                let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
-                let uidHash = encMsg.split(specialChar)[0];
+// function subscribeToMirror() {
+//     try {
+//         new MirrorConsensusTopicQuery()
+//             .setTopicId(topicId)
+//             .subscribe(mirrorNodeAddress, res => {
+//                 //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
+//                 let encMsg = new TextDecoder("utf-8").decode(res["message"]);
+//                 let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
+//                 let uidHash = encMsg.split(specialChar)[0];
 
-                log('subscribeToMirror()', `Emitting Confirmation Message To: ${uidHash}`, logStatus);
+//                 log('subscribeToMirror()', `Emitting Confirmation Message To: ${uidHash}`, logStatus);
 
-                io.to(uidHash).emit('confMessage', confMsg);
-            });
-        log("MirrorConsensusTopicQuery()", topicId.toString(), logStatus);
-    } catch (error) {
-        log("ERROR: MirrorConsensusTopicQuery()", error, logStatus);
-        process.exit(1);
-    }
-}
+//                 io.to(uidHash).emit('confMessage', confMsg);
+//             });
+//         log("MirrorConsensusTopicQuery()", topicId.toString(), logStatus);
+//     } catch (error) {
+//         log("ERROR: MirrorConsensusTopicQuery()", error, logStatus);
+//         process.exit(1);
+//     }
+// }
 
 function formatConfirmationMessage(encMsg, seqNum, runningHash){
     let retStr = `${topicId}~${seqNum}~${encMsg}~${runningHash}`;
@@ -273,23 +281,23 @@ configured topic memo and operator keys. Configures the topicID variable
 to the newly created topic.
 -------------------------------------------------------------------------
  */
-async function createTopicTransaction(memo) {
-    try {
-        const txId = await new ConsensusTopicCreateTransaction()
-            .setTopicMemo(memo)
-            .setSubmitKey(operatorKey.publicKey)
-            .execute(HederaClient);
-        log("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, logStatus);
-        await sleep(3000); // wait until Hedera reaches consensus
-        const receipt = await txId.getReceipt(HederaClient);
-        const newTopicId = receipt.getConsensusTopicId();
-        log("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, logStatus);
-        return newTopicId;
-    } catch (error) {
-        log("ERROR: createTopicTransaction()", error, logStatus);
-        process.exit(1);
-    }
-}
+// async function createTopicTransaction(memo) {
+//     try {
+//         const txId = await new ConsensusTopicCreateTransaction()
+//             .setTopicMemo(memo)
+//             .setSubmitKey(operatorKey.publicKey)
+//             .execute(HederaClient);
+//         log("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, logStatus);
+//         await sleep(3000); // wait until Hedera reaches consensus
+//         const receipt = await txId.getReceipt(HederaClient);
+//         const newTopicId = receipt.getConsensusTopicId();
+//         log("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, logStatus);
+//         return newTopicId;
+//     } catch (error) {
+//         log("ERROR: createTopicTransaction()", error, logStatus);
+//         process.exit(1);
+//     }
+// }
 
 /*
 -------------------------------------------------------------------------
@@ -300,25 +308,25 @@ take the values from 'hederaConfig' and assign them to `operatorKey` and
 `operatorAccount`
 -------------------------------------------------------------------------
 */
-function  configureAccount(account, key, client) {
-    try {
-        if(account !== "") {
-            operatorAccount = account;
-        }else {
-            operatorAccount = hederaConfig.account;
-        }
-        if(key !== "") {
-            operatorKey = Ed25519PrivateKey.fromString(key);
-        } else {
-            operatorKey = Ed25519PrivateKey.fromString(hederaConfig.key);
-        }
+// function  configureAccount(account, key, client) {
+//     try {
+//         if(account !== "") {
+//             operatorAccount = account;
+//         }else {
+//             operatorAccount = hederaConfig.account;
+//         }
+//         if(key !== "") {
+//             operatorKey = Ed25519PrivateKey.fromString(key);
+//         } else {
+//             operatorKey = Ed25519PrivateKey.fromString(hederaConfig.key);
+//         }
 
-        client.setOperator(operatorAccount, operatorKey);
+//         client.setOperator(operatorAccount, operatorKey);
 
-    } catch (error) {
-        log("ERROR: configureAccount()", error, logStatus);
-    }
-}
+//     } catch (error) {
+//         log("ERROR: configureAccount()", error, logStatus);
+//     }
+// }
 
 /*
 -------------------------------------------------------------------------
