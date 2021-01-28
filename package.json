@@ -5,7 +5,8 @@
   "scripts": {
     "startClient": "webpack-dev-server -d",
     "buildClient": "webpack -p",
-    "start": "npm run buildClient && npm run startClient"
+    "start": "npm run buildClient && npm run startClient",
+    "server": "webpack --mode production && node ./Server/server.js"
   },
   "repository": {
     "type": "git",
@@ -70,6 +71,7 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
     "autoprefixer": "^10.0.4",
+    "axios": "^0.21.1",
     "babel-eslint": "10.1.0",
     "babel-loader": "^8.1.0",
     "babel-polyfill": "6.26.0",

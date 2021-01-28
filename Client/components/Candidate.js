@@ -2,6 +2,7 @@ import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid,
 import candidateData from "../candidates.json";
 import React from "react";
 import {useHistory} from "react-router";
+import {sendPostRequest} from "../hooks/API";
 
 
 function Candidate(props) {
@@ -26,6 +27,23 @@ function Candidate(props) {
 }
 
 
+function handleVote(name) {
+    sendPostRequest('submit', {'candidateName': name}).then(
+        r => {
+            if (r.data.success == 'true') {
+                handleJSON(r.data);
+            }
+            else {
+                props.produceSnackBar('Vote Failed', 'error')
+            }
+
+        }
+    )
+}
+
+function handleJSON(data) {
+
+}
 
 
 function CandidateCard(props) {
@@ -57,7 +75,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => history.push('confirmation')}
+                                            onClick={() => {handleVote(props.name); history.push('/confirmation')}}
                                             className='voteButton'
                                     >
                                         VOTE

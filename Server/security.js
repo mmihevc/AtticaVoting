@@ -3,7 +3,7 @@ const openpgp = require('openpgp');
 const crypto = require('crypto');
 const fsp = require('fs').promises;
 
-const config = require('../config/config.js').securityConfig;
+const config = require('./config/config.js').securityConfig;
 const pubKeyFile = './config/' + config.pub;
 const privKeyFile = './config/' + config.priv;
 

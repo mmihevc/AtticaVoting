@@ -6,6 +6,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {title} from '../static/constants'
 import {useHistory} from "react-router";
+import AtticaLogo from '../static/images/atticaLogo.jpg'
 
 
 function Navigation(props) {
@@ -29,7 +30,7 @@ function Navigation(props) {
                         </Typography>
                     </Button>
                     <IconButton style={{marginLeft: 'auto'}} target="_blank" href='https://www.atticavoting.com/'>
-                        <Avatar alt='Attica Logo' src='../static/images/atticaLogo.jpg' variant='rounded'/>
+                        <Avatar alt='Attica Logo' src={AtticaLogo} variant='rounded'/>
                     </IconButton>
                 </Toolbar>
             </AppBar>
