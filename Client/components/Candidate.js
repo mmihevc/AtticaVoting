@@ -9,8 +9,8 @@ function Candidate(props) {
 
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
-        let image = '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
-        return image;
+        return '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
+
     }
 
     return (
