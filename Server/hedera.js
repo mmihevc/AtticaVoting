@@ -10,6 +10,10 @@ const {
 
 const {hederaConfig} = require('./config/config.js');
 
+const mirrorNodeAddress = new MirrorClient(
+    "hcs.testnet.mirrornode.hedera.com:5600"
+);
+
 module.exports = class HederaClass {
     
     constructor (account, key) {

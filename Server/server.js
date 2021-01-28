@@ -52,9 +52,9 @@ const routing = require('./routing');
 const API = require('./api/RESTfulAPI');
 
 /* init variables */
-const mirrorNodeAddress = new MirrorClient(
-    "hcs.testnet.mirrornode.hedera.com:5600"
-);
+// const mirrorNodeAddress = new MirrorClient(
+//     "hcs.testnet.mirrornode.hedera.com:5600"
+// );
 const specialChar = "~";
 let operatorKey;
 let operatorAccount = "";
@@ -79,7 +79,7 @@ async function init() {
             configureServer();
             if (answers.start.includes("start")) {
                 configureTopicMemo();
-                await createTopic();
+                await HederaAccount.createTopic();
             } else {
                 await connectTopic();
             }
@@ -107,7 +107,7 @@ function runServer() {
     webServer.listen(8443, () => {
         log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
     });
-    subscribeToMirror();
+    HederaAccount.subscribeToMirror();
     io.on("connection", function(client) {
         client.on("chat message", async function(msg) {
             try {
@@ -115,7 +115,7 @@ function runServer() {
                     log('runServer()', 'Checks Passed, Submitting Vote...', logStatus);
                     const formattedMessage = await formatVoteMessage(msg);
                     Promise.all([formattedMessage]);
-                    sendHCSMessage(formattedMessage);
+                    HederaAccount.sendHCSMessage(formattedMessage);
                 }
                 else{
                     log('Discrepency in vote found!', '', logStatus);
