@@ -27,11 +27,11 @@ function Candidate(props) {
 }
 
 
-function handleVote(name) {
+function handleVote(props, name) {
     sendPostRequest('submit', {'candidateName': name}).then(
         r => {
             if (r.data.success == 'true') {
-                handleJSON(r.data);
+                handleData(props, r.data);
             }
             else {
                 props.produceSnackBar('Vote Failed', 'error')
@@ -41,7 +41,10 @@ function handleVote(name) {
     )
 }
 
-function handleJSON(data) {
+function handleData(props, data) {
+    props.setTopic(data.topicId);
+    props.setHash(data.runningHash);
+    props.setMessage(data.message)
 
 }
 
@@ -75,7 +78,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote(props.name); history.push('/confirmation')}}
+                                            onClick={() => {handleVote(props, props.name); history.push('/confirmation')}}
                                             className='voteButton'
                                     >
                                         VOTE
