@@ -12,3 +12,5 @@ submit.push({
        res.send({success: true, topicId: '0.0.1234', runningHash: '12345567890abcdef', message: `I voted for ${vote}`});
    }
 });
+
+module.exports = submit;
