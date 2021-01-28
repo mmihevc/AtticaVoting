@@ -13,6 +13,7 @@ const open = require("open");
 const TextDecoder = require("text-encoding").TextDecoder;
 const fs = require("fs");
 const rp = require('request-promise');
+const bodyParser = require('body-parser');
 
 /* Hedera.js */
 const {
@@ -47,6 +48,8 @@ const newElectionConfig = require('./config/electionConfig.json');
 const security = require("./security.js");
 
 const routing = require('./routing');
+
+const API = require('./api/RESTfulAPI');
 
 /* init variables */
 const mirrorNodeAddress = new MirrorClient(
@@ -138,21 +141,23 @@ function configureServer() {
         cert: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/cert.pem'),
         ca: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/chain.pem')
     };*/
-    app.use('/', routing);
 
-    app.use(function (req, res, next) {
+    /*app.use(function (req, res, next) {
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
         res.setHeader('Access-Control-Allow-Credentials', true);
         next();
-    });
+    });*/
+    app.use(bodyParser.json());  ////////////////////////////////////////////////////
+    app.use(express.urlencoded({extended: false}));
     app.use(express.static("dist/public"));
-    app.use(express.static("Client/static"));
 
     //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
     io = socket.listen(webServer);
+
+    API.map(({path, callback}) => app.post('/api' + path, callback));
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
