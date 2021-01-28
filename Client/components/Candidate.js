@@ -30,7 +30,8 @@ function Candidate(props) {
 function handleVote(props, name) {
     sendPostRequest('submit', {'candidateName': name}).then(
         r => {
-            if (r.data.success == 'true') {
+            if (r.data.success) {
+                props.produceSnackBar('Vote Submitted', 'info');
                 handleData(props, r.data);
             }
             else {
@@ -42,6 +43,7 @@ function handleVote(props, name) {
 }
 
 function handleData(props, data) {
+    console.log(data.topicId);
     props.setTopic(data.topicId);
     props.setHash(data.runningHash);
     props.setMessage(data.message)
