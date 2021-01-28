@@ -27,8 +27,8 @@ function Candidate(props) {
 }
 
 
-function handleVote(props) {
-    sendPostRequest('submit', {'candidateName': props.name}).then(
+function handleVote(name) {
+    sendPostRequest('submit', {'candidateName': name}).then(
         r => {
             if (r.data.success == 'true') {
                 handleJSON(r.data);
@@ -75,7 +75,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote(props); history.push('/confirmation')}}
+                                            onClick={() => {handleVote(props.name); history.push('/confirmation')}}
                                             className='voteButton'
                                     >
                                         VOTE
