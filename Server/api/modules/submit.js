@@ -5,7 +5,7 @@ let submit = [];
 submit.push({
    path: '/submit',
    callback: (req,res) => {
-       const vote = req.body.candidate;
+       const vote = req.body.candidateName;
 
        console.log(`Vote for '${vote}' received`);
 
