@@ -27,32 +27,29 @@ function Candidate(props) {
 }
 
 
-function handleVote(props, name) {
-    sendPostRequest('submit', {'candidateName': name}).then(
-        r => {
-            if (r.data.success) {
-                props.produceSnackBar('Vote Submitted', 'info');
-                handleData(props, r.data);
-            }
-            else {
-                props.produceSnackBar('Vote Failed', 'error')
-            }
 
-        }
-    )
-}
-
-function handleData(props, data) {
-    console.log(data.topicId);
-    props.setTopic(data.topicId);
-    props.setHash(data.runningHash);
-    props.setMessage(data.message)
-
-}
 
 
 function CandidateCard(props) {
     const history = useHistory();
+
+    function handleVote() {
+        sendPostRequest('submit', {'candidateName': props.name}).then(
+            r => {
+                if (r.data.success) {
+                    props.produceSnackBar('Vote Submitted', 'info');
+                    props.setTopic(r.data.topicId);
+                    props.setHash(r.data.runningHash);
+                    props.setMessage(r.data.message)
+                }
+                else {
+                    props.produceSnackBar('Vote Failed', 'error')
+                }
+
+            }
+        )
+    }
+
     return (
         <div style={{maxWidth: 345}}>
             <Card variant='elevation'>
@@ -80,7 +77,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote(props, props.name); history.push('/confirmation')}}
+                                            onClick={() => {handleVote(); history.push('/confirmation')}}
                                             className='voteButton'
                                     >
                                         VOTE
