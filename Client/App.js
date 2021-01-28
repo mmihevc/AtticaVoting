@@ -22,7 +22,9 @@ const Router = props => {
     return (
         <Switch>
             <Route exact path="/">
-                <Home {...props} open={open} setOpen={setOpen}/>
+                <Home {...props} open={open} setOpen={setOpen}
+                      setTopic={setTopic} setMessage={setMessage}
+                      setSequence={setSequence} setHash={setHash}/>
             </Route>
             <Route path="/confirmation">
                 <Confirmation {...props} open={open} setOpen={setOpen} history={history}
@@ -30,10 +32,6 @@ const Router = props => {
             </Route>
             <Route path='/dlinfo'>
                 <DLInfo {...props} open={open} setOpen={setOpen} />
-            </Route>
-            <Route path='/candidate'>
-                <Candidate {...props} setTopic={setTopic} setMessage={setMessage}
-                           setSequence={setSequence} setHash={setHash}/>
             </Route>
         </Switch>
     )
