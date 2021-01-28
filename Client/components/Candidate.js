@@ -30,7 +30,13 @@ function Candidate(props) {
 function handleVote(props) {
     sendPostRequest('submit', {'candidateName': props.name}).then(
         r => {
-            handleJSON(r.data);
+            if (r.data.success == 'true') {
+                handleJSON(r.data);
+            }
+            else {
+                props.produceSnackBar('Vote Failed', 'error')
+            }
+
         }
     )
 }
