@@ -58,7 +58,7 @@ const API = require('./api/RESTfulAPI');
 const specialChar = "~";
 let operatorKey;
 let operatorAccount = "";
-let HederaClient = Client.forTestnet();
+//let HederaClient = Client.forTestnet();
 let topicId = "";
 let logStatus = "Default";
 let topicMemo = "";
