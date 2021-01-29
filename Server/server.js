@@ -49,8 +49,6 @@ const security = require("./security.js");
 
 const HederaClass = require('./hedera');
 
-const API = require('./api/RESTfulAPI');
-
 /* init variables */
 // const mirrorNodeAddress = new MirrorClient(
 //     "hcs.testnet.mirrornode.hedera.com:5600"
@@ -67,6 +65,8 @@ let electionId = 0;
 let startDate;
 let endDate;
 let HederaObj;
+let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
+
 
 var webServer, io;
 
@@ -79,7 +79,7 @@ async function init() {
             configureServer();
             if (answers.start.includes("start")) {
                 configureTopicMemo();
-                await HederaAccount.createTopic();
+                await HederaObj.createTopic();
             } else {
                 await connectTopic();
             }
@@ -107,7 +107,7 @@ function runServer() {
     webServer.listen(8443, () => {
         log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
     });
-    HederaAccount.subscribeToMirror();
+    HederaObj.subscribeToMirror();
     io.on("connection", function(client) {
         client.on("chat message", async function(msg) {
             try {
@@ -115,7 +115,7 @@ function runServer() {
                     log('runServer()', 'Checks Passed, Submitting Vote...', logStatus);
                     const formattedMessage = await formatVoteMessage(msg);
                     Promise.all([formattedMessage]);
-                    HederaAccount.sendHCSMessage(formattedMessage);
+                    HederaObj.sendHCSMessage(formattedMessage);
                 }
                 else{
                     log('Discrepency in vote found!', '', logStatus);
