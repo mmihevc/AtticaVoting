@@ -75,7 +75,7 @@ async function init() {
     inquirer.prompt(initQuestions).then(async function(answers) {
         try {
             logStatus = answers.status;
-            HederaObj = new HederaClass(answers.account, answers.key);
+            HederaObj = new HederaClass(answers.account, answers.key, logStatus);
             configureServer();
             if (answers.start.includes("start")) {
                 configureTopicMemo();

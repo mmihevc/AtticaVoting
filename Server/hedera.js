@@ -22,7 +22,8 @@ const mirrorNodeAddress = new MirrorClient(
 
 module.exports = class HederaClass {
     
-    constructor (account, key) {
+    constructor (account, key, logStatus) {
+        this.logStatus = logStatus;
         this.HederaClient = Client.forTestnet();
         this.configureAccount(account, key);
     }
