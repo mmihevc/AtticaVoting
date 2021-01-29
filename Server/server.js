@@ -47,7 +47,7 @@ const newElectionConfig = require('./config/electionConfig.json');
 /* security */
 const security = require("./security.js");
 
-const routing = require('./routing');
+const HederaClass = require('./hedera');
 
 const API = require('./api/RESTfulAPI');
 
