@@ -9,8 +9,8 @@ function Candidate(props) {
 
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
-        let image = '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
-        return image;
+        return '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
+
     }
 
     return (
@@ -30,7 +30,7 @@ function Candidate(props) {
 function handleVote(name) {
     sendPostRequest('submit', {'candidateName': name}).then(
         r => {
-            if (r.data.success == 'true') {
+            if (r.data.success === 'true') {
                 handleJSON(r.data);
             }
             else {
