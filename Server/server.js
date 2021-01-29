@@ -79,7 +79,7 @@ async function init() {
             configureServer();
             if (answers.start.includes("start")) {
                 configureTopicMemo();
-                await HederaObj.createTopic();
+                await createTopic();
             } else {
                 await connectTopic();
             }
@@ -354,12 +354,12 @@ create a new topic and store the new topic ID to `topicId`.
 async function createTopic() {
     try {
         log("createTopic()", "Creating New Topic...", logStatus);
-        topicId = await createTopicTransaction(topicMemo);
         log(
             "ConsensusTopicCreateTransaction()",
             "waiting for new HCS Topic & mirror node (it may take a few seconds)",
             logStatus
         );
+        topicId = await HederaObj.createTopicTransaction(topicMemo);
         log("createTopic()", `New Topic Created, ID = ${topicId}`, logStatus);
         await sleep(9000);
         return;
