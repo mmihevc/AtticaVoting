@@ -43,9 +43,9 @@ module.exports = class HederaClass {
                 .setTopicId(topicId)
                 .setMessage(msg)
                 .execute(HederaClient);
-            handleLog("ConsensusSubmitMessageTransaction()", msg, logStatus);
+            handleLog("ConsensusSubmitMessageTransaction()", msg,this.logStatus);
         } catch (error) {
-            handleLog("ERROR: ConsensusSubmitMessageTransaction()", error, logStatus);
+            handleLog("ERROR: ConsensusSubmitMessageTransaction()", error, this.logStatus);
             process.exit(1);
         }
     }
@@ -70,9 +70,9 @@ module.exports = class HederaClass {
                     
                     
                 });
-            handleLog("MirrorConsensusTopicQuery()", topicId.toString(), logStatus);
+            handleLog("MirrorConsensusTopicQuery()", topicId.toString(), this.logStatus);
         } catch (error) {
-            handleLog("ERROR: MirrorConsensusTopicQuery()", error, logStatus);
+            handleLog("ERROR: MirrorConsensusTopicQuery()", error, this.logStatus);
             process.exit(1);
         }
     }
@@ -92,14 +92,14 @@ module.exports = class HederaClass {
                 .setTopicMemo(memo)
                 .setSubmitKey(this.operatorKey.publicKey)
                 .execute(this.HederaClient);
-            handleLog("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, logStatus);
+            handleLog("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, this.logStatus);
             await sleep(3000); // wait until Hedera reaches consensus
             const receipt = await txId.getReceipt(this.HederaClient);
             const newTopicId = receipt.getConsensusTopicId();
-            handleLog("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, logStatus);
+            handleLog("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, this.logStatus);
             this.topicId = newTopicId;
         } catch (error) {
-            handleLog("ERROR: createTopicTransaction()", error, logStatus);
+            handleLog("ERROR: createTopicTransaction()", error, this.logStatus);
             process.exit(1);
         }
     }
@@ -129,7 +129,7 @@ module.exports = class HederaClass {
             this.HederaClient.setOperator(operatorAccount, operatorKey);
 
         } catch (error) {
-            handleLog("ERROR: configureAccount()", error, logStatus);
+            handleLog("ERROR: configureAccount()", error, this.logStatus);
         }
     }
 }
