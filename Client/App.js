@@ -8,8 +8,6 @@ import {useHistory} from "react-router";
 import Home from '../Client/components/Home'
 import Confirmation from '../Client/components/Confirmation'
 import DLInfo from '../Client/components/DLInfo'
-import Candidate from "./components/Candidate";
-
 
 const Router = props => {
     const [open, setOpen] = useState(false);
@@ -22,7 +20,9 @@ const Router = props => {
     return (
         <Switch>
             <Route exact path="/">
-                <Home {...props} open={open} setOpen={setOpen}/>
+                <Home {...props} open={open} setOpen={setOpen}
+                      setTopic={setTopic} setMessage={setMessage}
+                      setSequence={setSequence} setHash={setHash}/>
             </Route>
             <Route path="/confirmation">
                 <Confirmation {...props} open={open} setOpen={setOpen} history={history}
@@ -30,10 +30,6 @@ const Router = props => {
             </Route>
             <Route path='/dlinfo'>
                 <DLInfo {...props} open={open} setOpen={setOpen} />
-            </Route>
-            <Route path='/candidate'>
-                <Candidate {...props} setTopic={setTopic} setMessage={setMessage}
-                           setSequence={setSequence} setHash={setHash}/>
             </Route>
         </Switch>
     )
@@ -53,7 +49,7 @@ const LoadApp = () =>
 
 const App = () =>
 {
-    const theme = createMuiTheme({ palette: { primary: { main: '#1565c0' }, secondary: {main: "#D1B000"}}});
+    const theme = createMuiTheme({ palette: { primary: { main: '#CFB53B' }, secondary: {main: "#3232ff"}}});
 
 
     return (

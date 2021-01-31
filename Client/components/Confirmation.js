@@ -22,7 +22,7 @@ function Confirmation(props) {
                 <div className={classes.drawerHeader}/>
             <ConfirmationMessage setReceiptTable={setReceiptTable} receiptTable={receiptTable} {...props}/>
             {receiptTable ?
-                <ReceiptTable/>
+                <ReceiptTable {...props}/>
                 : null
             }
             </main>
@@ -62,7 +62,7 @@ function ConfirmationMessage(props) {
 }
 
 
-function ReceiptTable() {
+function ReceiptTable(props) {
     const classes = useStyles();
     const [topicExpand, setTopicExpanded] = useState(false);
     const [sequenceExpand, setSequenceExpand] = useState(false);
@@ -95,7 +95,7 @@ function ReceiptTable() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                    0
+                                    {props.topic}
                                 </StyledTableCell>
                             </StyledTableRow>
                             <StyledTableRow>
@@ -141,7 +141,7 @@ function ReceiptTable() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                    0
+                                    {props.hash}
                                 </StyledTableCell>
                             </StyledTableRow>
                             <StyledTableRow>
@@ -164,7 +164,7 @@ function ReceiptTable() {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                    0
+                                    {props.message}
                                 </StyledTableCell>
                             </StyledTableRow>
                         </TableBody>

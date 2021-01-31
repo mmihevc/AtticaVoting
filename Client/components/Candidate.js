@@ -6,7 +6,7 @@ import {sendPostRequest} from "../hooks/API";
 
 
 function Candidate(props) {
-
+    console.log(props)
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
         return '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
@@ -27,27 +27,31 @@ function Candidate(props) {
 }
 
 
-function handleVote(name) {
-    sendPostRequest('submit', {'candidateName': name}).then(
-        r => {
-            if (r.data.success === 'true') {
-                handleJSON(r.data);
-            }
-            else {
-                props.produceSnackBar('Vote Failed', 'error')
-            }
-
-        }
-    )
-}
-
-function handleJSON(data) {
-
-}
-
 
 function CandidateCard(props) {
     const history = useHistory();
+
+
+    function handleVote() {
+        sendPostRequest('submit', {'candidateName': props.name}).then(
+            r => {
+                if (r == null) {
+                    props.produceSnackBar('Server error', 'error');
+                }
+                if (r.data.success) {
+                    props.produceSnackBar('Vote Submitted', 'info');
+                    props.setTopic(r.data.topicId);
+                    props.setHash(r.data.runningHash);
+                    props.setMessage(r.data.message)
+                }
+                else {
+                    props.produceSnackBar('Vote Failed', 'error')
+                }
+
+            }
+        )
+    }
+
     return (
         <div style={{maxWidth: 345}}>
             <Card variant='elevation'>
@@ -75,7 +79,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote(props.name); history.push('/confirmation')}}
+                                            onClick={() => {handleVote(); history.push('/confirmation')}}
                                             className='voteButton'
                                     >
                                         VOTE
