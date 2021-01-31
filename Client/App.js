@@ -8,8 +8,6 @@ import {useHistory} from "react-router";
 import Home from '../Client/components/Home'
 import Confirmation from '../Client/components/Confirmation'
 import DLInfo from '../Client/components/DLInfo'
-import Candidate from "./components/Candidate";
-
 
 const Router = props => {
     const [open, setOpen] = useState(false);
@@ -51,7 +49,7 @@ const LoadApp = () =>
 
 const App = () =>
 {
-    const theme = createMuiTheme({ palette: { primary: { main: '#1565c0' }, secondary: {main: "#D1B000"}}});
+    const theme = createMuiTheme({ palette: { primary: { main: '#CFB53B' }, secondary: {main: "#3232ff"}}});
 
 
     return (
