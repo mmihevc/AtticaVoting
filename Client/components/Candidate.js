@@ -9,8 +9,8 @@ function Candidate(props) {
     console.log(props)
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
-        let image = '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
-        return image;
+        return '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
+
     }
 
     return (
@@ -27,8 +27,10 @@ function Candidate(props) {
 }
 
 
+
 function CandidateCard(props) {
     const history = useHistory();
+
 
     function handleVote() {
         sendPostRequest('submit', {'candidateName': props.name}).then(
