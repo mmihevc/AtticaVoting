@@ -67,7 +67,7 @@ let electionId = 0;
 let startDate;
 let endDate;
 
-var webServer, io;
+let webServer, io;
 
 /* configure our env based on prompted input */
 async function init() {
@@ -113,11 +113,11 @@ function runServer() {
                 if(checkUidList(msg.split('~')[0], msg.split('~')[1]) && await checkExistingVotes(msg.split('~')[0], msg.split('~')[1])){
                     log('runServer()', 'Checks Passed, Submitting Vote...', logStatus);
                     const formattedMessage = await formatVoteMessage(msg);
-                    Promise.all([formattedMessage]);
-                    sendHCSMessage(formattedMessage);
+                    await Promise.all([formattedMessage]);
+                    await sendHCSMessage(formattedMessage);
                 }
                 else{
-                    log('Discrepency in vote found!', '', logStatus);
+                    log('Discrepancy in vote found!', '', logStatus);
                     setTimeout(function() {io.emit('confMessage', 'No Vote')}, 3000);
                 }
             } catch (err) {
@@ -151,9 +151,8 @@ function configureServer() {
     });*/
     app.use(bodyParser.json());  ////////////////////////////////////////////////////
     app.use(express.urlencoded({extended: false}));
-    app.use(express.static("dist/public"));
+    app.use(express.static("Server/public/images/"));
 
-    //webServer = https.createServer(options, app);
     webServer = http.createServer(app);
     io = socket.listen(webServer);
 
@@ -196,10 +195,7 @@ async function checkExistingVotes(uid, email) {
         for(let i = 0; i < votes.length; i++) {
             if(votes[i].split('~')[0] === uidHash){
                 let emailHash = security.hash(email);
-                if(votes[i].split('~')[3] === emailHash)
-                    return true;
-                else
-                    return false;
+                return votes[i].split('~')[3] === emailHash;
             }
         }
         return true;
@@ -393,10 +389,10 @@ async function formatVoteMessage(msg) {
     res += idHash + specialChar;
 
     let pub = await security.getPublicKey();
-    Promise.all([pub]);
+    await Promise.all([pub]);
 
     let encVote = await security.encrypt(idHash + specialChar + vote, pub);
-    Promise.all([encVote]);
+    await Promise.all([encVote]);
     res += security.encode(encVote) + specialChar;
 
     res += new Date().getTime() + '' + specialChar;
@@ -405,5 +401,3 @@ async function formatVoteMessage(msg) {
 
     return res;
 }
-
-init(); // process arguments & handoff to runChat()

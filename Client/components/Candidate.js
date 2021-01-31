@@ -9,8 +9,8 @@ function Candidate(props) {
     console.log(props)
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
-        return '../static/images/' + candidateName[0].toLowerCase() + '.jpg';
-
+        return '../../Server/public/images/' + candidateName[0].toLowerCase() + '.jpg';
+        // return candidateName[0].toLowerCase() + '.jpg';
     }
 
     return (
@@ -51,7 +51,7 @@ function CandidateCard(props) {
             }
         )
     }
-
+    console.log(props.link);
     return (
         <div style={{maxWidth: 345}}>
             <Card variant='elevation'>
