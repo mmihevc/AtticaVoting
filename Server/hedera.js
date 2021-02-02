@@ -1,24 +1,24 @@
 const {
     Client,
-    ConsensusSubmitMessageTransaction,
-    ConsensusTopicId,
-    ConsensusTopicCreateTransaction,
-    MirrorClient,
-    MirrorConsensusTopicQuery,
-    Ed25519PrivateKey
+    TopicMessageSubmitTransaction,
+    TopicCreateTransaction,
+    //MirrorConsensusTopicQuery,
+    TopicMessageQuery,
+    PrivateKey,
+    PublicKey
 } = require("@hashgraph/sdk");
 
-const {hederaConfig} = require('./config/config.js');
+//const {hederaConfig} = require('./config/config.js');
+const config = require('./config/config');
+const hederaConfig = config.hederaConfig;
+
 
 const {
     handleLog,
     sleep,
+    UInt8ToString,
 
 } = require('./utils');
-
-const mirrorNodeAddress = new MirrorClient(
-    "hcs.testnet.mirrornode.hedera.com:5600"
-);
 
 module.exports = class HederaClass {
     
@@ -39,11 +39,12 @@ module.exports = class HederaClass {
     */
     async sendHCSMessage(msg) {
         try {
-            new ConsensusSubmitMessageTransaction()
-                .setTopicId(topicId)
-                .setMessage(msg)
-                .execute(HederaClient);
-            handleLog("ConsensusSubmitMessageTransaction()", msg,this.logStatus);
+            await new TopicMessageSubmitTransaction({
+                topicId: this.topicId,
+                message: msg
+            }).execute(this.HederaClient);
+
+            handleLog("ConsensusSubmitMessageTransaction()", msg, this.logStatus);
         } catch (error) {
             handleLog("ERROR: ConsensusSubmitMessageTransaction()", error, this.logStatus);
             process.exit(1);
@@ -60,17 +61,26 @@ module.exports = class HederaClass {
     */
     subscribeToMirror(confirmList) {
         try {
-            new MirrorConsensusTopicQuery()
-                .setTopicId(topicId)
-                .subscribe(mirrorNodeAddress, res => {
+            new TopicMessageQuery()
+                .setTopicId(this.topicId)
+                .subscribe(this.HederaClient, res => {
                     //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
-                    let encMsg = new TextDecoder("utf-8").decode(res["message"]);
-                    let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
-                    let uidHash = encMsg.split(specialChar)[0];
-                    
-                    
+                    let encMsg = Buffer.from(res.contents, "utf8").toString();
+                    console.log(`DEBUG: encMsg = ${encMsg}`);
+                    // let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
+                    // let uidHash = encMsg.split(specialChar)[0];
+                    handleLog("TopicMessageQuery()", "Confirmation Received", this.logStatus);
+
+                    confirmList.find(({aid}) => aid === encMsg)
+                        .resp.send({
+                            success: true, 
+                            topicId: this.topicId, 
+                            runningHash: UInt8ToString(res['runningHash']), 
+                            message: encMsg, 
+                            sequence: res.sequenceNumber
+                        });
                 });
-            handleLog("MirrorConsensusTopicQuery()", topicId.toString(), this.logStatus);
+            handleLog("MirrorConsensusTopicQuery()", this.topicId.toString(), this.logStatus);
         } catch (error) {
             handleLog("ERROR: MirrorConsensusTopicQuery()", error, this.logStatus);
             process.exit(1);
@@ -88,16 +98,17 @@ module.exports = class HederaClass {
     */
     async createTopicTransaction(memo) {
         try {
-            const txId = await new ConsensusTopicCreateTransaction()
+            const txId = await new TopicCreateTransaction()
                 .setTopicMemo(memo)
                 .setSubmitKey(this.operatorKey.publicKey)
                 .execute(this.HederaClient);
             handleLog("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, this.logStatus);
             await sleep(3000); // wait until Hedera reaches consensus
             const receipt = await txId.getReceipt(this.HederaClient);
-            const newTopicId = receipt.getConsensusTopicId();
+            const newTopicId = receipt.topicId;
             handleLog("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, this.logStatus);
             this.topicId = newTopicId;
+            return this.topicId;
         } catch (error) {
             handleLog("ERROR: createTopicTransaction()", error, this.logStatus);
             process.exit(1);
@@ -121,12 +132,12 @@ module.exports = class HederaClass {
                 this.operatorAccount = hederaConfig.account;
             }
             if(key !== "") {
-                this.operatorKey = Ed25519PrivateKey.fromString(key);
+                this.operatorKey = PrivateKey.fromString(key);
             } else {
-                this.operatorKey = Ed25519PrivateKey.fromString(hederaConfig.key);
+                this.operatorKey = PrivateKey.fromString(hederaConfig.key);
             }
 
-            this.HederaClient.setOperator(operatorAccount, operatorKey);
+            this.HederaClient.setOperator(this.operatorAccount, this.operatorKey);
 
         } catch (error) {
             handleLog("ERROR: configureAccount()", error, this.logStatus);
