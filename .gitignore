@@ -1,3 +1,5 @@
-Server/config/key.pub
-Server/config/key
-Server/config/config.js
+/Server/config/config.js
+/Server/config/key
+/Server/config/key.pub
+/dist/*
+/node_modules/*

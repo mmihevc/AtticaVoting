@@ -1,113 +1,146 @@
-/*
--------------------------------------------------------------------------
-sendHCSMessage()
--------------------------------------------------------------------------
-Helper function given by Hedera's Cooper Kunz. Function builds a new
-ConsensusSubmitMessageTransaction and sends the messages to the
-configured TopicID
--------------------------------------------------------------------------
- */
-async function sendHCSMessage(msg) {
-    try {
-        new ConsensusSubmitMessageTransaction()
-            .setTopicId(topicId)
-            .setMessage(msg)
-            .execute(HederaClient);
-        log("ConsensusSubmitMessageTransaction()", msg, logStatus);
-    } catch (error) {
-        log("ERROR: ConsensusSubmitMessageTransaction()", error, logStatus);
-        process.exit(1);
+const {
+    Client,
+    TopicMessageSubmitTransaction,
+    TopicCreateTransaction,
+    //MirrorConsensusTopicQuery,
+    TopicMessageQuery,
+    PrivateKey,
+    PublicKey
+} = require("@hashgraph/sdk");
+
+//const {hederaConfig} = require('./config/config.js');
+const config = require('./config/config');
+const hederaConfig = config.hederaConfig;
+
+
+const {
+    handleLog,
+    sleep,
+    UInt8ToString,
+
+} = require('./utils');
+
+module.exports = class HederaClass {
+    
+    constructor (account, key, logStatus) {
+        this.logStatus = logStatus;
+        this.HederaClient = Client.forTestnet();
+        this.configureAccount(account, key);
     }
-}
+    
+    /*
+    -------------------------------------------------------------------------
+    sendHCSMessage()
+    -------------------------------------------------------------------------
+    Helper function given by Hedera's Cooper Kunz. Function builds a new
+    ConsensusSubmitMessageTransaction and sends the messages to the
+    configured TopicID
+    -------------------------------------------------------------------------
+    */
+    async sendHCSMessage(msg) {
+        try {
+            await new TopicMessageSubmitTransaction({
+                topicId: this.topicId,
+                message: msg
+            }).execute(this.HederaClient);
 
-/*
--------------------------------------------------------------------------
-subscribeToMirror()
--------------------------------------------------------------------------
-Helper function given by Hedera's Cooper Kunz. Function subscribes to
-the topic through the mirror consensus nodes.
--------------------------------------------------------------------------
- */
-function subscribeToMirror() {
-    try {
-        new MirrorConsensusTopicQuery()
-            .setTopicId(topicId)
-            .subscribe(mirrorNodeAddress, res => {
-                //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
-                let encMsg = new TextDecoder("utf-8").decode(res["message"]);
-                let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
-                let uidHash = encMsg.split(specialChar)[0];
-
-                log('subscribeToMirror()', `Emitting Confirmation Message To: ${uidHash}`, logStatus);
-
-                io.to(uidHash).emit('confMessage', confMsg);
-            });
-        log("MirrorConsensusTopicQuery()", topicId.toString(), logStatus);
-    } catch (error) {
-        log("ERROR: MirrorConsensusTopicQuery()", error, logStatus);
-        process.exit(1);
-    }
-}
-
-/*
--------------------------------------------------------------------------
-createTopicTransaction()
--------------------------------------------------------------------------
-Function builds a ConsensusTopicCreateTransaction object with the
-configured topic memo and operator keys. Configures the topicID variable
-to the newly created topic.
--------------------------------------------------------------------------
- */
-async function createTopicTransaction(memo) {
-    try {
-        const txId = await new ConsensusTopicCreateTransaction()
-            .setTopicMemo(memo)
-            .setSubmitKey(operatorKey.publicKey)
-            .execute(HederaClient);
-        log("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, logStatus);
-        await sleep(3000); // wait until Hedera reaches consensus
-        const receipt = await txId.getReceipt(HederaClient);
-        const newTopicId = receipt.getConsensusTopicId();
-        log("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, logStatus);
-        return newTopicId;
-    } catch (error) {
-        log("ERROR: createTopicTransaction()", error, logStatus);
-        process.exit(1);
-    }
-}
-
-/*
--------------------------------------------------------------------------
-configureAccount(account, key)
--------------------------------------------------------------------------
-Takes in the answers, if either account or key is empty, function will
-take the values from 'hederaConfig' and assign them to `operatorKey` and
-`operatorAccount`
--------------------------------------------------------------------------
-*/
-function  configureAccount(account, key, client) {
-    try {
-        if(account !== "") {
-            operatorAccount = account;
-        }else {
-            operatorAccount = hederaConfig.account;
+            handleLog("ConsensusSubmitMessageTransaction()", msg, this.logStatus);
+        } catch (error) {
+            handleLog("ERROR: ConsensusSubmitMessageTransaction()", error, this.logStatus);
+            process.exit(1);
         }
-        if(key !== "") {
-            operatorKey = Ed25519PrivateKey.fromString(key);
-        } else {
-            operatorKey = Ed25519PrivateKey.fromString(hederaConfig.key);
+    }
+
+    /*
+    -------------------------------------------------------------------------
+    subscribeToMirror()
+    -------------------------------------------------------------------------
+    Helper function given by Hedera's Cooper Kunz. Function subscribes to
+    the topic through the mirror consensus nodes.
+    -------------------------------------------------------------------------
+    */
+    subscribeToMirror(confirmList) {
+        try {
+            new TopicMessageQuery()
+                .setTopicId(this.topicId)
+                .subscribe(this.HederaClient, res => {
+                    //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
+                    let encMsg = Buffer.from(res.contents, "utf8").toString();
+                    console.log(`DEBUG: encMsg = ${encMsg}`);
+                    // let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
+                    // let uidHash = encMsg.split(specialChar)[0];
+                    handleLog("TopicMessageQuery()", "Confirmation Received", this.logStatus);
+
+                    confirmList.find(({aid}) => aid === encMsg)
+                        .resp.send({
+                            success: true, 
+                            topicId: this.topicId, 
+                            runningHash: UInt8ToString(res['runningHash']), 
+                            message: encMsg, 
+                            sequence: res.sequenceNumber
+                        });
+                });
+            handleLog("MirrorConsensusTopicQuery()", this.topicId.toString(), this.logStatus);
+        } catch (error) {
+            handleLog("ERROR: MirrorConsensusTopicQuery()", error, this.logStatus);
+            process.exit(1);
         }
+    }
 
-        client.setOperator(operatorAccount, operatorKey);
+    /*
+    -------------------------------------------------------------------------
+    createTopicTransaction()
+    -------------------------------------------------------------------------
+    Function builds a ConsensusTopicCreateTransaction object with the
+    configured topic memo and operator keys. Configures the topicID variable
+    to the newly created topic.
+    -------------------------------------------------------------------------
+    */
+    async createTopicTransaction(memo) {
+        try {
+            const txId = await new TopicCreateTransaction()
+                .setTopicMemo(memo)
+                .setSubmitKey(this.operatorKey.publicKey)
+                .execute(this.HederaClient);
+            handleLog("ConsensusTopicCreateTransaction()", `submitted tx ${txId}`, this.logStatus);
+            await sleep(3000); // wait until Hedera reaches consensus
+            const receipt = await txId.getReceipt(this.HederaClient);
+            const newTopicId = receipt.topicId;
+            handleLog("ConsensusTopicCreateTransaction()", `success! new topic ${newTopicId}`, this.logStatus);
+            this.topicId = newTopicId;
+            return this.topicId;
+        } catch (error) {
+            handleLog("ERROR: createTopicTransaction()", error, this.logStatus);
+            process.exit(1);
+        }
+    }
 
-    } catch (error) {
-        log("ERROR: configureAccount()", error, logStatus);
+    /*
+    -------------------------------------------------------------------------
+    configureAccount(account, key)
+    -------------------------------------------------------------------------
+    Takes in the answers, if either account or key is empty, function will
+    take the values from 'hederaConfig' and assign them to `operatorKey` and
+    `operatorAccount`
+    -------------------------------------------------------------------------
+    */
+    configureAccount(account, key, client) {
+        try {
+            if(account !== "") {
+                this.operatorAccount = account;
+            }else {
+                this.operatorAccount = hederaConfig.account;
+            }
+            if(key !== "") {
+                this.operatorKey = PrivateKey.fromString(key);
+            } else {
+                this.operatorKey = PrivateKey.fromString(hederaConfig.key);
+            }
+
+            this.HederaClient.setOperator(this.operatorAccount, this.operatorKey);
+
+        } catch (error) {
+            handleLog("ERROR: configureAccount()", error, this.logStatus);
+        }
     }
 }
-
-module.exports = {
-    sendHCSMessage,
-    subscribeToMirror,
-    createTopicTransaction,
-    configureAccount
-};
