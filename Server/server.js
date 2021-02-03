@@ -51,28 +51,42 @@ let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
 
 
-var webServer;
+let webServer;
 
 /* configure our env based on prompted input */
 async function init() {
-    inquirer.prompt(initQuestions).then(async function(answers) {
-        try {
-            logStatus = answers.status;
-            HederaObj = new HederaClass(answers.account, answers.key, logStatus);
+    if(process.argv.find(({arg}) => arg === '-dev') !== null) {
+        try{
+            logStatus = 'debug';
+            HederaObj = new HederaClass("", "", logStatus);
             configureServer();
-            if (answers.start.includes("start")) {
-                configureTopicMemo();
-                await createTopic();
-            } else {
-                await connectTopic();
-            }
-            /* run & serve the express app */
+            configureTopicMemo();
+            await createTopic();
             runServer();
         } catch (error) {
-            log("ERROR: init()", error, logStatus);
+            log('ERROR: init()', error, logStatus);
             process.exit(1);
         }
-    });
+    }else{
+        inquirer.prompt(initQuestions).then(async function(answers) {
+            try {
+                logStatus = answers.status;
+                HederaObj = new HederaClass(answers.account, answers.key, logStatus);
+                configureServer();
+                if (answers.start.includes("start")) {
+                    configureTopicMemo();
+                    await createTopic();
+                } else {
+                    await connectTopic();
+                }
+                /* run & serve the express app */
+                runServer();
+            } catch (error) {
+                log("ERROR: init()", error, logStatus);
+                process.exit(1);
+            }
+        });
+    }
 }
 
 /*

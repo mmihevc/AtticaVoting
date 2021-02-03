@@ -44,7 +44,8 @@ function CandidateCard(props) {
                     props.produceSnackBar('Vote Submitted', 'info');
                     props.setTopic(r.data.topicId);
                     props.setHash(r.data.runningHash);
-                    props.setMessage(r.data.message)
+                    props.setMessage(r.data.message);
+                    history.push('/confirmation');
                 }
                 else {
                     props.produceSnackBar('Vote Failed', 'error')
@@ -105,7 +106,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote(); history.push('/confirmation')}}
+                                            onClick={() => {handleVote();}}
                                             className='voteButton'
                                     >
                                         VOTE
