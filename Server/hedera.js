@@ -74,7 +74,7 @@ module.exports = class HederaClass {
                     confirmList.find(({aid}) => aid === encMsg)
                         .resp.send({
                             success: true, 
-                            topicId: this.topicId, 
+                            topicId: `${this.topicId}`, 
                             runningHash: UInt8ToString(res['runningHash']), 
                             message: encMsg, 
                             sequence: res.sequenceNumber
