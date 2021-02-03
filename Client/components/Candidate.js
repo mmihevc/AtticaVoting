@@ -37,14 +37,17 @@ function CandidateCard(props) {
     function handleVote() {
         sendPostRequest('submit', {'candidateName': props.name}).then(
             r => {
+
                 if (r == null) {
                     props.produceSnackBar('Server error', 'error');
                 }
+
                 if (r.data.success) {
                     props.produceSnackBar('Vote Submitted', 'info');
                     props.setTopic(r.data.topicId);
                     props.setHash(r.data.runningHash);
                     props.setMessage(r.data.message);
+                    props.setSequence(r.data.sequence);
                     history.push('/confirmation');
                 }
                 else {
@@ -106,7 +109,7 @@ function CandidateCard(props) {
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote();}}
+                                            onClick={() => {handleVote()}}
                                             className='voteButton'
                                     >
                                         VOTE
