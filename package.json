@@ -5,7 +5,7 @@
   "scripts": {
     "startClient": "webpack-dev-server -d",
     "buildClient": "webpack -p",
-    "start": "concurrently \"npm run startClient\" \"node ./Server/server.js\" ",
+    "start": "concurrently \"npm run startClient\" \"node ./Server/server.js -dev\" ",
     "server": "webpack --mode production && node ./Server/server.js"
   },
   "repository": {
