@@ -77,7 +77,7 @@ module.exports = class HederaClass {
                             topicId: `${this.topicId}`, 
                             runningHash: UInt8ToString(res['runningHash']), 
                             message: encMsg, 
-                            sequence: res.sequenceNumber
+                            sequence: `${res.sequenceNumber}`
                         });
                 });
             handleLog("MirrorConsensusTopicQuery()", this.topicId.toString(), this.logStatus);
