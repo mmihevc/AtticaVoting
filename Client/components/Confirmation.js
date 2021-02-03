@@ -118,7 +118,7 @@ function ReceiptTable(props) {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                    0
+                                    {props.sequence}
                                 </StyledTableCell>
                             </StyledTableRow>
                             <StyledTableRow>

@@ -1,16 +1,17 @@
-import {Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Grid, Typography, Box} from "@material-ui/core";
+import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconButton, Collapse} from "@material-ui/core";
 import candidateData from "../candidates.json";
-import React from "react";
+import React, {useState} from "react";
 import {useHistory} from "react-router";
 import {sendPostRequest} from "../hooks/API";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {useStyles} from "../static/constants";
+import clsx from "clsx";
 
 
 function Candidate(props) {
-    console.log(props)
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
         return '../../Server/public/images/' + candidateName[0].toLowerCase() + '.jpg';
-        // return candidateName[0].toLowerCase() + '.jpg';
     }
 
     return (
@@ -18,7 +19,7 @@ function Candidate(props) {
               alignItems='center' alignContent='center'>
             {Object.values(candidateData).map((item, index) =>
                 <Grid item key={index}>
-                    <CandidateCard {...props} name={item.name} description={item.description}
+                    <CandidateCard {...props} name={item.name} position={item.position} description={item.description}
                                    link={searchCandidateImage(item.name)}/>
                 </Grid>
             )}
@@ -30,19 +31,24 @@ function Candidate(props) {
 
 function CandidateCard(props) {
     const history = useHistory();
-
+    const classes = useStyles();
+    const [expanded, setExpanded] = useState(false);
 
     function handleVote() {
         sendPostRequest('submit', {'candidateName': props.name}).then(
             r => {
+
                 if (r == null) {
                     props.produceSnackBar('Server error', 'error');
                 }
+
                 if (r.data.success) {
                     props.produceSnackBar('Vote Submitted', 'info');
                     props.setTopic(r.data.topicId);
                     props.setHash(r.data.runningHash);
-                    props.setMessage(r.data.message)
+                    props.setMessage(r.data.message);
+                    props.setSequence(r.data.sequence);
+                    history.push('/confirmation');
                 }
                 else {
                     props.produceSnackBar('Vote Failed', 'error')
@@ -51,7 +57,7 @@ function CandidateCard(props) {
             }
         )
     }
-    console.log(props.link);
+
     return (
         <div style={{maxWidth: 345}}>
             <Card variant='elevation'>
@@ -68,18 +74,42 @@ function CandidateCard(props) {
                             <Typography gutterBottom variant="h5" component="h2" className='candidateName'>{props.name}</Typography>
                         </Grid>
                         <Grid item>
-                            <CardActionArea>
-                                <Typography variant="body2" color="textSecondary" component="p">
-                                    {props.description}
-                                </Typography>
-                            </CardActionArea>
+                            <>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center"
+                                >
+                                    <Typography variant="body2" color="textSecondary" component="p">
+                                        {props.position}
+                                    </Typography>
+                                    <IconButton
+                                        className={clsx(classes.expand, {
+                                            [classes.expandOpen]: expanded,
+                                        })}
+                                        onClick={() => {setExpanded(!expanded)}}
+                                        aria-expanded={expanded}
+                                        aria-label="show more"
+                                    >
+                                        <ExpandMoreIcon/>
+                                    </IconButton>
+                                </Grid>
+                            </>
+                            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                                <CardContent>
+                                    <Typography ariant="body2" color="textSecondary" component="p">
+                                        {props.description}
+                                    </Typography>
+                                </CardContent>
+                            </Collapse>
                         </Grid>
                         <Grid item>
                             <CardActions>
                                 <Box pt={2}>
                                     <Button variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote(); history.push('/confirmation')}}
+                                            onClick={() => {handleVote()}}
                                             className='voteButton'
                                     >
                                         VOTE
@@ -94,5 +124,6 @@ function CandidateCard(props) {
         </div>
     )
 }
+
 
 export default Candidate;

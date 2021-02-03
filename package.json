@@ -5,7 +5,7 @@
   "scripts": {
     "startClient": "webpack-dev-server -d",
     "buildClient": "webpack -p",
-    "start": "concurrently \"npm run startClient\" \"node ./Server/server.js\" ",
+    "start": "concurrently --kill-others-on-fail \"npm run startClient\" \"node ./Server/server.js -dev\" ",
     "server": "webpack --mode production && node ./Server/server.js"
   },
   "repository": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/Attica-Voting/AtticaVoting#readme",
   "dependencies": {
-    "@hashgraph/sdk": "^1.1.9",
+    "@hashgraph/sdk": "^2.0.13",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",

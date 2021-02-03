@@ -1,18 +1,22 @@
 {
   "candidate1" : {
     "name": "Maddie Mihevc",
-    "description": "Director of Community Engagement (DCE)"
+    "position" : "Director of Community Engagement",
+    "description": "She is currently working on her Masters in Computer Science"
   },
   "candidate2" : {
     "name": "Derek Larkins",
-    "description": "Chief Technology Officer (CTO)"
+    "position" : "Chief Technology Officer (CTO)",
+    "description": "He is getting a degree in Math but Maddie isn't sure the exact title of it"
   },
   "candidate3" : {
     "name": "Waylon Jepsen",
-    "description": "Creative Director (CD)"
+    "position" : "Creative Director (CD)",
+    "description": "He is also cool like Maddie and working on his Masters in Computer Science"
   },
   "candidate4" : {
     "name": "Christian Fergunson",
-    "description": "Chief Strategy Officer (CSO)"
+    "position" : "Chief Strategy Officer (CSO)",
+    "description": "He just graduated with his MBA woot woot"
   }
 }
