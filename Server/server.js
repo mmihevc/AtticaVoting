@@ -51,7 +51,7 @@ let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
 
 
-var webServer;
+let webServer;
 
 /* configure our env based on prompted input */
 async function init() {
