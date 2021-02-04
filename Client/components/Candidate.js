@@ -1,4 +1,4 @@
-import {Button, Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconButton, Collapse} from "@material-ui/core";
+import {Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconButton, Collapse, Checkbox, Button} from "@material-ui/core";
 import candidateData from "../candidates.json";
 import React, {useState} from "react";
 import {useHistory} from "react-router";
@@ -9,30 +9,12 @@ import clsx from "clsx";
 
 
 function Candidate(props) {
+    const history = useHistory();
+
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
         return '../../Server/public/images/' + candidateName[0].toLowerCase() + '.jpg';
     }
-
-    return (
-        <Grid container spacing={2} justify='center'
-              alignItems='center' alignContent='center'>
-            {Object.values(candidateData).map((item, index) =>
-                <Grid item key={index}>
-                    <CandidateCard {...props} name={item.name} position={item.position} description={item.description}
-                                   link={searchCandidateImage(item.name)}/>
-                </Grid>
-            )}
-        </Grid>
-    )
-}
-
-
-
-function CandidateCard(props) {
-    const history = useHistory();
-    const classes = useStyles();
-    const [expanded, setExpanded] = useState(false);
 
     function handleVote() {
         sendPostRequest('submit', {'candidateName': props.name}).then(
@@ -57,6 +39,33 @@ function CandidateCard(props) {
             }
         )
     }
+
+    return (
+        <Grid container spacing={2} justify='center'
+              alignItems='center' alignContent='center'>
+                {Object.values(candidateData).map((item, index) =>
+                    <Grid item key={index}>
+                        <CandidateCard {...props} name={item.name} position={item.position} description={item.description}
+                                       link={searchCandidateImage(item.name)}/>
+                    </Grid>
+                )}
+                <Grid container justify='center' alignItems='center' alignContent='center'>
+                    <Box pt={3}>
+                        <Button onClick={() => {handleVote()}} variant="contained" color='primary'>
+                            Submit Vote
+                        </Button>
+                    </Box>
+                </Grid>
+
+        </Grid>
+
+    )
+}
+
+
+function CandidateCard(props) {
+    const classes = useStyles();
+    const [expanded, setExpanded] = useState(false);
 
     return (
         <div style={{maxWidth: 345}}>
@@ -107,13 +116,10 @@ function CandidateCard(props) {
                         <Grid item>
                             <CardActions>
                                 <Box pt={2}>
-                                    <Button variant='contained'
+                                    <Checkbox variant='contained'
                                             color='primary'
-                                            onClick={() => {handleVote()}}
                                             className='voteButton'
-                                    >
-                                        VOTE
-                                    </Button>
+                                    />
                                 </Box>
                             </CardActions>
                         </Grid>
