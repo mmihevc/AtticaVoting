@@ -1,7 +1,7 @@
 import {Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconButton, Collapse, Checkbox, Button} from "@material-ui/core";
 import candidateData from "../candidates.json";
 import React, {useState} from "react";
-
+import CheckIcon from '@material-ui/icons/Check';
 import {sendPostRequest} from "../hooks/API";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {useStyles} from "../static/constants";
@@ -69,6 +69,7 @@ function CandidateCard(props) {
     const [expanded, setExpanded] = useState(false);
     const temp = props.position.replace( /([A-Z])/g, " $1" );
     const position = temp.charAt(0).toUpperCase() + temp.slice(1);
+    const displayCheck = props.selectedCandidates[props.position] === props.name;
 
     function handleSelectedCandidate() {
         props.setSelectedCandidates({
@@ -126,13 +127,15 @@ function CandidateCard(props) {
                         <Grid item>
                             <CardActions>
                                 <Box pt={2}>
-                                    <Button variant='contained'
-                                              color='primary'
-                                              className='voteButton'
-                                              onClick={() => handleSelectedCandidate()}
-                                    >
-                                        VOTE
-                                    </Button>
+                                    {!displayCheck ?
+                                        <Button variant='contained'
+                                                color='primary'
+                                                className='voteButton'
+                                                onClick={() => handleSelectedCandidate()}
+                                        >
+                                            VOTE
+                                        </Button> : <CheckIcon/>
+                                    }
                                 </Box>
                             </CardActions>
                         </Grid>
