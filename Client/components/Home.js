@@ -20,7 +20,7 @@ function Home(props) {
             >
                 <div className={classes.drawerHeader}/>
             <Description />
-            <Candidate {...props}/>
+            <Candidate {...props} history={props.history}/>
             </main>
         </div>
     );
