@@ -2,7 +2,7 @@ import {Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconBu
 import candidateData from "../candidates.json";
 import React, {useState} from "react";
 import CheckIcon from '@material-ui/icons/Check';
-import {sendPostRequest} from "../hooks/API";
+import {sendPostRequest, sendGetRequest} from "../hooks/API";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {useStyles} from "../static/constants";
 import clsx from "clsx";
@@ -11,20 +11,23 @@ import clsx from "clsx";
 function Candidate(props) {
     const [selectedCandidates, setSelectedCandidates] = useState({});
 
+    sendGetRequest().then(
+        r => {
+            console.log(r.data);
+        }
+    )
+
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
         return '../../Server/public/images/' + candidateName[0].toLowerCase() + '.jpg';
     }
 
     function handleVote() {
-
         sendPostRequest('submit', {'candidatesChosen': selectedCandidates}).then(
             r => {
-
                 if (r == null) {
                     props.produceSnackBar('Server error', 'error');
                 }
-
                 if (r.data.success) {
                     props.produceSnackBar('Vote Submitted', 'info');
                     props.setTopic(r.data.topicId);
@@ -36,21 +39,45 @@ function Candidate(props) {
                 else {
                     props.produceSnackBar('Vote Failed', 'error')
                 }
-
             }
         )
     }
 
+
+
+
     return (
         <Grid container spacing={2} justify='center'
               alignItems='center' alignContent='center'>
-                {Object.values(candidateData).map((item, index) =>
+            <DisplayHeadings {...props} heading={"Select A Presidential Candidate"}/>
+                {Object.values(candidateData).filter((item) => {
+                    if (item.position === 'teeshirt') {
+                        return false
+                    }
+                    return true;
+                }).map((item, index) =>
                     <Grid item key={index}>
-                        <CandidateCard {...props} name={item.name} position={item.position} description={item.description}
-                                       setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}
+                        <CandidateCard {...props} name={item.name} position={item.position}
+                                       description={item.description}
+                                       setSelectedCandidates={setSelectedCandidates}
+                                       selectedCandidates={selectedCandidates}
                                        link={searchCandidateImage(item.name)}/>
                     </Grid>
                 )}
+            <DisplayHeadings {...props} heading={"Select a TeeShirt"}/>
+                {Object.values(candidateData).filter((item) => {
+                    if (item.position === 'teeshirt') {
+                        return true;
+                    }
+                    return false;
+                }).map((item, index) =>
+                    <Grid item key={index} >
+                        <TeeShirtCard {...props} name={item.name} position={item.position} description={item.description}
+                                      setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}
+                                      link={searchCandidateImage(item.name)} />
+                    </Grid>
+                )}
+
                 <Grid container justify='center' alignItems='center' alignContent='center'>
                     <Box pt={3}>
                         <Button onClick={() => handleVote()} variant="contained" color='primary'>
@@ -63,6 +90,26 @@ function Candidate(props) {
     )
 }
 
+function DisplayHeadings(props) {
+    return (
+        <>
+            <Grid container spacing={2} justify='center'
+                  alignItems='center' alignContent='center'>
+                <Box pt={2} pb={2}>
+                    <Typography variant='h6'>{props.heading}</Typography>
+                </Box>
+            </Grid>
+        </>
+    )
+}
+
+function handleSelectedCandidate(props) {
+    props.setSelectedCandidates({
+        ...props.selectedCandidates,
+        [props.position]: props.name
+    });
+}
+
 function CandidateCard(props) {
     const classes = useStyles();
     const [expanded, setExpanded] = useState(false);
@@ -70,12 +117,6 @@ function CandidateCard(props) {
     const position = temp.charAt(0).toUpperCase() + temp.slice(1);
     const displayCheck = props.selectedCandidates[props.position] === props.name;
 
-    function handleSelectedCandidate() {
-        props.setSelectedCandidates({
-            ...props.selectedCandidates,
-            [props.position]: props.name
-        });
-    }
 
     return (
         <div style={{maxWidth: 345}}>
@@ -85,6 +126,7 @@ function CandidateCard(props) {
                     style={{height: 300}}
                     image={props.link}
                     title='candidate image'
+                    className={classes.candidateImg}
                 />
                 <CardContent>
                     <Grid container justify='center'
@@ -130,7 +172,7 @@ function CandidateCard(props) {
                                         <Button variant='contained'
                                                 color='primary'
                                                 className='voteButton'
-                                                onClick={() => handleSelectedCandidate()}
+                                                onClick={() => handleSelectedCandidate(props)}
                                         >
                                             VOTE
                                         </Button> : <CheckIcon/>
@@ -143,6 +185,47 @@ function CandidateCard(props) {
 
             </Card>
         </div>
+    )
+}
+
+
+
+
+function TeeShirtCard(props) {
+    const displayCheck = props.selectedCandidates[props.position] === props.name;
+    const classes = useStyles();
+    return (
+        <>
+            <Card variant='elevation'>
+                <CardMedia
+                    component="img"
+                    style={{height: 300}}
+                    image={props.link}
+                    title='teeshirt image'
+                    className={classes.candidateImg}
+                />
+                <CardContent>
+                    <Grid container justify='center'
+                          alignItems='center' alignContent='center' direction='column'>
+                        <Grid item>
+                            <CardActions>
+                                <Box pt={2}>
+                                    {!displayCheck ?
+                                        <Button variant='contained'
+                                                color='primary'
+                                                className='voteButton'
+                                                onClick={() => handleSelectedCandidate(props)}
+                                        >
+                                            VOTE
+                                        </Button> : <CheckIcon/>
+                                    }
+                                </Box>
+                            </CardActions>
+                        </Grid>
+                    </Grid>
+                </CardContent>
+            </Card>
+        </>
     )
 }
 
