@@ -10,7 +10,6 @@ import clsx from "clsx";
 
 function Candidate(props) {
     const [selectedCandidates, setSelectedCandidates] = useState({});
-    const [candidatesVotedFor, setCandidatesVotedFor] = useState([]);
 
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
@@ -19,7 +18,7 @@ function Candidate(props) {
 
     function handleVote() {
 
-        sendPostRequest('submit', {'candidatesChosen': props.name}).then(
+        sendPostRequest('submit', {'candidatesChosen': selectedCandidates}).then(
             r => {
 
                 if (r == null) {
