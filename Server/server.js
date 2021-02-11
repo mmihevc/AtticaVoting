@@ -49,6 +49,7 @@ let startDate;
 let endDate;
 let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
+let candidateList;
 
 
 let webServer;
@@ -100,6 +101,7 @@ submissions) and formats the message to be submitted to HCS.
  */
 function runServer() {
     log('runServer()', 'Server Starting...', logStatus);
+    getCandidateList();
     //loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
     webServer.listen(8443, () => {
         log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
@@ -140,21 +142,28 @@ function configureServer() {
         confirmList.push({aid: vote, resp: res});
     });
 
-    //io = socket.listen(webServer);
+    app.get('/api/candidates', (req,res) => {
+        res.send(randomCandList());
+    });
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
 
-$.getJSON('/candidates.json').done(function(data){
-    window.condidates = data;
-    console.log(window.condidates);
-});
-function Randomize_Json(){
-    const obj_keys = Object.keys(window.condidates);
-    const ran_key = obj_keys[Math.floor(Math.random() * obj_keys.length)];
-    window.selectedquestion = window.condidates[ran_key];
-    console.log(window.selectedquestion);
-    console.log(window.condidates);
+function getCandidateList(){
+    fs.readFileSync('./config/candidates.json', 'utf-8', (err, jsonString) => {
+        candidateList = JSON.parse(jsonString);
+    });
+}
+
+function randomCandList(){
+    let obj_keys = Object.keys(candidateList);
+    let randList = {};
+    for(let i=0; i < obj_keys.length; i++){
+        let randCand = obj_keys[Math.floor(Math.random() * obj_keys.length)]
+        randList[`candidate${i}`] = randCand;
+        obj_keys.splice(obj_keys.indexOf(randCand), 1)
+    }
+    return randList;
 }
 
 function loadUidList(fileName) {
