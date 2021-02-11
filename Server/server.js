@@ -118,24 +118,6 @@ function runServer() {
 }
 
 function configureServer() {
-    if(secure){
-        const options = {
-            key: fs.readFileSync(`./Server/config/${httpsConfig.key}`),
-            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`)
-        };
-
-        app.use(function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-            res.setHeader('Access-Control-Allow-Credentials', true);
-            next();
-        });
-
-        webServer = https.createServer(options,app);
-    } else {
-        webServer = http.createServer(app);
-    }
 
     app.use(bodyParser.json());  ////////////////////////////////////////////////////
     app.use(express.urlencoded({extended: false}));
@@ -156,6 +138,25 @@ function configureServer() {
     app.get('/api/candidates', (req,res) => {
         res.send(randomCandList());
     });
+
+    if(secure){
+        const options = {
+            key: fs.readFileSync(`./Server/config/${httpsConfig.key}`),
+            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`)
+        };
+
+        app.use(function (req, res, next) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            res.setHeader('Access-Control-Allow-Credentials', true);
+            next();
+        });
+
+        webServer = https.createServer(options,app);
+    } else {
+        webServer = http.createServer(app);
+    }
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
