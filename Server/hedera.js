@@ -7,6 +7,8 @@ const {
     PublicKey
 } = require("@hashgraph/sdk");
 
+console.log(require("@hashgraph/sdk"));
+
 //const {hederaConfig} = require('./config/config.js');
 const config = require('./config/config');
 const hederaConfig = config.hederaConfig;
