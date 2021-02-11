@@ -1,5 +1,4 @@
 import {Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconButton, Collapse, Checkbox, Button} from "@material-ui/core";
-import candidateData from "../candidates.json";
 import React, {useState} from "react";
 import CheckIcon from '@material-ui/icons/Check';
 import {sendPostRequest, sendGetRequest} from "../hooks/API";
@@ -9,11 +8,13 @@ import clsx from "clsx";
 
 
 function Candidate(props) {
+    let candidateData;
     const [selectedCandidates, setSelectedCandidates] = useState({});
 
     sendGetRequest().then(
         r => {
             console.log(r.data);
+            candidateData = r.data;
         }
     )
 
@@ -42,9 +43,6 @@ function Candidate(props) {
             }
         )
     }
-
-
-
 
     return (
         <Grid container spacing={2} justify='center'
