@@ -2,7 +2,6 @@ const {
     Client,
     TopicMessageSubmitTransaction,
     TopicCreateTransaction,
-    //MirrorConsensusTopicQuery,
     TopicMessageQuery,
     PrivateKey,
     PublicKey

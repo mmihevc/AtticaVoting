@@ -2,8 +2,7 @@
 const express = require("express");
 const app = express();
 const http = require("http");
-//const https = require("https");
-const socket = require("socket.io");
+const https = require("https");
 //const cors = require("cors");
 
 /* include other packages */
@@ -27,6 +26,7 @@ const hexToStr = convert('hex', 'utf8');
 /* config */
 const config = require('./config/config.js');
 const tallyConfig = config.dragonGlassConfig;
+const httpsConfig = config.httpsConfig;
 
 const newElectionConfig = require('./config/electionConfig.json');
 
@@ -49,6 +49,8 @@ let startDate;
 let endDate;
 let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
+
+let secure = false;
 
 
 let webServer;
@@ -101,32 +103,41 @@ submissions) and formats the message to be submitted to HCS.
 function runServer() {
     log('runServer()', 'Server Starting...', logStatus);
     //loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
-    webServer.listen(8443, () => {
-        log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
-    });
+    if(secure){
+        webServer.listen(443, () => {
+            log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
+        });
+    }else{
+        webServer.listen(80, () => {
+            log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
+        });
+    }
     HederaObj.subscribeToMirror(confirmList);
 }
 
 function configureServer() {
-    /*const options = {
-        key: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/privkey.pem'),
-        cert: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/cert.pem'),
-        ca: fs.readFileSync('/etc/letsencrypt/live/atticavoting.com/chain.pem')
-    };*/
+    if(secure){
+        const options = {
+            key: fs.readFileSync(`./Server/config/${httpsConfig.key}`),
+            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`)
+        };
 
-    /*app.use(function (req, res, next) {
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-        res.setHeader('Access-Control-Allow-Credentials', true);
-        next();
-    });*/
+        app.use(function (req, res, next) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+            res.setHeader('Access-Control-Allow-Credentials', true);
+            next();
+        });
+
+        webServer = https.createServer(options,app);
+    } else {
+        webServer = http.createServer(app);
+    }
+
     app.use(bodyParser.json());  ////////////////////////////////////////////////////
     app.use(express.urlencoded({extended: false}));
     app.use(express.static("dist/public"));
-
-    //webServer = https.createServer(options, app);
-    webServer = http.createServer(app);
 
     app.post('/api/submit', (req,res) => {
         const vote = security.hash(req.body.candidateName);
@@ -139,8 +150,6 @@ function configureServer() {
 
         confirmList.push({aid: vote, resp: res});
     });
-
-    //io = socket.listen(webServer);
 
     log('configureServer()', 'Server Configured!', logStatus);
 }
