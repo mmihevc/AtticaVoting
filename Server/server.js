@@ -51,7 +51,7 @@ let endDate;
 let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
 
-let secure = false;
+let secure = true;
 
 
 let webServer;
