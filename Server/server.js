@@ -150,7 +150,7 @@ function configureServer() {
 }
 
 function getCandidateList(){
-    fs.readFileSync('./config/candidates.json', 'utf-8', (err, jsonString) => {
+    fs.readFileSync('./candidates.json', 'utf-8', (err, jsonString) => {
         candidateList = JSON.parse(jsonString);
     });
 }
