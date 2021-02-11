@@ -10,6 +10,11 @@ export async function sendPostRequest(location, requestBody) {
 }
 
 export async function sendGetRequest() {
-    let res = await axios.get("/api/candidates");
-    return res.data;
+    try {
+        let res = await axios.get("/api/candidates");
+        return res.data;
+    } catch(error) {
+        return null;
+    }
+
 }

@@ -20,8 +20,14 @@ const securityConfig = {
     "priv": "./key"
 }
 
+const httpsConfig = {
+    "cert": "cert.pem",
+    "chain": "chain.pem"
+}
+
 module.exports = {
     hederaConfig,
     dragonGlassConfig,
-    securityConfig
+    securityConfig,
+    httpsConfig
 };
