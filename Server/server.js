@@ -119,8 +119,8 @@ function runServer() {
 function configureServer() {
     if(secure){
         const options = {
-            cert: fs.readFileSync(`./config/${httpsConfig.cert}`),
-            ca: fs.readFileSync(`./config/${httpsConfig.chain}`)
+            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`),
+            ca: fs.readFileSync(`./Server/config/${httpsConfig.chain}`)
         };
 
         app.use(function (req, res, next) {
