@@ -50,7 +50,7 @@ let endDate;
 let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
 
-let secure = true;
+let secure = false;
 
 
 let webServer;
@@ -118,8 +118,8 @@ function runServer() {
 function configureServer() {
     if(secure){
         const options = {
-            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`),
-            ca: fs.readFileSync(`./Server/config/${httpsConfig.chain}`)
+            key: fs.readFileSync(`./Server/config/${httpsConfig.key}`),
+            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`)
         };
 
         app.use(function (req, res, next) {
