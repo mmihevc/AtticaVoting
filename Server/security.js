@@ -107,7 +107,7 @@ function decode(ct) {
 
 
 async function test() {
-    let text = 'whyyyyy';
+    let text = 'why';
     let pub = await getPublicKey();
     let priv = await getPrivateKey('pgp');
     Promise.all([pub, priv]);

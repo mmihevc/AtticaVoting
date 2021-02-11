@@ -121,7 +121,7 @@ function configureServer() {
         res.setHeader('Access-Control-Allow-Credentials', true);
         next();
     });*/
-    app.use(bodyParser.json());  ////////////////////////////////////////////////////
+    app.use(bodyParser.json());
     app.use(express.urlencoded({extended: false}));
     app.use(express.static("dist/public"));
 
@@ -143,6 +143,18 @@ function configureServer() {
     //io = socket.listen(webServer);
 
     log('configureServer()', 'Server Configured!', logStatus);
+}
+
+$.getJSON('/candidates.json').done(function(data){
+    window.condidates = data;
+    console.log(window.condidates);
+});
+function Randomize_Json(){
+    const obj_keys = Object.keys(window.condidates);
+    const ran_key = obj_keys[Math.floor(Math.random() * obj_keys.length)];
+    window.selectedquestion = window.condidates[ran_key];
+    console.log(window.selectedquestion);
+    console.log(window.condidates);
 }
 
 function loadUidList(fileName) {
