@@ -8,6 +8,8 @@ import {useHistory} from "react-router";
 import Home from '../Client/components/Home'
 import Confirmation from '../Client/components/Confirmation'
 import DLInfo from '../Client/components/DLInfo'
+import LoginLayout from "./components/LoginLayout";
+import Login from "./components/Login"
 
 const Router = props => {
     const [open, setOpen] = useState(false);
@@ -20,6 +22,11 @@ const Router = props => {
     return (
         <Switch>
             <Route exact path="/">
+                <LoginLayout>
+                    <Login {...props} history={history}/>
+                </LoginLayout>
+            </Route>
+            <Route exact path="/home">
                 <Home {...props} open={open} setOpen={setOpen}
                       setTopic={setTopic} setMessage={setMessage}
                       setSequence={setSequence} setHash={setHash}/>
