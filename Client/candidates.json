@@ -15,24 +15,24 @@
     "position" : "vicePresident",
     "description": "He just graduated with his MBA woot woot"
   },
-  "teeshirt1" : {
+  "candidate5" : {
     "name" : "caleb",
     "position" : "teeshirt"
   },
-  "teeshirt2" : {
+  "candidate6" : {
     "name" : "vincent",
     "position" : "teeshirt"
   },
-  "teeshirt3" : {
+  "candidate7" : {
     "name" : "christopher",
     "position" : "teeshirt"
   },
-  "candidate3" : {
+  "candidate8" : {
     "name": "Waylon Jepsen",
     "position" : "vicePresident",
     "description": "He is also cool like Maddie and working on his Masters in Computer Science"
   },
-  "teeshirt4" : {
+  "candidate9" : {
     "name" : "james",
     "position" : "teeshirt"
   }

@@ -11,8 +11,8 @@ export async function sendPostRequest(location, requestBody) {
 
 export async function sendGetRequest() {
     try {
-        let res = await axios.get("/api/candidates");
-        return res.data;
+        return await axios.get("/api/candidates");
+
     } catch(error) {
         return null;
     }

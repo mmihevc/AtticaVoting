@@ -121,6 +121,7 @@ function configureServer() {
     app.use(bodyParser.json());  ////////////////////////////////////////////////////
     app.use(express.urlencoded({extended: false}));
     app.use(express.static("dist/public"));
+    app.use(express.static("Server/public"));
 
     app.post('/api/submit', (req,res) => {
         const vote = security.hash(req.body.candidateName);
@@ -135,7 +136,7 @@ function configureServer() {
     });
 
     app.get('/api/candidates', (req,res) => {
-        res.send(randomCandList());
+        res.send(candidateList);
     });
 
     if(secure){
@@ -165,18 +166,6 @@ function configureServer() {
 function getCandidateList(){
     let file_data = fs.readFileSync('./Server/candidates.json');
     candidateList = JSON.parse(file_data);
-}
-
-function randomCandList(){
-    let obj_keys = Object.keys(candidateList);
-    let randList = {};
-    let range = obj_keys.length;
-    for(let i=0; i < range; i++){
-        let randCand = obj_keys[Math.floor(Math.random() * obj_keys.length)]
-        randList[`candidate${i}`] = candidateList[randCand];
-        obj_keys.splice(obj_keys.indexOf(randCand), 1)
-    }
-    return randList;
 }
 
 function loadUidList(fileName) {

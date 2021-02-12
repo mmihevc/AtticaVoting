@@ -1,5 +1,5 @@
 import {Card, CardActions, CardContent, CardMedia, Grid, Typography, Box, IconButton, Collapse, Checkbox, Button} from "@material-ui/core";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import CheckIcon from '@material-ui/icons/Check';
 import {sendPostRequest, sendGetRequest} from "../hooks/API";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -8,19 +8,30 @@ import clsx from "clsx";
 
 
 function Candidate(props) {
-    let candidateData;
+    const [candidateData, setCandidateData] = useState([]);
     const [selectedCandidates, setSelectedCandidates] = useState({});
+    //let candidateData = {};
 
-    sendGetRequest().then(
-        r => {
-            console.log(r.data);
-            candidateData = r.data;
+    useEffect(() => {
+        sendGetRequest().then(
+            r => {
+                setCandidateData(shuffle(Object.values(r.data)))
+            }
+        )
+    }, [])
+
+    function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [a[i], a[j]] = [a[j], a[i]];
         }
-    )
+        return a;
+    }
 
     function searchCandidateImage(name) {
         let candidateName = name.split(" ");
-        return '../../Server/public/images/' + candidateName[0].toLowerCase() + '.jpg';
+        return '/images/' + candidateName[0].toLowerCase() + '.jpg';
+
     }
 
     function handleVote() {
@@ -48,12 +59,9 @@ function Candidate(props) {
         <Grid container spacing={2} justify='center'
               alignItems='center' alignContent='center'>
             <DisplayHeadings {...props} heading={"Select A Presidential Candidate"}/>
-                {Object.values(candidateData).filter((item) => {
-                    if (item.position === 'teeshirt') {
-                        return false
-                    }
-                    return true;
-                }).map((item, index) =>
+                {candidateData.filter((item) =>
+                    item.position !== 'teeshirt'
+                ).map((item, index) =>
                     <Grid item key={index}>
                         <CandidateCard {...props} name={item.name} position={item.position}
                                        description={item.description}
@@ -63,12 +71,9 @@ function Candidate(props) {
                     </Grid>
                 )}
             <DisplayHeadings {...props} heading={"Select a TeeShirt"}/>
-                {Object.values(candidateData).filter((item) => {
-                    if (item.position === 'teeshirt') {
-                        return true;
-                    }
-                    return false;
-                }).map((item, index) =>
+                {candidateData.filter((item) =>
+                    item.position === 'teeshirt'
+                ).map((item, index) =>
                     <Grid item key={index} >
                         <TeeShirtCard {...props} name={item.name} position={item.position} description={item.description}
                                       setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}

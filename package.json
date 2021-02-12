@@ -1,12 +1,16 @@
 {
-  "name": "AtticaVoting",
+  "name": "attica-voting",
   "version": "1.0.0",
   "description": "Attica Voting Application",
   "scripts": {
     "startClient": "webpack-dev-server -d",
     "buildClient": "webpack -p",
-    "start": "concurrently --kill-others-on-fail \"npm run startClient\" \"node ./Server/server.js -dev\" ",
-    "server": "webpack --mode production && node ./Server/server.js"
+    "startServer": "nodemon ./Server/server.js -dev",
+    "start": "concurrently --kill-others-on-fail \"npm:startClient\" \"npm:startServer\" ",
+    "deploy": "npm run buildClient && node ./Server/server.js"
+  },
+  "nodemonConfig": {
+    "ignore": ["Client", "dist", "node_modules"]
   },
   "repository": {
     "type": "git",
@@ -85,6 +89,7 @@
     "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
     "node-sass": "^4.14.1",
+    "nodemon": "^2.0.7",
     "postcss": "^8.1.10",
     "postcss-loader": "^4.1.0",
     "precss": "^4.0.0",
