@@ -103,7 +103,6 @@ submissions) and formats the message to be submitted to HCS.
  */
 function runServer() {
     log('runServer()', 'Server Starting...', logStatus);
-    getCandidateList();
     //loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
     if(secure){
         webServer.listen(443, () => {
@@ -158,21 +157,23 @@ function configureServer() {
         webServer = http.createServer(app);
     }
 
+    getCandidateList();
+
     log('configureServer()', 'Server Configured!', logStatus);
 }
 
 function getCandidateList(){
-    fs.readFileSync('./Server/candidates.json', 'utf-8', (err, jsonString) => {
-        candidateList = JSON.parse(jsonString);
-    });
+    let file_data = fs.readFileSync('./Server/candidates.json');
+    candidateList = JSON.parse(file_data);
 }
 
 function randomCandList(){
     let obj_keys = Object.keys(candidateList);
     let randList = {};
-    for(let i=0; i < obj_keys.length; i++){
+    let range = obj_keys.length;
+    for(let i=0; i < range; i++){
         let randCand = obj_keys[Math.floor(Math.random() * obj_keys.length)]
-        randList[`candidate${i}`] = randCand;
+        randList[`candidate${i}`] = candidateList[randCand];
         obj_keys.splice(obj_keys.indexOf(randCand), 1)
     }
     return randList;
