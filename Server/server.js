@@ -49,6 +49,7 @@ let startDate;
 let endDate;
 let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
+let candidateList;
 
 let secure = false;
 
@@ -116,6 +117,28 @@ function runServer() {
 }
 
 function configureServer() {
+
+    app.use(bodyParser.json());  ////////////////////////////////////////////////////
+    app.use(express.urlencoded({extended: false}));
+    app.use(express.static("dist/public"));
+    app.use(express.static("Server/public"));
+
+    app.post('/api/submit', (req,res) => {
+        const vote = security.hash(req.body.candidateName);
+
+        console.log(`Vote '${vote}' received!`);
+        
+        HederaObj.sendHCSMessage(vote);
+
+        console.log(`Submitted vote '${vote}'`);
+
+        confirmList.push({aid: vote, resp: res});
+    });
+
+    app.get('/api/candidates', (req,res) => {
+        res.send(candidateList);
+    });
+
     if(secure){
         const options = {
             key: fs.readFileSync(`./Server/config/${httpsConfig.key}`),
@@ -135,23 +158,14 @@ function configureServer() {
         webServer = http.createServer(app);
     }
 
-    app.use(bodyParser.json());  ////////////////////////////////////////////////////
-    app.use(express.urlencoded({extended: false}));
-    app.use(express.static("dist/public"));
-
-    app.post('/api/submit', (req,res) => {
-        const vote = security.hash(req.body.candidateName);
-
-        console.log(`Vote '${vote}' received!`);
-        
-        HederaObj.sendHCSMessage(vote);
-
-        console.log(`Submitted vote '${vote}'`);
-
-        confirmList.push({aid: vote, resp: res});
-    });
+    getCandidateList();
 
     log('configureServer()', 'Server Configured!', logStatus);
+}
+
+function getCandidateList(){
+    let file_data = fs.readFileSync('./Server/candidates.json');
+    candidateList = JSON.parse(file_data);
 }
 
 function loadUidList(fileName) {

@@ -1,0 +1,39 @@
+{
+  "candidate1" : {
+    "name": "Maddie Mihevc",
+    "position" : "president",
+    "description": "She is currently working on her Masters in Computer Science"
+  },
+  "candidate2" : {
+    "name": "Derek Larkins",
+    "position" : "president",
+    "description": "He is getting a degree in Math but Maddie isn't sure the exact title of it"
+  },
+
+  "candidate4" : {
+    "name": "Christian Fergunson",
+    "position" : "vicePresident",
+    "description": "He just graduated with his MBA woot woot"
+  },
+  "candidate5" : {
+    "name" : "caleb",
+    "position" : "teeshirt"
+  },
+  "candidate6" : {
+    "name" : "vincent",
+    "position" : "teeshirt"
+  },
+  "candidate7" : {
+    "name" : "christopher",
+    "position" : "teeshirt"
+  },
+  "candidate8" : {
+    "name": "Waylon Jepsen",
+    "position" : "vicePresident",
+    "description": "He is also cool like Maddie and working on his Masters in Computer Science"
+  },
+  "candidate9" : {
+    "name" : "james",
+    "position" : "teeshirt"
+  }
+}
