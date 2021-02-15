@@ -74,6 +74,12 @@ export const useStyles = makeStyles((theme) => ({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
+    candidateImg: {
+        height: 'auto',
+        maxHeight: '250px',
+        width: 'auto',
+        maxWidth: '250px'
+    }
 }));
 
 export const StyledTableCell = withStyles((theme) => ({
