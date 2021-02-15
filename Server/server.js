@@ -123,7 +123,10 @@ function configureServer() {
     app.use(express.static("dist/public"));
 
     app.post('/api/submit', (req,res) => {
-        const vote = security.hash(req.body.candidateName);
+        const id = '123456789';
+        const anonID = hash(`${id}${Math.floor(Math.random() * 1000)}`);
+
+        const vote = req.body.selectedCandidates;
 
         console.log(`Vote '${vote}' received!`);
         
