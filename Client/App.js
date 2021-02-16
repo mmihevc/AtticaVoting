@@ -17,19 +17,25 @@ const Router = props => {
     const [message, setMessage] = useState();
     const [sequence, setSequence] = useState();
     const [hash, setHash] = useState();
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const history = useHistory();
 
     return (
         <Switch>
             <Route exact path="/">
                 <LoginLayout>
-                    <Login {...props} history={history}/>
+                    <Login {...props} history={history} username={username} email={email}
+                           setUsername={setUsername} setEmail={setEmail}
+                    />
                 </LoginLayout>
             </Route>
             <Route exact path="/home">
                 <Home {...props} open={open} setOpen={setOpen}
                       setTopic={setTopic} setMessage={setMessage}
-                      setSequence={setSequence} setHash={setHash}/>
+                      setSequence={setSequence} setHash={setHash}
+                      history={history} username={username} email={email}
+                />
             </Route>
             <Route path="/confirmation">
                 <Confirmation {...props} open={open} setOpen={setOpen} history={history}

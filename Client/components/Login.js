@@ -8,11 +8,8 @@ import '../static/css/login.scss';
 
 const Login = props => {
 
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
 
     function login() {
-
         props.history.push('/home');
     }
 
@@ -25,8 +22,8 @@ const Login = props => {
                 <Typography variant={"h4"} align={"center"}>Welcome to Attica Voting</Typography>
             </Grid>
             <LoginFields
-                username={username} setUsername={setUsername}
-                email={email} setEmail={setEmail}
+                username={props.username} setUsername={props.setUsername}
+                email={props.email} setEmail={props.setEmail}
                 login={login} {...props}
             />
             <Grid item container justify={"center"} alignItems={"center"} alignContent={"center"}>
@@ -53,7 +50,7 @@ const LoginFields = props => {
                 <TextField
                     fullWidth color={"primary"} variant={"outlined"}
                     autoComplete={"username"} id={'username'}
-                    label={"Username"} value={props.username} onChange={(e) => props.setUsername(e.target.value)}
+                    label={"Name"} value={props.username} onChange={(e) => props.setUsername(e.target.value)}
                     onKeyDown={(e) =>
                     {
                         if(e.key === 'Enter') props.login();
