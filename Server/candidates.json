@@ -1,19 +1,19 @@
 {
   "candidate1" : {
-    "name": "Maddie Mihevc",
-    "position" : "president",
-    "description": "She is currently working on her Masters in Computer Science"
+    "name": "Michael and Janelle",
+    "position" : "presidentAndVicePresident",
+    "description": "enter description for candidates here"
   },
   "candidate2" : {
-    "name": "Derek Larkins",
-    "position" : "president",
-    "description": "He is getting a degree in Math but Maddie isn't sure the exact title of it"
+    "name": "Aaron and Maria",
+    "position" : "presidentAndVicePresident",
+    "description": "enter description for candidates here"
   },
 
   "candidate4" : {
-    "name": "Christian Fergunson",
-    "position" : "vicePresident",
-    "description": "He just graduated with his MBA woot woot"
+    "name": "Nicki and Brett",
+    "position" : "presidentAndVicePresident",
+    "description": "enter description for candidates here"
   },
   "candidate5" : {
     "name" : "grey",
@@ -28,26 +28,26 @@
     "position" : "teeshirt"
   },
   "candidate8" : {
-    "name": "Waylon Jepsen",
-    "position" : "vicePresident",
-    "description": "He is also cool like Maddie and working on his Masters in Computer Science"
+    "name": "Hannah and Antonio",
+    "position" : "presidentAndVicePresident",
+    "description": "enter description for candidates here"
   },
   "candidate9" : {
     "name" : "white",
     "position" : "teeshirt"
   },
   "candidate10" : {
-    "name" : "jack",
+    "name" : "Jack",
     "position" : "speakerOfTheSenate",
     "description" : "enter description here"
   },
   "candidate11" : {
-    "name" : "taylor",
-    "position" : "SpeakerOfTheSenate",
+    "name" : "Taylor",
+    "position" : "speakerOfTheSenate",
     "description" : "enter description here"
   },
   "candidate12" : {
-    "name" : "miranda",
+    "name" : "Miranda",
     "position" : "speakerOfTheSenate",
     "description" : "enter description here"
   }
