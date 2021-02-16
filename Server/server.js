@@ -134,8 +134,8 @@ async function configureServer() {
 
             submittedVote += `${anonID}~`;
 
-            const vote = req.body.selectedCandidates;
-            const encrypted = await security.encrypt(`${anonID}~${vote}`, pubKey);
+            const votes = JSON.stringify(req.body.candidatesChosen);
+            const encrypted = await security.encrypt(`${anonID}~${votes}`, pubKey);
             const encoded = security.encode(encrypted);
 
             submittedVote += `${encoded}~`;
@@ -146,7 +146,7 @@ async function configureServer() {
             
             HederaObj.sendHCSMessage(submittedVote);
 
-            console.log(`Vote Submitted!\n~AnonId=${anonID}\n~EncVote=${encoded}\n~Timestamp=${timestamp}`);
+            log('API Submit', `Vote Submitted!\n~AnonId=${anonID}\n~EncVote=${encoded}\n~Timestamp=${timestamp}`, logStatus);
 
             confirmList.push({aid: anonID, resp: res});
         }catch (err){
