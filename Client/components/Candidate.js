@@ -10,7 +10,6 @@ import clsx from "clsx";
 function Candidate(props) {
     const [candidateData, setCandidateData] = useState([]);
     const [selectedCandidates, setSelectedCandidates] = useState({});
-    //let candidateData = {};
 
     useEffect(() => {
         sendGetRequest().then(
@@ -35,7 +34,8 @@ function Candidate(props) {
     }
 
     function handleVote() {
-        sendPostRequest('submit', {'candidatesChosen': selectedCandidates}).then(
+        sendPostRequest('submit', {'candidatesChosen': selectedCandidates,
+            'name' : props.username, 'email': props.email}).then(
             r => {
                 if (r == null) {
                     props.produceSnackBar('Server error', 'error');
