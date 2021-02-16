@@ -232,5 +232,9 @@ function TeeShirtCard(props) {
     )
 }
 
+function constitutionAmendmentCard() {
+
+}
+
 
 export default Candidate;

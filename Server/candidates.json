@@ -16,15 +16,15 @@
     "description": "He just graduated with his MBA woot woot"
   },
   "candidate5" : {
-    "name" : "caleb",
+    "name" : "grey",
     "position" : "teeshirt"
   },
   "candidate6" : {
-    "name" : "vincent",
+    "name" : "green",
     "position" : "teeshirt"
   },
   "candidate7" : {
-    "name" : "christopher",
+    "name" : "tan",
     "position" : "teeshirt"
   },
   "candidate8" : {
@@ -33,7 +33,22 @@
     "description": "He is also cool like Maddie and working on his Masters in Computer Science"
   },
   "candidate9" : {
-    "name" : "james",
+    "name" : "white",
     "position" : "teeshirt"
+  },
+  "candidate10" : {
+    "name" : "jack",
+    "position" : "speakerOfTheSenate",
+    "description" : "enter description here"
+  },
+  "candidate11" : {
+    "name" : "taylor",
+    "position" : "SpeakerOfTheSenate",
+    "description" : "enter description here"
+  },
+  "candidate12" : {
+    "name" : "miranda",
+    "position" : "speakerOfTheSenate",
+    "description" : "enter description here"
   }
 }
