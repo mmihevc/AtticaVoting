@@ -65,7 +65,6 @@ module.exports = class HederaClass {
                 .subscribe(this.HederaClient, res => {
                     //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
                     let encMsg = Buffer.from(res.contents, "utf8").toString();
-                    console.log(`DEBUG: encMsg = ${encMsg}`);
                     let anonID = encMsg.split('~')[0];
                     // let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
                     // let uidHash = encMsg.split(specialChar)[0];
