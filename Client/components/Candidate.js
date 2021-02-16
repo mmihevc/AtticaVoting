@@ -58,9 +58,9 @@ function Candidate(props) {
     return (
         <Grid container spacing={2} justify='center'
               alignItems='center' alignContent='center'>
-            <DisplayHeadings {...props} heading={"Select A Presidential Candidate"}/>
+            <DisplayHeadings {...props} heading={"Presidential Candidate"}/>
                 {candidateData.filter((item) =>
-                    item.position !== 'teeshirt'
+                    item.position === "presidentAndVicePresident"
                 ).map((item, index) =>
                     <Grid item key={index}>
                         <CandidateCard {...props} name={item.name} position={item.position}
@@ -70,17 +70,28 @@ function Candidate(props) {
                                        link={searchCandidateImage(item.name)}/>
                     </Grid>
                 )}
-            <DisplayHeadings {...props} heading={"Select a TeeShirt"}/>
-                {candidateData.filter((item) =>
-                    item.position === 'teeshirt'
-                ).map((item, index) =>
-                    <Grid item key={index} >
-                        <TeeShirtCard {...props} name={item.name} position={item.position} description={item.description}
-                                      setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}
-                                      link={searchCandidateImage(item.name)} />
-                    </Grid>
-                )}
-
+            <DisplayHeadings {...props} heading={"Speaker of the Senate Candidate"}/>
+            {candidateData.filter((item) =>
+                item.position === "speakerOfTheSenate"
+            ).map((item, index) =>
+                <Grid item key={index}>
+                    <CandidateCard {...props} name={item.name} position={item.position}
+                                   description={item.description}
+                                   setSelectedCandidates={setSelectedCandidates}
+                                   selectedCandidates={selectedCandidates}
+                                   link={searchCandidateImage(item.name)}/>
+                </Grid>
+            )}
+            <DisplayHeadings {...props} heading={"TeeShirt"}/>
+            {candidateData.filter((item) =>
+                item.position === 'teeshirt'
+            ).map((item, index) =>
+                <Grid item key={index} >
+                    <TeeShirtCard {...props} name={item.name} position={item.position} description={item.description}
+                                  setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}
+                                  link={searchCandidateImage(item.name)} />
+                </Grid>
+            )}
                 <Grid container justify='center' alignItems='center' alignContent='center'>
                     <Box pt={3}>
                         <Button onClick={() => handleVote()} variant="contained" color='primary'>
@@ -98,8 +109,8 @@ function DisplayHeadings(props) {
         <>
             <Grid container spacing={2} justify='center'
                   alignItems='center' alignContent='center'>
-                <Box pt={2} pb={2}>
-                    <Typography variant='h6'>{props.heading}</Typography>
+                <Box pt={5} pb={3}>
+                    <Typography variant='h4'>{props.heading}</Typography>
                 </Box>
             </Grid>
         </>
@@ -122,7 +133,7 @@ function CandidateCard(props) {
 
 
     return (
-        <div style={{maxWidth: 345}}>
+        <div>
             <Card variant='elevation'>
                 <CardMedia
                     component="img"
@@ -230,6 +241,10 @@ function TeeShirtCard(props) {
             </Card>
         </>
     )
+}
+
+function constitutionAmendmentCard() {
+
 }
 
 
