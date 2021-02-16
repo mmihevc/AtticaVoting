@@ -34,6 +34,7 @@ const newElectionConfig = require('./config/electionConfig.json');
 const security = require("./security.js");
 
 const HederaClass = require('./hedera');
+const { encrypt } = require("openpgp");
 
 /* init variables */
 // const mirrorNodeAddress = new MirrorClient(
@@ -116,26 +117,41 @@ function runServer() {
     HederaObj.subscribeToMirror(confirmList);
 }
 
-function configureServer() {
+async function configureServer() {
 
-    app.use(bodyParser.json());  ////////////////////////////////////////////////////
+    const pubKey = await security.getPublicKey();
+
+    app.use(bodyParser.json());
     app.use(express.urlencoded({extended: false}));
     app.use(express.static("dist/public"));
     app.use(express.static("Server/public"));
 
-    app.post('/api/submit', (req,res) => {
-        const id = '123456789';
-        const anonID = hash(`${id}${Math.floor(Math.random() * 1000)}`);
+    app.post('/api/submit', async (req,res) => {
+        try{    
+            let submittedVote = ``;
+            const id = '123456789';
+            const anonID = security.hash(`${id}${Math.floor(Math.random() * 1000)}`);
 
-        const vote = req.body.selectedCandidates;
+            submittedVote += `${anonID}~`;
 
-        console.log(`Vote '${vote}' received!`);
-        
-        HederaObj.sendHCSMessage(vote);
+            const vote = req.body.selectedCandidates;
+            const encrypted = await security.encrypt(`${anonID}~${vote}`, pubKey);
+            const encoded = security.encode(encrypted);
 
-        console.log(`Submitted vote '${vote}'`);
+            submittedVote += `${encoded}~`;
 
-        confirmList.push({aid: vote, resp: res});
+            const timestamp = Date.now();
+
+            submittedVote += `${timestamp}`
+            
+            HederaObj.sendHCSMessage(submittedVote);
+
+            console.log(`Vote Submitted!\n~AnonId=${anonID}\n~EncVote=${encoded}\n~Timestamp=${timestamp}`);
+
+            confirmList.push({aid: anonID, resp: res});
+        }catch (err){
+            log('API Submit Error', err, logStatus);
+        }
     });
 
     app.get('/api/candidates', (req,res) => {
