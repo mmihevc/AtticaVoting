@@ -76,7 +76,7 @@ export const useStyles = makeStyles((theme) => ({
     },
     candidateImg: {
         height: '100%',
-        maxWidth: '345px'
+        maxWidth: '300px'
     }
 }));
 

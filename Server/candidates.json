@@ -50,5 +50,15 @@
     "name" : "Miranda",
     "position" : "speakerOfTheSenate",
     "description" : "enter description here"
+  },
+  "candidate13" : {
+    "name" : "Amendment 204",
+    "position" : "amendment204",
+    "description" : "declare all Friday's casual Fridays"
+  },
+  "candidate14" :{
+    "name" : "Amendment 370",
+    "position" : "amendment370",
+    "description" : "everyone must now skip through the plaza"
   }
 }
