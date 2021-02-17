@@ -129,7 +129,7 @@ async function configureServer() {
     app.post('/api/submit', async (req,res) => {
         try{    
             let submittedVote = ``;
-            const id = '123456789';
+            const id = req.body.name + req.body.email;
             const anonID = security.hash(`${id}${Math.floor(Math.random() * 1000)}`);
 
             submittedVote += `${anonID}~`;
@@ -137,6 +137,8 @@ async function configureServer() {
             const votes = JSON.stringify(req.body.candidatesChosen);
             const encrypted = await security.encrypt(`${anonID}~${votes}`, pubKey);
             const encoded = security.encode(encrypted);
+
+            console.log(`DEBUG: ${votes}`);
 
             submittedVote += `${encoded}~`;
 
