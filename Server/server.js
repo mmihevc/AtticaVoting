@@ -138,8 +138,6 @@ async function configureServer() {
             const encrypted = await security.encrypt(`${anonID}~${votes}`, pubKey);
             const encoded = security.encode(encrypted);
 
-            console.log(`DEBUG: ${votes}`);
-
             submittedVote += `${encoded}~`;
 
             const timestamp = Date.now();
