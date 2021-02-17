@@ -6,7 +6,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {useStyles} from "../static/constants";
 import clsx from "clsx";
 
-
 function Candidate(props) {
     const [candidateData, setCandidateData] = useState([]);
     const [selectedCandidates, setSelectedCandidates] = useState({});
@@ -251,10 +250,20 @@ function TeeShirtCard(props) {
     )
 }
 
+
+
 function ConstitutionAmendmentCard(props) {
     const [expanded, setExpanded] = useState(false);
     const classes = useStyles();
     const displayCheck = props.selectedCandidates[props.position] === props.name;
+
+    function handleAmendmentVote(e) {
+        let vote = e.currentTarget.value ;
+        props.setSelectedCandidates({
+            ...props.selectedCandidates,
+            [props.position]: vote === 'yes' ? 'yes' : 'no'
+        });
+    }
 
     return (
         <>
@@ -296,26 +305,25 @@ function ConstitutionAmendmentCard(props) {
                         </Collapse>
                     </Grid>
                     <Grid item>
-                        <CardActions>
+                        <CardActions style={{justifyContent: 'center'}}>
                             <Box pt={2}>
                                 {!displayCheck ?
                                     <>
 
                                             <Button variant='contained'
                                                     color='primary'
-                                                    className='voteButton'
+                                                    value='yes'
                                                     style={{marginRight: '10px'}}
-                                                    onClick={() => handleSelectedCandidate(props)}
+                                                    onClick={(e) => handleAmendmentVote(e)}
                                             >
                                                 YES
                                             </Button>
                                             <Button variant='contained'
                                                     color='primary'
-                                                    className='voteButton'
-                                                    onClick={() => handleSelectedCandidate(props)}>
+                                                    value='no'
+                                                    onClick={(e) => handleAmendmentVote(e)}>
                                                 NO
                                             </Button>
-
                                     </>
                                     : <CheckIcon/>
                                 }
