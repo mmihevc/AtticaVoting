@@ -31,7 +31,7 @@ const Router = props => {
                 </LoginLayout>
             </Route>
             <Route exact path="/home">
-                <Home {...props} open={open} setOpen={setOpen}
+                <Home {...props} history={history} open={open} setOpen={setOpen}
                       setTopic={setTopic} setMessage={setMessage}
                       setSequence={setSequence} setHash={setHash}
                       history={history} username={username} email={email}

@@ -34,6 +34,7 @@ const newElectionConfig = require('./config/electionConfig.json');
 const security = require("./security.js");
 
 const HederaClass = require('./hedera');
+const { encrypt } = require("openpgp");
 
 /* init variables */
 // const mirrorNodeAddress = new MirrorClient(
@@ -116,23 +117,41 @@ function runServer() {
     HederaObj.subscribeToMirror(confirmList);
 }
 
-function configureServer() {
+async function configureServer() {
 
-    app.use(bodyParser.json());  ////////////////////////////////////////////////////
+    const pubKey = await security.getPublicKey();
+
+    app.use(bodyParser.json());
     app.use(express.urlencoded({extended: false}));
     app.use(express.static("dist/public"));
     app.use(express.static("Server/public"));
 
-    app.post('/api/submit', (req,res) => {
-        const vote = security.hash(req.body.candidateName);
+    app.post('/api/submit', async (req,res) => {
+        try{    
+            let submittedVote = ``;
+            const id = req.body.name + req.body.email;
+            const anonID = security.hash(`${id}${Math.floor(Math.random() * 1000)}`);
 
-        console.log(`Vote '${vote}' received!`);
-        
-        HederaObj.sendHCSMessage(vote);
+            submittedVote += `${anonID}~`;
 
-        console.log(`Submitted vote '${vote}'`);
+            const votes = JSON.stringify(req.body.candidatesChosen);
+            const encrypted = await security.encrypt(`${anonID}~${votes}`, pubKey);
+            const encoded = security.encode(encrypted);
 
-        confirmList.push({aid: vote, resp: res});
+            submittedVote += `${encoded}~`;
+
+            const timestamp = Date.now();
+
+            submittedVote += `${timestamp}`
+            
+            HederaObj.sendHCSMessage(submittedVote);
+
+            log('API Submit', `Vote Submitted!\n~AnonId=${anonID}\n~EncVote=${encoded}\n~Timestamp=${timestamp}`, logStatus);
+
+            confirmList.push({aid: anonID, resp: res});
+        }catch (err){
+            log('API Submit Error', err, logStatus);
+        }
     });
 
     app.get('/api/candidates', (req,res) => {
