@@ -1,7 +1,7 @@
 import {makeStyles, TableCell, TableRow, withStyles} from "@material-ui/core";
 
 export const title = 'ASCSU Student Elections';
-export const electionDescription = 'Choose your candidate below!';
+export const electionDescription = '';
 export const electionStart = 0;
 export const electionEnd = 0;
 
@@ -75,10 +75,8 @@ export const useStyles = makeStyles((theme) => ({
         transform: 'rotate(180deg)',
     },
     candidateImg: {
-        height: 'auto',
-        maxHeight: '250px',
-        width: 'auto',
-        maxWidth: '250px'
+        height: '100%',
+        maxWidth: '300px'
     }
 }));
 
