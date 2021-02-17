@@ -2,9 +2,10 @@
 const inquirer = require("inquirer");
 const rp = require("request-promise");
 const {
-    ConsensusTopicInfoQuery,
+    TopicInfoQuery,
+    TopicMessageQuery,
     Client,
-    Ed25519PrivateKey
+    PrivateKey
 } = require("@hashgraph/sdk");
 
 /* config */
@@ -85,9 +86,9 @@ function configureClient (account, key, client) {
         else
             acctId = hederaConfig.account;
         if(key !== "")
-            privKey = Ed25519PrivateKey.fromString(key);
+            privKey = PrivateKey.fromString(key);
         else
-            privKey = Ed25519PrivateKey.fromString(hederaConfig.key);
+            privKey = PrivateKey.fromString(hederaConfig.key);
         client.setOperator(acctId, privKey);
     } catch (error) {
         log("ERROR: configureClient()", error, "default");
@@ -97,7 +98,7 @@ function configureClient (account, key, client) {
 async function pullTopicInfo(topicId, client) {
     let topicInfo;
     try {
-        topicInfo = await new ConsensusTopicInfoQuery()
+        topicInfo = await new TopicInfoQuery()
             .setTopicId(topicId)
             .execute(client);
     } catch (err) {
@@ -105,6 +106,42 @@ async function pullTopicInfo(topicId, client) {
     }
 
     return topicInfo;
+}
+
+async function tally (votes, topicInfo, pass){
+    let currTally = {};
+    try{
+        let keys = await security.getKeys(pass);
+        Promise.all([keys.priv, keys.pub]);
+
+
+
+    }catch(err){
+        console.log(`ERROR: ${err}`);
+    }
+}
+
+async function pullAllVotes(topicId, client){
+    let votes = [];
+    try {
+        let messages = await new TopicMessageQuery()
+            .setTopicId(topicId)
+    } catch (err) {
+        console.log(`ERROR: pullVotes() ${err}`);
+    }
+}
+
+async function pullAllVotes(topicId, client, start, end){
+    let votes = [];
+    try {
+        let messages = await new TopicMessageQuery()
+            .setTopicId(topicId)
+            .setStartTime(start)
+            .setEndTime(end)
+            .execute(client);
+    } catch (err) {
+        console.log(`ERROR: pullVotes() ${err}`);
+    }
 }
 
 async function tally (votes, topicInfo, pass) {
