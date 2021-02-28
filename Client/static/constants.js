@@ -1,6 +1,6 @@
 import {makeStyles, TableCell, TableRow, withStyles} from "@material-ui/core";
 
-export const title = 'ASCSU Student Elections';
+export const title = 'Attica Voting';
 export const electionDescription = '';
 export const electionStart = 0;
 export const electionEnd = 0;
@@ -9,6 +9,11 @@ const drawerWidth = 240;
 export const useStyles = makeStyles((theme) => ({
     root: {
         display: 'flex',
+    },
+    rowLayout: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center' // To be vertically aligned
     },
     appBar: {
         transition: theme.transitions.create(['margin', 'width'], {
@@ -77,6 +82,13 @@ export const useStyles = makeStyles((theme) => ({
     candidateImg: {
         height: '100%',
         maxWidth: '300px'
+    },
+    formControl: {
+        margin: theme.spacing(1),
+        minWidth: 120,
+    },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
     }
 }));
 
@@ -98,3 +110,10 @@ export const StyledTableRow = withStyles((theme) => ({
         },
     },
 }))(TableRow);
+
+export function handleSelectedCandidate(props) {
+    props.setSelectedCandidates({
+        ...props.selectedCandidates,
+        [props.position]: props.name
+    });
+}

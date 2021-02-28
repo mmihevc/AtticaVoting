@@ -15,10 +15,6 @@
     "position" : "presidentAndVicePresident",
     "description": "enter description for candidates here"
   },
-  "candidate5" : {
-    "name" : "grey",
-    "position" : "teeshirt"
-  },
   "candidate6" : {
     "name" : "green",
     "position" : "teeshirt"

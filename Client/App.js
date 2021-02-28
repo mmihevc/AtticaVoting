@@ -10,6 +10,8 @@ import Confirmation from '../Client/components/Confirmation'
 import DLInfo from '../Client/components/DLInfo'
 import LoginLayout from "./components/LoginLayout";
 import Login from "./components/Login"
+import Results from "./components/Results";
+import Processing from "./components/Processing";
 
 const Router = props => {
     const [open, setOpen] = useState(false);
@@ -43,6 +45,12 @@ const Router = props => {
             </Route>
             <Route path='/dlinfo'>
                 <DLInfo {...props} open={open} setOpen={setOpen} />
+            </Route>
+            <Route path='/results'>
+                <Results {...props}/>
+            </Route>
+            <Route path='/processing'>
+                <Processing {...props}/>
             </Route>
         </Switch>
     )

@@ -68,9 +68,19 @@ function ReceiptTable(props) {
     const [sequenceExpand, setSequenceExpand] = useState(false);
     const [hashExpand, setHashExpand] = useState(false);
     const [messageExpand, setMessageExpand] = useState(false);
+    let message = '';
+
+    for (let i = 0; i < props.message.length; i++){
+        if (i % 100 == 0 && i != 0) {
+            message += props.message[i] + '\n';
+        }
+        else {
+            message += props.message[i];
+        }
+    }
 
     return (
-        <>
+        <div>
             <Box pt={5}>
                 <TableContainer component={Paper}>
                     <Table className={classes.table}>
@@ -164,7 +174,7 @@ function ReceiptTable(props) {
                                     </Box>
                                 </StyledTableCell>
                                 <StyledTableCell align="right">
-                                    {props.message}
+                                    {message}
                                 </StyledTableCell>
                             </StyledTableRow>
                         </TableBody>
@@ -172,7 +182,7 @@ function ReceiptTable(props) {
                 </TableContainer>
             </Box>
             <ReceiptTableMessage/>
-        </>
+        </div>
     )
 }
 
