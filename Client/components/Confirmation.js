@@ -1,204 +1,115 @@
-import React, {useState} from "react";
-import {
-    Typography, Box, Grid, Link, TableContainer, Paper, Table, TableBody, Button, Collapse
-} from "@material-ui/core";
+import React, {useEffect, useLayoutEffect, useRef} from "react";
 import Navigation from "./Navigation";
+import {CardMedia, Grid, Box, Typography, IconButton} from "@material-ui/core";
+import vote from '../static/images/voting.gif';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import '../static/css/confirmation.scss';
+import {useStyles} from "../static/constants";
 import clsx from "clsx";
-import {useStyles, StyledTableRow, StyledTableCell} from "../static/constants";
+
 
 
 function Confirmation(props) {
     const classes = useStyles();
-    const [receiptTable, setReceiptTable] = useState(false);
 
     return (
         <div className={classes.root}>
-            <Navigation {...props} open={props.open} setOpen={props.setOpen}/>
+            <Navigation {...props}/>
             <main
                 className={clsx(classes.content, {
                     [classes.contentShift]: props.open,
                 })}
             >
                 <div className={classes.drawerHeader}/>
-            <ConfirmationMessage setReceiptTable={setReceiptTable} receiptTable={receiptTable} {...props}/>
-            {receiptTable ?
-                <ReceiptTable {...props}/>
-                : null
-            }
+                <Grid container direction="row" justify="space-between" alignItems="center">
+                    <Box pl={'50px'} pt={'100px'}>
+                        <Grid item xs={12}>
+                            <CardMedia
+                                component="img"
+                                image={vote}
+                                title='voting-image'
+                            />
+                        </Grid>
+                    </Box>
+                    <DisplayMessage {...props}/>
+                </Grid>
             </main>
-
         </div>
+
     )
+
+
 }
 
-function ConfirmationMessage(props) {
-    return (
-        <>
-            <Box pt={5}>
-                <Grid container justify='center'
-                      alignItems='center' alignContent='center'>
-                    <Grid item>
-                        <Typography variant='h3'>
-                            Thank you for voting!
-                        </Typography>
-                    </Grid>
-                    <Grid item>
-                        <Box pt={4}>
-                            <Typography variant='h5'>
-                                If you would like to view the receipt for your vote click
-                                <Link onClick={() => props.setReceiptTable(!props.receiptTable)}
-                                      color="primary" style={{ textDecoration: 'none' }}
-                                > here </Link>
-                                or if you would like to learn more about
-                                Distributed Ledger Technology click
-                                <Link onClick={() => props.history.push('dlinfo')} color="primary" style={{ textDecoration: 'none' }}> here </Link>
-                            </Typography>
-                        </Box>
-                    </Grid>
-                </Grid>
-            </Box>
-        </>
-    )
-}
+function DisplayMessage(props) {
 
+    const textBlock = useRef(null);
 
-function ReceiptTable(props) {
-    const classes = useStyles();
-    const [topicExpand, setTopicExpanded] = useState(false);
-    const [sequenceExpand, setSequenceExpand] = useState(false);
-    const [hashExpand, setHashExpand] = useState(false);
-    const [messageExpand, setMessageExpand] = useState(false);
-    let message = '';
+    useEffect(() => {
+        if (!textBlock || !textBlock.current) return;
 
-    for (let i = 0; i < props.message.length; i++){
-        if (i % 100 == 0 && i != 0) {
-            message += props.message[i] + '\n';
+        const doTyping = async () =>
+        {
+            let isBackspacing = false, isSecondary = false;
+            const text = [
+                "Processing.|Please Wait",
+                "Your Vote has been Submitted.|Thank you for voting"
+            ];
+
+            const element = textBlock.current;
+            const header = element.getElementsByTagName("h2")[0];
+            const secondary = element.getElementsByTagName("h4")[0];
+
+            for (const page in text) {
+                for (let i = 0; i < 2; i++) {
+                    for (let j = 0; j < page.length; j++) {
+                        if (!isBackspacing ? page.charAt(j) : page.charAt(page.length - 1 - j) === "|") {
+                            isSecondary = !isBackspacing;
+                            if (isBackspacing) {
+                                secondary.classList.remove("cursor");
+                                header.classList.add("cursor");
+                            }
+                            else {
+                                header.classList.remove("cursor");
+                                secondary.classList.add("cursor");
+                            }
+                        } else {
+                            if (!isBackspacing) {
+                                if (!isSecondary) {
+                                    header.textContent = header.textContent + page.charAt(i);
+                                    console.log(header.textContent);
+                                } else {
+                                    secondary.textContent = secondary.textContent + page.charAt(i);
+                                }
+                            } else {
+                                if (!isSecondary) {
+                                    header.textContent = header.textContent.substring(0, header.textContent.length - 1);
+                                } else {
+                                    secondary.textContent = secondary.textContent.substring(0, secondary.textContent.length - 1);
+                                }
+                            }
+                        }
+                        console.log(header.innerHTML);
+                        await new Promise(r => setTimeout(r, 4000));
+                    }
+                    isBackspacing = true;
+                }
+            }
         }
-        else {
-            message += props.message[i];
-        }
-    }
+        doTyping();
+    }, [textBlock]);
 
     return (
-        <div>
-            <Box pt={5}>
-                <TableContainer component={Paper}>
-                    <Table className={classes.table}>
-                        <TableBody>
-                            <StyledTableRow >
-                                <StyledTableCell component="th" scope="row">
-                                    <Button
-                                        className={clsx(classes.expand, {
-                                            [classes.expandOpen]: topicExpand,
-                                        })}
-                                        onClick={() => setTopicExpanded(!topicExpand)}
-                                        aria-expanded={topicExpand}
-                                        aria-label="show more">
-                                        Topic ID
-                                    </Button>
-                                    <Box pt={1}>
-                                        <Collapse in={topicExpand} timeout="auto" unmountOnExit>
-                                            <Typography>
-                                                It worked!
-                                            </Typography>
-                                        </Collapse>
-                                    </Box>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                    {props.topic}
-                                </StyledTableCell>
-                            </StyledTableRow>
-                            <StyledTableRow>
-                                <StyledTableCell component="th" scope="row">
-                                    <Button
-                                        className={clsx(classes.expand, {
-                                            [classes.expandOpen]: sequenceExpand,
-                                        })}
-                                        onClick={() => setSequenceExpand(!sequenceExpand)}
-                                        aria-expanded={sequenceExpand}
-                                        aria-label="show more">
-                                        Sequence
-                                    </Button>
-                                    <Box pt={1}>
-                                        <Collapse in={sequenceExpand} timeout="auto" unmountOnExit>
-                                            <Typography>
-                                                It worked!
-                                            </Typography>
-                                        </Collapse>
-                                    </Box>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                    {props.sequence}
-                                </StyledTableCell>
-                            </StyledTableRow>
-                            <StyledTableRow>
-                                <StyledTableCell component="th" scope="row">
-                                    <Button
-                                        className={clsx(classes.expand, {
-                                            [classes.expandOpen]: hashExpand,
-                                        })}
-                                        onClick={() => setHashExpand(!hashExpand)}
-                                        aria-expanded={hashExpand}
-                                        aria-label="show more">
-                                        Running Hash
-                                    </Button>
-                                    <Box pt={1}>
-                                        <Collapse in={hashExpand} timeout="auto" unmountOnExit>
-                                            <Typography>
-                                                It worked!
-                                            </Typography>
-                                        </Collapse>
-                                    </Box>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                    {props.hash}
-                                </StyledTableCell>
-                            </StyledTableRow>
-                            <StyledTableRow>
-                                <StyledTableCell component="th" scope="row">
-                                    <Button
-                                        className={clsx(classes.expand, {
-                                            [classes.expandOpen]: messageExpand,
-                                        })}
-                                        onClick={() => setMessageExpand(!messageExpand)}
-                                        aria-expanded={messageExpand}
-                                        aria-label="show more">
-                                        Message
-                                    </Button>
-                                    <Box pt={1}>
-                                        <Collapse in={messageExpand} timeout="auto" unmountOnExit>
-                                            <Typography>
-                                                It worked!
-                                            </Typography>
-                                        </Collapse>
-                                    </Box>
-                                </StyledTableCell>
-                                <StyledTableCell align="right">
-                                    {message}
-                                </StyledTableCell>
-                            </StyledTableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box>
-            <ReceiptTableMessage/>
-        </div>
-    )
-}
-
-function ReceiptTableMessage () {
-    return (
-        <>
-            <Box pt={3}>
-                <Grid container justify='center'
-                      alignItems='center' alignContent='center'>
-                    <Typography variant='h6'>
-                        Click on each term to learn more about what each term means
-                    </Typography>
-                </Grid>
-            </Box>
-        </>
-    )
+        <Grid item xs={6}>
+            <div className='output' id='output' ref={textBlock}>
+                <h2 className='cursor'/>
+                <h4/>
+                <Typography variant='h6'>
+                    Learn More <IconButton><ArrowRightIcon/></IconButton>
+                </Typography>
+            </div>
+        </Grid>
+    );
 }
 
 export default Confirmation;

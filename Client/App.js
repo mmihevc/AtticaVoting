@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import {SnackbarProvider, useSnackbar} from 'notistack';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
@@ -6,12 +6,12 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import {useHistory} from "react-router";
 
 import Home from '../Client/components/Home'
-import Confirmation from '../Client/components/Confirmation'
+import OldConfirmation from './components/OldConfirmation'
 import DLInfo from '../Client/components/DLInfo'
 import LoginLayout from "./components/LoginLayout";
 import Login from "./components/Login"
 import Results from "./components/Results";
-import Processing from "./components/Processing";
+import Confirmation from "./components/Confirmation";
 
 const Router = props => {
     const [open, setOpen] = useState(false);
@@ -39,18 +39,11 @@ const Router = props => {
                       history={history} username={username} email={email}
                 />
             </Route>
-            <Route path="/confirmation">
-                <Confirmation {...props} open={open} setOpen={setOpen} history={history}
-                              topic={topic} message={message} sequence={sequence} hash={hash}/>
-            </Route>
-            <Route path='/dlinfo'>
+            <Route path='/learn-more'>
                 <DLInfo {...props} open={open} setOpen={setOpen} />
             </Route>
             <Route path='/results'>
                 <Results {...props}/>
-            </Route>
-            <Route path='/processing'>
-                <Processing {...props}/>
             </Route>
         </Switch>
     )
