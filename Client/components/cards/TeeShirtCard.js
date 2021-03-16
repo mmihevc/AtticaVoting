@@ -1,44 +1,18 @@
 import React from "react";
-import {useStyles, handleSelectedCandidate} from "../../static/constants";
-import {Box, Button, Card, CardActions, CardContent, CardMedia, Grid} from "@material-ui/core";
-import CheckIcon from "@material-ui/icons/Check";
+import {Box, CardMedia, Grid} from "@material-ui/core";
+
 
 function TeeShirtCard(props) {
-    const displayCheck = props.selectedCandidates[props.position] === props.name;
-    const classes = useStyles();
 
     return (
-        <>
-            <Card variant='elevation'>
+        <Box width={300} height={350} boxShadow={1}>
                 <CardMedia
                     component="img"
-                    style={{height: 300}}
-                    image={props.link}
-                    title='teeshirt image'
-                    className={classes.candidateImg}
+                    style={{height: 350, width:'100%'}}
+                    image={props.img}
+                    title={props.candidate.name}
                 />
-                <CardContent>
-                    <Grid container justify='center'
-                          alignItems='center' alignContent='center' direction='column'>
-                        <Grid item>
-                            <CardActions>
-                                <Box pt={2}>
-                                    {!displayCheck ?
-                                        <Button variant='contained'
-                                                color='primary'
-                                                className='voteButton'
-                                                onClick={() => handleSelectedCandidate(props)}
-                                        >
-                                            VOTE
-                                        </Button> : <CheckIcon/>
-                                    }
-                                </Box>
-                            </CardActions>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
-        </>
+        </Box>
     )
 }
 

@@ -1,115 +1,127 @@
-import React, {useEffect, useLayoutEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import Navigation from "./Navigation";
-import {CardMedia, Grid, Box, Typography, IconButton} from "@material-ui/core";
+import {Grid, Box, Typography, Hidden, Button} from "@material-ui/core";
 import vote from '../static/images/voting.gif';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
-import '../static/css/confirmation.scss';
-import {useStyles} from "../static/constants";
-import clsx from "clsx";
-
-
+import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 function Confirmation(props) {
-    const classes = useStyles();
 
     return (
-        <div className={classes.root}>
+        <>
             <Navigation {...props}/>
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: props.open,
-                })}
-            >
-                <div className={classes.drawerHeader}/>
-                <Grid container direction="row" justify="space-between" alignItems="center">
-                    <Box pl={'50px'} pt={'100px'}>
-                        <Grid item xs={12}>
-                            <CardMedia
-                                component="img"
-                                image={vote}
+            <Grid container direction="row" alignItems="center">
+                <Hidden mdDown>
+                    <Grid item lg={6}>
+                        <Box p={2}>
+                            <img
+                                src={vote}
                                 title='voting-image'
+                                style={{width:'80%'}}
                             />
-                        </Grid>
-                    </Box>
-                    <DisplayMessage {...props}/>
-                </Grid>
-            </main>
-        </div>
-
+                        </Box>
+                    </Grid>
+                </Hidden>
+                <DisplayMessage {...props}/>
+            </Grid>
+        </>
     )
 
 
 }
 
-function DisplayMessage(props) {
+function DisplayMessage({votingStep}) {
+    const [learnMore, setLearnMore] = useState(false);
 
     const textBlock = useRef(null);
 
     useEffect(() => {
         if (!textBlock || !textBlock.current) return;
 
-        const doTyping = async () =>
-        {
-            let isBackspacing = false, isSecondary = false;
-            const text = [
-                "Processing.|Please Wait",
-                "Your Vote has been Submitted.|Thank you for voting"
-            ];
+        const element = textBlock.current;
+        const header = element.getElementsByTagName("h2")[0];
+        const secondary = element.getElementsByTagName("h4")[0];
 
-            const element = textBlock.current;
-            const header = element.getElementsByTagName("h2")[0];
-            const secondary = element.getElementsByTagName("h4")[0];
+        const text = [
+            "Processing|Please Wait",
+            "Submitted|Thank you for voting!"
+        ];
 
-            for (const page in text) {
-                for (let i = 0; i < 2; i++) {
-                    for (let j = 0; j < page.length; j++) {
-                        if (!isBackspacing ? page.charAt(j) : page.charAt(page.length - 1 - j) === "|") {
-                            isSecondary = !isBackspacing;
-                            if (isBackspacing) {
-                                secondary.classList.remove("cursor");
-                                header.classList.add("cursor");
-                            }
-                            else {
-                                header.classList.remove("cursor");
-                                secondary.classList.add("cursor");
-                            }
-                        } else {
-                            if (!isBackspacing) {
-                                if (!isSecondary) {
-                                    header.textContent = header.textContent + page.charAt(i);
-                                    console.log(header.textContent);
-                                } else {
-                                    secondary.textContent = secondary.textContent + page.charAt(i);
-                                }
-                            } else {
-                                if (!isSecondary) {
-                                    header.textContent = header.textContent.substring(0, header.textContent.length - 1);
-                                } else {
-                                    secondary.textContent = secondary.textContent.substring(0, secondary.textContent.length - 1);
-                                }
-                            }
-                        }
-                        console.log(header.innerHTML);
-                        await new Promise(r => setTimeout(r, 4000));
+        const doTyping = async () => {
+            let page = text[0];
+            let typingForwards = votingStep === 1;
+            let typingHeader = votingStep === 1;
+            const firstRun = typingForwards;
+
+            do {
+                if (firstRun && firstRun !== typingForwards) break;
+                let prevData = { letter: null, iterations: 0};
+                for (let k = 0; k < page.length; k++) {
+                    if (prevData.iterations > 2) break;
+                    if ((typingForwards ? page.charAt(k) : page.charAt(page.length - 1 - k)) === "|") {
+                        typingHeader = !typingHeader;
+                        (typingForwards ? header : secondary).classList.remove("cursor");
+                        (typingForwards ? secondary : header).classList.add("cursor");
+                    } else {
+                        const currentTypingElement = typingHeader ? header : secondary;
+                        currentTypingElement.innerText = typingForwards ?
+                            currentTypingElement.innerText + page.charAt(k) :
+                            currentTypingElement.innerText.substring(0, currentTypingElement.innerText.length - 1);
+                        const lastLetter = currentTypingElement.innerText.length > 0 ?
+                            currentTypingElement.innerText[currentTypingElement.innerText.length - 1] :
+                            null;
+                        if (prevData.letter === lastLetter) prevData.iterations += 1;
+                        else prevData.iterations = 0;
+                        prevData.letter = lastLetter;
                     }
-                    isBackspacing = true;
+                    await new Promise(r => setTimeout(r, 175));
                 }
-            }
+                page = text[1];
+                typingForwards = !typingForwards;
+            } while(firstRun !== typingForwards)
+            if (!firstRun) setLearnMore(prevLearnMore => !prevLearnMore);
         }
         doTyping();
-    }, [textBlock]);
+    }, [textBlock, votingStep]);
 
     return (
-        <Grid item xs={6}>
+        <Grid item lg={6} xs={12}>
             <div className='output' id='output' ref={textBlock}>
-                <h2 className='cursor'/>
-                <h4/>
-                <Typography variant='h6'>
-                    Learn More <IconButton><ArrowRightIcon/></IconButton>
-                </Typography>
+                <Typography variant='h2' className='cursor'/>
+                <Box pt={2} pb={2}>
+                    <Typography variant='h4'/>
+                </Box>
+                {learnMore ?
+                    <LearnMore icon={ArrowForwardIosIcon}/>:
+                    null
+                }
             </div>
         </Grid>
     );
 }
+
+const LearnMore = props =>
+{
+    const Icon = props.icon;
+
+
+    return(
+        <Button
+            style={{height: 50, borderRadius: 8, textTransform: 'none'}}
+        >
+            <Box p={2}>
+                <Grid container spacing={4}
+                      alignItems={"center"} alignContent={"center"}
+                >
+                    <Grid item>
+                        <Typography variant='h6'>Learn More</Typography>
+                    </Grid>
+                    <Icon color="primary"/>
+                </Grid>
+            </Box>
+        </Button>
+    )
+
+}
+
 
 export default Confirmation;

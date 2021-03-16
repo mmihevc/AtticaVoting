@@ -32,7 +32,7 @@ module.exports = {
     },
     plugins: [
         new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin({ template: "Client/static/template/index.html", favicon: "Client/static/template/favicon.ico"}),
+        new HtmlWebpackPlugin({ template: "Client/static/template/index.html", favicon: "Client/static/template/favicon.ico", title: 'Attica Voting'}),
         new webpack.HotModuleReplacementPlugin()
     ],
     output: { filename: "bundle.js", path: path.join(__dirname, outputDirectory) },

@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
-import {useStyles, electionDescription} from '../static/constants'
-import CandidateCard from "./cards/CandidateCard";
-import {Grid, Typography, Box, Button} from "@material-ui/core";
-import {sendGetRequest, sendPostRequest} from "../hooks/API";
+import React, {useEffect, useState} from 'react'
+import {Box, Typography, Grid} from "@material-ui/core";
+import '../static/css/global.scss'
 import Navigation from "./Navigation";
-import TeeShirtCard from "./cards/TeeShirtCard";
-import AmendmentCard from "./cards/AmendmentCard";
-import RankedCandidateCard from "./cards/RankedCandidateCard";
+import {sendGetRequest, sendPostRequest} from "../hooks/API";
 import Confirmation from "./Confirmation";
-import clsx from "clsx";
+import CandidateCard from "./cards/CandidateCard";
+import {useStyles, presidentialDescription, teeShirtDescription} from "../static/constants";
+import SubmitButton from "./SubmitButton";
+import TeeShirtCard from "./cards/TeeShirtCard";
+import CountdownTimer from "./CountdownTimer";
+import Countdown from "react-countdown";
 
 
 function Home(props) {
@@ -25,9 +26,11 @@ function Home(props) {
 
 
 function Voting(props) {
-    const classes = useStyles();
     const [candidateData, setCandidateData] = useState([]);
     const [selectedCandidates, setSelectedCandidates] = useState({});
+    const [displayCandidateBio, setDisplayCandidateBio] = useState(false);
+    const [date, setDate] = useState();
+
 
     useEffect(() => {
         sendGetRequest().then(
@@ -64,7 +67,6 @@ function Voting(props) {
                 }
                 if (r.data.success) {
                     props.setVotingStep(2);
-                    //props.produceSnackBar('Vote Submitted', 'info');
                     props.setTopic(r.data.topicId);
                     props.setHash(r.data.runningHash);
                     props.setMessage(r.data.message);
@@ -76,105 +78,120 @@ function Voting(props) {
 
     }
 
-    return (
-        <div className={classes.root}>
+    function handleSelectedCandidate(candidate) {
+        setSelectedCandidates({
+            ...selectedCandidates,
+            [candidate.position]: {name:candidate.name, description: candidate.description}
+        });
+    }
+
+    return(
+        <>
             <Navigation {...props}/>
-            <main
-                className={clsx(classes.content, {
-                    [classes.contentShift]: props.open,
-                })}
-            >
-                <div className={classes.drawerHeader}/>
-                <Box pt={5}>
-                    <Description />
-                    <Grid container spacing={5} justify='center'
-                          alignItems='center' alignContent='center'>
-                        <DisplayHeadings {...props} heading={"Presidential Candidate"}/>
-                        {candidateData.filter((item) =>
-                            item.position === "presidentAndVicePresident"
-                        ).map((item, index) =>
-                            <Grid item key={index}>
-                                <RankedCandidateCard {...props} name={item.name} position={item.position}
-                                                     description={item.description}
-                                                     setSelectedCandidates={setSelectedCandidates}
-                                                     selectedCandidates={selectedCandidates}
-                                                     link={searchCandidateImage(item.name)}/>
-                            </Grid>
-                        )}
-                        <DisplayHeadings {...props} heading={"Speaker of the Senate Candidate"}/>
-                        {candidateData.filter((item) =>
-                            item.position === "speakerOfTheSenate"
-                        ).map((item, index) =>
-                            <Grid item key={index}>
-                                <CandidateCard {...props} name={item.name} position={item.position}
-                                               description={item.description}
-                                               setSelectedCandidates={setSelectedCandidates}
-                                               selectedCandidates={selectedCandidates}
-                                               link={searchCandidateImage(item.name)}/>
-                            </Grid>
-                        )}
-                        <DisplayHeadings {...props} heading={"T-Shirt"}/>
-                        {candidateData.filter((item) =>
-                            item.position === 'teeshirt'
-                        ).map((item, index) =>
-                            <Grid item key={index} >
-                                <TeeShirtCard {...props} name={item.name} position={item.position} description={item.description}
-                                              setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}
-                                              link={searchCandidateImage(item.name)} />
-                            </Grid>
-                        )}
-                        <DisplayHeadings {...props} heading={"ASCSU Constitution Amendments"}/>
-                        {candidateData.filter((item) =>
-                            item.position.includes('amendment')
-                        ).map((item, index) =>
-                            <Grid item key={index}>
-                                <AmendmentCard {...props} name={item.name} position={item.position}
-                                               description={item.description} setSelectedCandidates={setSelectedCandidates}
-                                               selectedCandidates={selectedCandidates}
-                                               link={searchCandidateImage(item.name)}/>
-                            </Grid>
-                        )}
-                        <Grid container justify='center' alignItems='center' alignContent='center'>
-                            <Box pt={3} pb={3}>
-                                <Button onClick={() => handleVote()} variant="contained" color='primary'>
-                                    Submit Votes
-                                </Button>
-                            </Box>
-                        </Grid>
-                    </Grid>
+            <Box width={"100vw"} height={"100vh"} style={{scrollBehavior: "smooth"}}>
+                <Box width={"100%"} height={"100%"} style={{}}>
+                    <Box minHeight={500} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
+
+                    </Box>
+                    <Box minHeight={626}>
+                        <CandidateCardLayout align={"left"} title={"Presidential Race"}
+                                             description={!selectedCandidates['presidentAndVicePresident'] ?
+                                                 presidentialDescription : selectedCandidates['presidentAndVicePresident'].description}
+                        >
+                            {candidateData.filter(candidate => candidate.position === "presidentAndVicePresident")
+                                .map((candidate, index) =>
+                                    <Grid item key={index}>
+                                        <CandidateCard
+                                            {...props}
+                                            candidate={candidate}
+                                            handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                            selectedCandidates={selectedCandidates}
+                                            setSelectedCandidates={setSelectedCandidates}
+                                            img={searchCandidateImage(candidate.name)}
+                                        />
+                                    </Grid>
+                                )
+                            }
+                        </CandidateCardLayout>
+                    </Box>
+                    <WaveDivider />
+                    <Box minHeight={626} bgcolor={"neutral.dark"}>
+                        <CandidateCardLayout align={"right"} title={"TeeShirt Contest"} description={teeShirtDescription}>
+                            {candidateData.filter((candidate) =>
+                                candidate.position === 'teeshirt'
+                            ).map((candidate, index) =>
+                                <Grid item key={index} >
+                                    <TeeShirtCard {...props}
+                                                  candidate={candidate}
+                                                  setSelectedCandidates={setSelectedCandidates}
+                                                  selectedCandidates={selectedCandidates}
+                                                  img={searchCandidateImage(candidate.name)} />
+                                </Grid>
+                            )}
+                        </CandidateCardLayout>
+                    </Box>
+                    <WaveDivider flip />
+                    <Box minHeight={626}>
+                    </Box>
                 </Box>
-            </main>
-        </div>
-    )
+            </Box>
+            <SubmitButton onClick={() => handleVote()}/>
+        </>
+    );
 }
 
-function Description() {
-    return (
-        <div>
-            <Box pb={4} pt={3}>
-                <Grid container justify='center'
-                      alignItems='center' alignContent='center'>
-                    <Typography variant="h5">
-                        {electionDescription}
-                    </Typography>
+function CandidateCardLayout(props) {
+    const classes = useStyles();
+
+    const text =
+        <Grid item lg={5}>
+            <Box p={12}>
+                <Grid container direction={"column"} spacing={2}>
+                    <Grid item>
+                        <Typography align={props.align} variant='h3' className={classes.underline}>
+                            {props.title}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography align={props.align}>
+                            {props.description}
+                        </Typography>
+                        <Box pt={5}>
+                            <Typography align={props.align}>
+                                You can click on the candidates to learn more
+                            </Typography>
+                        </Box>
+                    </Grid>
                 </Grid>
             </Box>
-        </div>
+        </Grid>;
+
+    const cards =
+        <Grid item lg={7}>
+            <Box p={8}>
+                <Grid container spacing={6} justify='center'>
+                    {props.children}
+                </Grid>
+            </Box>
+        </Grid>;
+
+    return(
+        <Grid container>
+            {props.align === "right" ? cards : text}
+            {props.align === "right" ? text : cards}
+        </Grid>
     )
 }
 
-function DisplayHeadings(props) {
-    return (
-        <>
-            <Grid container spacing={2} justify='center'
-                  alignItems='center' alignContent='center'>
-                <Box pt={5} pb={3}>
-                    <Typography variant='h4' style={{ textDecoration: 'underline #CFB53B'}}>{props.heading}</Typography>
-                </Box>
-            </Grid>
-        </>
+const WaveDivider = props =>
+{
+    return(
+        <Box color={"neutral.dark"} style={{transform: props.flip ? "matrix(1,0,0,-1,0,0)" : undefined}}>
+            <svg style={{display: "block"}} viewBox="0 0 1440 100" preserveAspectRatio="none">
+                <path className={"wave"} fill="currentColor" d="M826.337463,25.5396311 C670.970254,58.655965 603.696181,68.7870267 447.802481,35.1443383 C293.342778,1.81111414 137.33377,1.81111414 0,1.81111414 L0,150 L1920,150 L1920,1.81111414 C1739.53523,-16.6853983 1679.86404,73.1607868 1389.7826,37.4859505 C1099.70117,1.81111414 981.704672,-7.57670281 826.337463,25.5396311 Z"/>
+            </svg>
+        </Box>
     )
 }
 
 export default Home;
-
