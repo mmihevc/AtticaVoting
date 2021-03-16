@@ -153,7 +153,7 @@ function handleLog(event, log, status) {
 
 /* FIXME: Comments needed */
 function populateCandidates(){
-  const Candidate = require("./Candidate").Candidate;
+  const Candidate = require("./CandidateCard").Candidate;
   let candidates = require("./electionConfig.js").electionConfig['candidates'];
   let retArr = new Array(candidates.length);
   for(let i = 0; i < candidates.length; i++) {

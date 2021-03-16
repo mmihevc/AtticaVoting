@@ -10,7 +10,11 @@
     "deploy": "npm run buildClient && node ./Server/server.js"
   },
   "nodemonConfig": {
-    "ignore": ["Client", "dist", "node_modules"]
+    "ignore": [
+      "Client",
+      "dist",
+      "node_modules"
+    ]
   },
   "repository": {
     "type": "git",
@@ -32,6 +36,7 @@
   },
   "homepage": "https://github.com/Attica-Voting/AtticaVoting#readme",
   "dependencies": {
+    "@devexpress/dx-react-chart": "^2.7.4",
     "@hashgraph/sdk": "^2.0.13",
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
@@ -52,6 +57,7 @@
     "openpgp": "^4.10.2",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
+    "react-countdown": "^2.3.1",
     "react-dnd": "11.1.3",
     "react-dnd-html5-backend": "11.1.3",
     "react-dnd-multi-backend": "6.0.2",
@@ -74,6 +80,9 @@
     "@babel/polyfill": "^7.10.4",
     "@babel/preset-env": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
+    "@devexpress/dx-react-core": "2.7.4",
+    "@devexpress/dx-react-chart-material-ui": "2.7.4",
+    "@devexpress/dx-react-chart": "2.7.4",
     "autoprefixer": "^10.0.4",
     "axios": "^0.21.1",
     "babel-eslint": "10.1.0",

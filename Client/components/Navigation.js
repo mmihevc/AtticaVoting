@@ -1,15 +1,38 @@
 import React from "react";
 import {useStyles} from '../static/constants'
-import {AppBar, Divider, Drawer, IconButton, Link, Toolbar, Typography, Avatar, Box, Button} from "@material-ui/core";
+import {AppBar, IconButton, Toolbar, Typography, Avatar, Button, Divider, Box, Link, Drawer, Grid} from "@material-ui/core";
 import clsx from "clsx";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import {title} from '../static/constants'
 import {useHistory} from "react-router";
-import AtticaLogo from '../static/images/atticaLogo.jpg'
+import AtticaLogo from '../static/images/logo.jpg'
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 
 function Navigation(props) {
+    const classes = useStyles();
+    return (
+        <Box p={2}>
+            <Grid container justify='space-between' alignItems='center'>
+                <Grid item>
+                    <IconButton style={{marginLeft: 'auto', backgroundColor: 'transparent'}} target="_blank" href='https://www.atticavoting.com/'>
+                        <Box pr={2}>
+                            <Typography variant="h6" className={classes.underline} style={{color: 'black'}}>
+                                {title}
+                            </Typography>
+                        </Box>
+                        <Avatar alt='Attica Logo' src={AtticaLogo} variant='rounded'/>
+                    </IconButton>
+                </Grid>
+                <Grid item>
+
+                </Grid>
+            </Grid>
+        </Box>
+    )
+}
+
+
+function OldNavigation(props) {
     const classes = useStyles();
     const history = useHistory();
 
@@ -20,10 +43,6 @@ function Navigation(props) {
                         [classes.appBarShift]: props.open,
                     })}>
                 <Toolbar>
-                    <IconButton edge="start" style={{marginRight: 15}} onClick={() => props.setOpen(!props.open)}>
-                        <MenuIcon style={{fill: '#C8C372'}}/>
-                    </IconButton>
-
                     <Button onClick={() => history.push('/')}>
                         <Typography variant="h6" style={{color: 'white'}}>
                             {title}

@@ -1,15 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 import {SnackbarProvider, useSnackbar} from 'notistack';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
-import CssBaseline from "@material-ui/core/CssBaseline";
 import {useHistory} from "react-router";
 
-import Home from '../Client/components/Home'
-import Confirmation from '../Client/components/Confirmation'
+import OldHome from './components/OldHome'
 import DLInfo from '../Client/components/DLInfo'
 import LoginLayout from "./components/LoginLayout";
 import Login from "./components/Login"
+import Results from "./components/Results";
+import Home from "./components/Home";
+import {grey} from "@material-ui/core/colors";
+import {CssBaseline} from "@material-ui/core";
 
 const Router = props => {
     const [open, setOpen] = useState(false);
@@ -19,6 +21,7 @@ const Router = props => {
     const [hash, setHash] = useState();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
+    const [rankedChoice, setRankedChoice] = useState(false);
     const history = useHistory();
 
     return (
@@ -32,17 +35,17 @@ const Router = props => {
             </Route>
             <Route exact path="/home">
                 <Home {...props} open={open} setOpen={setOpen}
-                      setTopic={setTopic} setMessage={setMessage}
-                      setSequence={setSequence} setHash={setHash}
-                      history={history} username={username} email={email}
+                         setTopic={setTopic} setMessage={setMessage}
+                         setSequence={setSequence} setHash={setHash}
+                         history={history} username={username} email={email}
+                         rankedChoice={rankedChoice} setRankedChoice={setRankedChoice}
                 />
             </Route>
-            <Route path="/confirmation">
-                <Confirmation {...props} open={open} setOpen={setOpen} history={history}
-                              topic={topic} message={message} sequence={sequence} hash={hash}/>
-            </Route>
-            <Route path='/dlinfo'>
+            <Route path='/learn-more'>
                 <DLInfo {...props} open={open} setOpen={setOpen} />
+            </Route>
+            <Route path='/results'>
+                <Results {...props}/>
             </Route>
         </Switch>
     )
@@ -62,7 +65,10 @@ const LoadApp = () =>
 
 const App = () =>
 {
-    const theme = createMuiTheme({ palette: { primary: { main: '#CFB53B' }, secondary: {main: "#3232ff"}}});
+    const theme = createMuiTheme({ palette: {
+            primary: {main: '#0D72BA' },
+            secondary: {main: "#C1912D"},
+            neutral: { main: '#FFFFFF', light: grey[100], dark: grey[200] },}});
 
 
     return (

@@ -68,7 +68,7 @@ module.exports = class HederaClass {
                     let anonID = encMsg.split('~')[0];
                     // let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
                     // let uidHash = encMsg.split(specialChar)[0];
-                    handleLog("TopicMessageQuery()", "Confirmation Received", this.logStatus);
+                    handleLog("TopicMessageQuery()", "OldConfirmation Received", this.logStatus);
 
                     confirmList.find(({aid}) => aid === anonID)
                         .resp.send({
