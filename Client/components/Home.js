@@ -8,8 +8,6 @@ import CandidateCard from "./cards/CandidateCard";
 import {useStyles, presidentialDescription, teeShirtDescription} from "../static/constants";
 import SubmitButton from "./SubmitButton";
 import TeeShirtCard from "./cards/TeeShirtCard";
-import CountdownTimer from "./CountdownTimer";
-import Countdown from "react-countdown";
 
 
 function Home(props) {
@@ -25,19 +23,14 @@ function Home(props) {
 }
 
 
+
+
 function Voting(props) {
     const [candidateData, setCandidateData] = useState([]);
     const [selectedCandidates, setSelectedCandidates] = useState({});
-    const [displayCandidateBio, setDisplayCandidateBio] = useState(false);
-    const [date, setDate] = useState();
-
 
     useEffect(() => {
-        sendGetRequest().then(
-            r => {
-                setCandidateData(shuffle(Object.values(r.data)))
-            }
-        )
+        sendGetRequest().then(r => setCandidateData(shuffle(Object.values(r.data))))
     }, [])
 
     function shuffle(a) {
@@ -48,14 +41,12 @@ function Voting(props) {
         return a;
     }
 
-    function searchCandidateImage(name) {
+    function searchCandidateImage({ name }) {
         let candidateName = name.split(" ");
         return '/images/' + candidateName[0].toLowerCase() + '.jpg';
-
     }
 
     function handleVote() {
-        //props.produceSnackBar('Confirmation votes. Please wait', 'info');
         props.setVotingStep(1);
         sendPostRequest('submit', {
             'candidatesChosen': props.selectedCandidates,
@@ -85,6 +76,16 @@ function Voting(props) {
         });
     }
 
+    function candidatesSelected(candidate) {
+        if (selectedCandidates[candidate.position]) {
+            if (selectedCandidates[candidate.position].name === candidate.name) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     return(
         <>
             <Navigation {...props}/>
@@ -104,10 +105,9 @@ function Voting(props) {
                                         <CandidateCard
                                             {...props}
                                             candidate={candidate}
+                                            img={searchCandidateImage(candidate)}
+                                            checked={candidatesSelected(candidate)}
                                             handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
-                                            selectedCandidates={selectedCandidates}
-                                            setSelectedCandidates={setSelectedCandidates}
-                                            img={searchCandidateImage(candidate.name)}
                                         />
                                     </Grid>
                                 )
@@ -123,9 +123,10 @@ function Voting(props) {
                                 <Grid item key={index} >
                                     <TeeShirtCard {...props}
                                                   candidate={candidate}
-                                                  setSelectedCandidates={setSelectedCandidates}
-                                                  selectedCandidates={selectedCandidates}
-                                                  img={searchCandidateImage(candidate.name)} />
+                                                  img={searchCandidateImage(candidate)}
+                                                  checked={candidatesSelected(candidate)}
+                                                  handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                    />
                                 </Grid>
                             )}
                         </CandidateCardLayout>
@@ -135,7 +136,7 @@ function Voting(props) {
                     </Box>
                 </Box>
             </Box>
-            <SubmitButton onClick={() => handleVote()}/>
+            <SubmitButton {...props} onClick={() => handleVote()}/>
         </>
     );
 }
