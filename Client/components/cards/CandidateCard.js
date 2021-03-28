@@ -22,14 +22,14 @@ function CandidateCard(props) {
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
                  onClick={props.handleSelectedCandidate} className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
-                <CardMedia image={props.img} title={props.candidate.name} classes={mediaStyles}
+                <CardMedia image={props.img} title={props.candidate.name} classes={props.nameRequired ? mediaStyles : undefined}
                            style={{height: 300, width:'100%'}} onClick={() => props.handleSelectedCandidate()}/>
-                <Grid container direction='column' justify='center' alignItems='center'>
+                {props.nameRequired ? <Grid container direction='column' justify='center' alignItems='center'>
                     <Grid item>
-                        <Typography gutterBottom variant="h5" component="h2" className='candidateName'>{props.candidate.name}</Typography>
+                        <Typography gutterBottom variant="h6" component="h2" className='candidateName'>{props.candidate.name}</Typography>
                     </Grid>
 
-                </Grid>
+                </Grid> : null}
             </Box>
             {
                 props.checked ?

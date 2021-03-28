@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import {Button, Grid, InputAdornment, TextField, Typography} from "@material-ui/core";
 import PersonIcon from '@material-ui/icons/Person';
 import EmailIcon from '@material-ui/icons/Email';
-import '../static/css/login.scss';
+import '../../static/css/login.scss';
 
 
 const Login = props => {

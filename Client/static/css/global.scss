@@ -1,3 +1,8 @@
+html *
+{
+  font-family: 'poppins', monospace !important;
+}
+
 body {
   background-color: white !important;
 }
@@ -59,4 +64,16 @@ h4.cursor::after {
   100% {
     opacity:0;
   }
+}
+
+.countdownTimer {
+  display: flex;
+  justify-content: space-around;
+  font-family: sans-serif;
+  text-align: center;
+  padding-top: 40px;
+}
+
+.time {
+  font-size: 32px;
 }

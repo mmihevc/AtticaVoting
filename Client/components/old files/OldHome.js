@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from "react";
-import {useStyles, electionDescription} from '../static/constants'
+import {useStyles, electionDescription} from '../../static/constants'
 import {Grid, Typography, Box, Button} from "@material-ui/core";
-import {sendGetRequest, sendPostRequest} from "../hooks/API";
-import Navigation from "./Navigation";
-import TeeShirtCard from "./cards/TeeShirtCard";
-import AmendmentCard from "./cards/AmendmentCard";
-import Confirmation from "./Confirmation";
-import '../static/css/global.scss'
+import {sendGetRequest, sendPostRequest} from "../../hooks/API";
+import Navigation from "../utils/Navigation";
+import TeeShirtCard from "../cards/TeeShirtCard";
+import AmendmentCard from "../cards/AmendmentCard";
+import Confirmation from "../pages/Confirmation";
+import '../../static/css/global.scss'
+import CandidateCard from "../cards/CandidateCard";
 
 
 function OldHome(props) {

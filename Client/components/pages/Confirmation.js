@@ -1,8 +1,9 @@
 import React, {useEffect, useRef, useState} from "react";
-import Navigation from "./Navigation";
+import Navigation from "../utils/Navigation";
 import {Grid, Box, Typography, Hidden, Button} from "@material-ui/core";
-import vote from '../static/images/voting.gif';
+import vote from '../../static/images/voting.gif';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import {useStyles} from "../../static/constants";
 
 function Confirmation(props) {
 
@@ -102,18 +103,19 @@ function DisplayMessage({votingStep}) {
 const LearnMore = props =>
 {
     const Icon = props.icon;
-
+    const classes = useStyles();
 
     return(
         <Button
             style={{height: 50, borderRadius: 8, textTransform: 'none'}}
+            className={classes.learnMoreButton}
         >
             <Box p={2}>
                 <Grid container spacing={4}
                       alignItems={"center"} alignContent={"center"}
                 >
                     <Grid item>
-                        <Typography variant='h6'>Learn More</Typography>
+                        <Typography variant='h6' >Learn More</Typography>
                     </Grid>
                     <Icon color="primary"/>
                 </Grid>

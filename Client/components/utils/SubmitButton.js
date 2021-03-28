@@ -5,7 +5,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import {Box, Button, Grid, Typography} from '@material-ui/core';
 import clsx from "clsx";
 import {motion} from "framer-motion"
-import {useStyles, scale} from "../static/constants";
+import {useStyles, scale} from "../../static/constants";
 
 function SubmitButton(props)
 {

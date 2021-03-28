@@ -1,10 +1,10 @@
 import React from "react";
-import {useStyles} from '../static/constants'
+import {useStyles} from '../../static/constants'
 import {AppBar, IconButton, Toolbar, Typography, Avatar, Button, Divider, Box, Link, Drawer, Grid} from "@material-ui/core";
 import clsx from "clsx";
-import {title} from '../static/constants'
+import {title} from '../../static/constants'
 import {useHistory} from "react-router";
-import AtticaLogo from '../static/images/logo.jpg'
+import AtticaLogo from '../../static/images/logo.jpg'
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 
 
@@ -15,12 +15,12 @@ function Navigation(props) {
             <Grid container justify='space-between' alignItems='center'>
                 <Grid item>
                     <IconButton style={{marginLeft: 'auto', backgroundColor: 'transparent'}} target="_blank" href='https://www.atticavoting.com/'>
-                        <Box pr={2}>
+                        <Avatar alt='Attica Logo' src={AtticaLogo} variant='rounded'/>
+                        <Box pl={2}>
                             <Typography variant="h6" className={classes.underline} style={{color: 'black'}}>
                                 {title}
                             </Typography>
                         </Box>
-                        <Avatar alt='Attica Logo' src={AtticaLogo} variant='rounded'/>
                     </IconButton>
                 </Grid>
                 <Grid item>

@@ -2,9 +2,9 @@ import React, {useState} from "react";
 import {
     Typography, Box, Grid, Link, TableContainer, Paper, Table, TableBody, Button, Collapse
 } from "@material-ui/core";
-import Navigation from "./Navigation";
+import Navigation from "../utils/Navigation";
 import clsx from "clsx";
-import {useStyles, StyledTableRow, StyledTableCell} from "../static/constants";
+import {useStyles, StyledTableRow, StyledTableCell} from "../../static/constants";
 
 
 function OldConfirmation(props) {

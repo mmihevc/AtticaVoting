@@ -1,13 +1,14 @@
 import React, {useEffect, useState} from 'react'
 import {Box, Typography, Grid} from "@material-ui/core";
-import '../static/css/global.scss'
-import Navigation from "./Navigation";
-import {sendGetRequest, sendPostRequest} from "../hooks/API";
+import '../../static/css/global.scss'
+import Navigation from "../utils/Navigation";
+import {sendGetRequest, sendPostRequest} from "../../hooks/API";
 import Confirmation from "./Confirmation";
-import CandidateCard from "./cards/CandidateCard";
-import {useStyles, presidentialDescription, teeShirtDescription} from "../static/constants";
-import SubmitButton from "./SubmitButton";
-import TeeShirtCard from "./cards/TeeShirtCard";
+import CandidateCard from "../cards/CandidateCard";
+import {useStyles, presidentialDescription, teeShirtDescription,
+    electionTitle, electionDescription, cuteDogDescription} from "../../static/constants";
+import SubmitButton from "../utils/SubmitButton";
+import CountdownTimer from "../utils/CountdownTimer";
 
 
 function Home(props) {
@@ -50,7 +51,6 @@ function Voting(props) {
         props.setVotingStep(1);
         sendPostRequest('submit', {
             'candidatesChosen': props.selectedCandidates,
-            'name' : props.username, 'email': props.email
         }).then(
             r => {
                 if (r == null) {
@@ -92,7 +92,7 @@ function Voting(props) {
             <Box width={"100vw"} height={"100vh"} style={{scrollBehavior: "smooth"}}>
                 <Box width={"100%"} height={"100%"} style={{}}>
                     <Box minHeight={500} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
-
+                        <HeaderBar/>
                     </Box>
                     <Box minHeight={626}>
                         <CandidateCardLayout align={"left"} title={"Presidential Race"}
@@ -108,6 +108,7 @@ function Voting(props) {
                                             img={searchCandidateImage(candidate)}
                                             checked={candidatesSelected(candidate)}
                                             handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                            nameRequired={true}
                                         />
                                     </Grid>
                                 )
@@ -121,11 +122,12 @@ function Voting(props) {
                                 candidate.position === 'teeshirt'
                             ).map((candidate, index) =>
                                 <Grid item key={index} >
-                                    <TeeShirtCard {...props}
+                                    <CandidateCard {...props}
                                                   candidate={candidate}
                                                   img={searchCandidateImage(candidate)}
                                                   checked={candidatesSelected(candidate)}
                                                   handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                                   nameRequired={false}
                                     />
                                 </Grid>
                             )}
@@ -133,6 +135,21 @@ function Voting(props) {
                     </Box>
                     <WaveDivider flip />
                     <Box minHeight={626}>
+                        <CandidateCardLayout align={"right"} title={"Cutest Dog"} description={cuteDogDescription}>
+                            {candidateData.filter((candidate) =>
+                                candidate.position === 'cuteDog'
+                            ).map((candidate, index) =>
+                                <Grid item key={index} >
+                                    <CandidateCard {...props}
+                                                   candidate={candidate}
+                                                   img={searchCandidateImage(candidate)}
+                                                   checked={candidatesSelected(candidate)}
+                                                   handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                                   nameRequired={false}
+                                    />
+                                </Grid>
+                            )}
+                        </CandidateCardLayout>
                     </Box>
                 </Box>
             </Box>
@@ -180,6 +197,24 @@ function CandidateCardLayout(props) {
         <Grid container>
             {props.align === "right" ? cards : text}
             {props.align === "right" ? text : cards}
+        </Grid>
+    )
+}
+
+function HeaderBar() {
+    return (
+        <Grid container direction="column" justify="center">
+            <Box p={4}>
+                <Typography variant='h2' align='center' style={{color: 'white'}}>
+                    {electionTitle}
+                </Typography>
+            </Box>
+            <Box p={4}>
+                <Typography variant='h5' align='center' style={{color: 'white'}}>
+                    {electionDescription}
+                </Typography>
+            </Box>
+            <CountdownTimer/>
         </Grid>
     )
 }
