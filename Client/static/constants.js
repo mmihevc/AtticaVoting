@@ -75,14 +75,10 @@ export const useStyles = makeStyles((theme) =>
             backgroundColor: green[500],
             '&:hover': { backgroundColor: green[600] },
         },
-        learnMoreButton: {
-            boxShadow: 'none',
-            '&:hover': {
-                boxShadow: 'none',
-                '@media (hover: none)': {
-                    boxShadow: 'none',
-                },
-            }
+        scroll: {
+            position: 'fixed',
+            bottom: theme.spacing(2),
+            right: theme.spacing(2),
         }
     })
 );

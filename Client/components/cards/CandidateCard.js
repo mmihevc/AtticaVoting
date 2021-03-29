@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { useSlopeCardMediaStyles } from '@mui-treasury/styles/cardMedia/slope';
 import {Box, Grid, Typography, CardMedia} from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
@@ -23,7 +23,7 @@ function CandidateCard(props) {
                  onClick={props.handleSelectedCandidate} className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
                 <CardMedia image={props.img} title={props.candidate.name} classes={props.nameRequired ? mediaStyles : undefined}
-                           style={{height: 300, width:'100%'}} onClick={() => props.handleSelectedCandidate()}/>
+                           style={{height: (props.nameRequired ? 300 : 350), width:'100%'}} onClick={() => props.handleSelectedCandidate()}/>
                 {props.nameRequired ? <Grid container direction='column' justify='center' alignItems='center'>
                     <Grid item>
                         <Typography gutterBottom variant="h6" component="h2" className='candidateName'>{props.candidate.name}</Typography>

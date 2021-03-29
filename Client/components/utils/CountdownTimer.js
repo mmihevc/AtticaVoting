@@ -9,7 +9,7 @@ const color = '#e7f9fc';
 
 const timerProps = {
     isPlaying: true,
-    size: 120,
+    size: 175,
     strokeWidth: 6
 };
 

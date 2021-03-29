@@ -5,10 +5,12 @@ import Navigation from "../utils/Navigation";
 import {sendGetRequest, sendPostRequest} from "../../hooks/API";
 import Confirmation from "./Confirmation";
 import CandidateCard from "../cards/CandidateCard";
+import ScrollToButton from "../utils/ScrollToButton"
 import {useStyles, presidentialDescription, teeShirtDescription,
     electionTitle, electionDescription, cuteDogDescription} from "../../static/constants";
 import SubmitButton from "../utils/SubmitButton";
 import CountdownTimer from "../utils/CountdownTimer";
+
 
 
 function Home(props) {
@@ -89,74 +91,80 @@ function Voting(props) {
     return(
         <>
             <Navigation {...props}/>
-            <Box width={"100vw"} height={"100vh"} style={{scrollBehavior: "smooth"}}>
-                <Box width={"100%"} height={"100%"} style={{}}>
-                    <Box minHeight={500} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
-                        <HeaderBar/>
-                    </Box>
-                    <Box minHeight={626}>
-                        <CandidateCardLayout align={"left"} title={"Presidential Race"}
-                                             description={!selectedCandidates['presidentAndVicePresident'] ?
-                                                 presidentialDescription : selectedCandidates['presidentAndVicePresident'].description}
-                        >
-                            {candidateData.filter(candidate => candidate.position === "presidentAndVicePresident")
-                                .map((candidate, index) =>
-                                    <Grid item key={index}>
-                                        <CandidateCard
-                                            {...props}
-                                            candidate={candidate}
-                                            img={searchCandidateImage(candidate)}
-                                            checked={candidatesSelected(candidate)}
-                                            handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
-                                            nameRequired={true}
+            <React.Fragment>
+                <Box width={"100vw"} height={"100vh"} style={{scrollBehavior: "smooth"}}>
+                    <Box width={"100%"} height={"100%"} style={{}}>
+                        <Box minHeight={500} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
+                            <HeaderBar/>
+                        </Box>
+                        <Box minHeight={626}>
+                            <CandidateCardLayout align={"right"} title={"Presidential Race"}
+                                                 description={!selectedCandidates['presidentAndVicePresident'] ?
+                                                     presidentialDescription : selectedCandidates['presidentAndVicePresident'].description}
+                            >
+                                {candidateData.filter(candidate => candidate.position === "presidentAndVicePresident")
+                                    .map((candidate, index) =>
+                                        <Grid item key={index}>
+                                            <CandidateCard
+                                                {...props}
+                                                candidate={candidate}
+                                                img={searchCandidateImage(candidate)}
+                                                checked={candidatesSelected(candidate)}
+                                                handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                                nameRequired={true}
+                                            />
+                                        </Grid>
+                                    )
+                                }
+                            </CandidateCardLayout>
+                        </Box>
+                        <WaveDivider />
+                        <Box minHeight={626} bgcolor={"neutral.dark"}>
+                            <CandidateCardLayout align={"left"} title={"TeeShirt Contest"} description={teeShirtDescription}>
+                                {candidateData.filter((candidate) =>
+                                    candidate.position === 'teeshirt'
+                                ).map((candidate, index) =>
+                                    <Grid item key={index} >
+                                        <CandidateCard {...props}
+                                                       candidate={candidate}
+                                                       img={searchCandidateImage(candidate)}
+                                                       checked={candidatesSelected(candidate)}
+                                                       handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                                       nameRequired={false}
                                         />
                                     </Grid>
-                                )
-                            }
-                        </CandidateCardLayout>
-                    </Box>
-                    <WaveDivider />
-                    <Box minHeight={626} bgcolor={"neutral.dark"}>
-                        <CandidateCardLayout align={"right"} title={"TeeShirt Contest"} description={teeShirtDescription}>
-                            {candidateData.filter((candidate) =>
-                                candidate.position === 'teeshirt'
-                            ).map((candidate, index) =>
-                                <Grid item key={index} >
-                                    <CandidateCard {...props}
-                                                  candidate={candidate}
-                                                  img={searchCandidateImage(candidate)}
-                                                  checked={candidatesSelected(candidate)}
-                                                  handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
-                                                   nameRequired={false}
-                                    />
-                                </Grid>
-                            )}
-                        </CandidateCardLayout>
-                    </Box>
-                    <WaveDivider flip />
-                    <Box minHeight={626}>
-                        <CandidateCardLayout align={"right"} title={"Cutest Dog"} description={cuteDogDescription}>
-                            {candidateData.filter((candidate) =>
-                                candidate.position === 'cuteDog'
-                            ).map((candidate, index) =>
-                                <Grid item key={index} >
-                                    <CandidateCard {...props}
-                                                   candidate={candidate}
-                                                   img={searchCandidateImage(candidate)}
-                                                   checked={candidatesSelected(candidate)}
-                                                   handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
-                                                   nameRequired={false}
-                                    />
-                                </Grid>
-                            )}
-                        </CandidateCardLayout>
+                                )}
+                            </CandidateCardLayout>
+                        </Box>
+                        <WaveDivider flip />
+                        <Box minHeight={626}>
+                            <CandidateCardLayout align={"right"} title={"Cutest Dog"} description={cuteDogDescription}>
+                                {candidateData.filter((candidate) =>
+                                    candidate.position === 'cuteDog'
+                                ).map((candidate, index) =>
+                                    <Grid item key={index} >
+                                        <CandidateCard {...props}
+                                                       candidate={candidate}
+                                                       img={searchCandidateImage(candidate)}
+                                                       checked={candidatesSelected(candidate)}
+                                                       handleSelectedCandidate={() => handleSelectedCandidate(candidate)}
+                                                       nameRequired={false}
+                                                       className='lastSection'
+                                        />
+                                    </Grid>
+                                )}
+                            </CandidateCardLayout>
+                        </Box>
                     </Box>
                 </Box>
-            </Box>
-            <SubmitButton {...props} onClick={() => handleVote()}/>
+                <ScrollToButton {...props}>
+                    <SubmitButton color="secondary" size="small" aria-label="scroll back to top" {...props} onClick={() => handleVote()}/>
+                </ScrollToButton>
+            </React.Fragment>
         </>
     );
 }
+
 
 function CandidateCardLayout(props) {
     const classes = useStyles();
