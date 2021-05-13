@@ -1,6 +1,6 @@
 import React from 'react'
-import Navigation from "./Navigation";
-import {useStyles} from "../static/constants";
+import Navigation from "../utils/Navigation";
+import {useStyles} from "../../static/constants";
 import clsx from "clsx";
 
 function DLInfo(props) {

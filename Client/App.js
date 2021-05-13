@@ -4,12 +4,12 @@ import {SnackbarProvider, useSnackbar} from 'notistack';
 import {createMuiTheme, ThemeProvider} from '@material-ui/core/styles';
 import {useHistory} from "react-router";
 
-import OldHome from './components/OldHome'
-import DLInfo from '../Client/components/DLInfo'
-import LoginLayout from "./components/LoginLayout";
-import Login from "./components/Login"
-import Results from "./components/Results";
-import Home from "./components/Home";
+import OldHome from './components/old files/OldHome'
+import DLInfo from './components/pages/DLInfo'
+import LoginLayout from "./components/login/LoginLayout";
+import Login from "./components/login/Login"
+import Results from "./components/pages/Results";
+import Home from "./components/pages/Home";
 import {grey} from "@material-ui/core/colors";
 import {CssBaseline} from "@material-ui/core";
 
@@ -27,13 +27,6 @@ const Router = props => {
     return (
         <Switch>
             <Route exact path="/">
-                <LoginLayout>
-                    <Login {...props} history={history} username={username} email={email}
-                           setUsername={setUsername} setEmail={setEmail}
-                    />
-                </LoginLayout>
-            </Route>
-            <Route exact path="/home">
                 <Home {...props} open={open} setOpen={setOpen}
                          setTopic={setTopic} setMessage={setMessage}
                          setSequence={setSequence} setHash={setHash}

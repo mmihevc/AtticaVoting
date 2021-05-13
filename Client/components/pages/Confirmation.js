@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
-import Navigation from "./Navigation";
+import Navigation from "../utils/Navigation";
 import {Grid, Box, Typography, Hidden, Button} from "@material-ui/core";
-import vote from '../static/images/voting.gif';
+import vote from '../../static/images/voting.gif';
+import finish from '../../static/images/finish.jpg'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 function Confirmation(props) {
@@ -14,7 +15,7 @@ function Confirmation(props) {
                     <Grid item lg={6}>
                         <Box p={2}>
                             <img
-                                src={vote}
+                                src={props.votingStep !== 2 ? vote : finish}
                                 title='voting-image'
                                 style={{width:'80%'}}
                             />
@@ -103,11 +104,9 @@ const LearnMore = props =>
 {
     const Icon = props.icon;
 
-
     return(
         <Button
-            style={{height: 50, borderRadius: 8, textTransform: 'none'}}
-        >
+            style={{height: 50, borderRadius: 8, textTransform: 'none'}}>
             <Box p={2}>
                 <Grid container spacing={4}
                       alignItems={"center"} alignContent={"center"}
@@ -122,6 +121,5 @@ const LearnMore = props =>
     )
 
 }
-
 
 export default Confirmation;

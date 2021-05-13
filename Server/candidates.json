@@ -2,18 +2,18 @@
   "candidate1" : {
     "name": "Michael and Janelle",
     "position" : "presidentAndVicePresident",
-    "description": "enter description for candidates here"
+    "description": "enter description for Michael and Janelle here"
   },
   "candidate2" : {
     "name": "Aaron and Maria",
     "position" : "presidentAndVicePresident",
-    "description": "enter description for candidates here"
+    "description": "enter description for Aaron and Maria here"
   },
 
   "candidate4" : {
     "name": "Nicki and Brett",
     "position" : "presidentAndVicePresident",
-    "description": "enter description for candidates here"
+    "description": "enter description for Nicki and Brett here"
   },
   "candidate6" : {
     "name" : "green",
@@ -26,7 +26,7 @@
   "candidate8" : {
     "name": "Hannah and Antonio",
     "position" : "presidentAndVicePresident",
-    "description": "enter description for candidates here"
+    "description": "enter description for Hannah and Antonio here"
   },
   "candidate9" : {
     "name" : "white",
@@ -56,5 +56,21 @@
     "name" : "Amendment 370",
     "position" : "amendment370",
     "description" : "everyone must now skip through the plaza"
+  },
+  "candidate15" : {
+    "name" : "Harvey",
+    "position" : "cuteDog"
+  },
+  "candidate16" : {
+    "name" : "Marley",
+    "position" : "cuteDog"
+  },
+  "candidate17" : {
+    "name" : "Murphy",
+    "position" : "cuteDog"
+  },
+  "candidate18" : {
+    "name" : "Tina",
+    "position" : "cuteDog"
   }
 }

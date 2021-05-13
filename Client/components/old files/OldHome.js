@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {useStyles, electionDescription} from '../static/constants'
+import {useStyles, electionDescription} from '../../static/constants'
 import {Grid, Typography, Box, Button} from "@material-ui/core";
-import {sendGetRequest, sendPostRequest} from "../hooks/API";
-import Navigation from "./Navigation";
-import TeeShirtCard from "./cards/TeeShirtCard";
-import AmendmentCard from "./cards/AmendmentCard";
-import Confirmation from "./Confirmation";
-import '../static/css/global.scss'
+import {sendGetRequest, sendPostRequest} from "../../hooks/API";
+import Navigation from "../utils/Navigation";
+import AmendmentCard from "../cards/AmendmentCard";
+import Confirmation from "../pages/Confirmation";
+import '../../static/css/global.scss'
+import CandidateCard from "../cards/CandidateCard";
 
 
 function OldHome(props) {
@@ -103,16 +103,6 @@ function Voting(props) {
                                                setSelectedCandidates={setSelectedCandidates}
                                                selectedCandidates={selectedCandidates}
                                                link={searchCandidateImage(item.name)}/>
-                            </Grid>
-                        )}
-                        <DisplayHeadings {...props} heading={"T-Shirt"}/>
-                        {candidateData.filter((item) =>
-                            item.position === 'teeshirt'
-                        ).map((item, index) =>
-                            <Grid item key={index} >
-                                <TeeShirtCard {...props} name={item.name} position={item.position} description={item.description}
-                                              setSelectedCandidates={setSelectedCandidates} selectedCandidates={selectedCandidates}
-                                              link={searchCandidateImage(item.name)} />
                             </Grid>
                         )}
                         <DisplayHeadings {...props} heading={"ASCSU Constitution Amendments"}/>
