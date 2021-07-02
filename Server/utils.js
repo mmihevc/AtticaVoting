@@ -4,7 +4,7 @@ Initialization questions for inquirer prompts
 -------------------------------------------------------------------------
  */
 
-let initQuestions = [
+export let initQuestions = [
   createPromptObject('list', 'status', 'What logging mode do you want to run in?', ['Default', 'Minimal', 'Debug'], function(val){return val.toLowerCase();}),
   createPromptObject('input', 'account', 'What\'s your account ID? [empty will default to the value in config.js]\n'),
   createPromptObject('password', 'key', 'What\'s your private key? \n[empty will default to the value in config.js]\n'),
@@ -16,14 +16,14 @@ let initQuestions = [
 Tallying questions for inquirer prompts
 -------------------------------------------------------------------------
  */
-let tallyQuestions = [
+export let tallyQuestions = [
   createPromptObject('input', 'account', 'What\'s your account ID? [empty will default to the value in config.js]\n'),
   createPromptObject('password', 'key', 'What\'s your private key? \n[empty will default to the value in config.js]\n'),
   createPromptObject('input', 'topic', 'Please enter the topic ID of the election\n'),
   createPromptObject('password', 'pass', 'What\'s the password to unlock the votes?\n'),
 ];
 
-let connectQuestions = [
+export let connectQuestions = [
   createPromptObject('input', 'topic', 'Please enter the topic ID of the election\n')
 ];
 
@@ -33,7 +33,7 @@ createPromptObject()
 -------------------------------------------------------------------------
 */
 
-function createPromptObject(type, name, message){
+/*function createPromptObject(type, name, message){
   let obj = {
     type: type,
     name: name,
@@ -41,9 +41,9 @@ function createPromptObject(type, name, message){
   };
 
   return obj;
-}
+}*/
 
-function createPromptObject(type, name, message, choices, filter) {
+export function createPromptObject(type, name, message, choices, filter) {
   let obj = {
     type: type,
     name: name,
@@ -65,7 +65,7 @@ Outputs: String
 Takes an unsigned array of integers and converts it to a string.
 -------------------------------------------------------------------------
  */
-function UInt8ToString(array) {
+export function UInt8ToString(array) {
   let str = "";
   for (let i = 0; i < array.length; i++) {
     str += array[i];
@@ -83,7 +83,7 @@ Outputs: time (date( year, Month, Date))
 This is a helper function that changes seconds to date
 -------------------------------------------------------------------------
  */
-function secondsToDate(time) {
+export function secondsToDate(time) {
   let date = new Date(1970, 0, 1);
   date.setSeconds(time.seconds);
   return date;
@@ -99,7 +99,7 @@ This is a helper function that holds the program for the passed amount of
 ms
 -------------------------------------------------------------------------
 */
-function sleep(ms) {
+export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
@@ -112,7 +112,7 @@ Inputs: event, log, status
 This is a helper function that logs  events
 -------------------------------------------------------------------------
  */
-function handleLog(event, log, status) {
+export function handleLog(event, log, status) {
   if (status === "debug") {
     console.log(`${event} ${log}`);
   } else if (status === "minimal") {
@@ -152,9 +152,9 @@ function handleLog(event, log, status) {
 // }
 
 /* FIXME: Comments needed */
-function populateCandidates(){
-  const Candidate = require("./CandidateCard").Candidate;
-  let candidates = require("./electionConfig.js").electionConfig['candidates'];
+export function populateCandidates(){
+  // const Candidate = require("./CandidateCard").Candidate;
+  // let candidates = require("./electionConfig.js").electionConfig['candidates'];
   let retArr = new Array(candidates.length);
   for(let i = 0; i < candidates.length; i++) {
     retArr[i] = new Candidate(candidates[i]['name'], candidates[i]['desc'], candidates[i]['img']);
@@ -170,7 +170,7 @@ this is the helper function that communicates with the Dragon Glass API
 and then stores all the votes within the votes array.
 -------------------------------------------------------------------------
  */
-async function pullVotes(topicId, apiKey, rp, logStatus) {
+export async function pullVotes(topicId, apiKey, rp, logStatus) {
   try{ 
     let options = {
         uri: `https://api-testnet.dragonglass.me/hedera/api/hcs/messages?topicID=${topicId}`,
@@ -187,7 +187,7 @@ async function pullVotes(topicId, apiKey, rp, logStatus) {
   }
 }
 
-async function sendRequest (options, rp, logStatus) {
+export async function sendRequest (options, rp, logStatus) {
   let response;
   try {
       await rp(options)
@@ -205,7 +205,7 @@ async function sendRequest (options, rp, logStatus) {
   return response.data;
 }
 
-function hexConvertVotes (data) {
+export function hexConvertVotes (data) {
   let votes = [];
   for (let i = 0; i < data.length; i++) {
       votes[i] = hexToStr(data[i].message);
@@ -213,21 +213,8 @@ function hexConvertVotes (data) {
   return votes;
 }
 
-const convert = (from, to) => str => Buffer.from(str, from).toString(to);
+export const convert = (from, to) => str => Buffer.from(str, from).toString(to);
 
-const hexToStr = convert('hex', 'utf8');
+export const hexToStr = convert('hex', 'utf8');
 
-module.exports = {
-  initQuestions,
-  tallyQuestions,
-  connectQuestions,
-  UInt8ToString,
-  secondsToDate,
-  sleep,
-  handleLog,
-  populateCandidates,
-  pullVotes,
-  sendRequest,
-  hexConvertVotes,
-  hexToStr
-};
+

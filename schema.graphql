@@ -1,0 +1,14 @@
+type Election {
+    _id: ID!
+    title: String
+    test: String
+
+}
+
+type Query {
+    electionLookup(_id: ID!): Election
+}
+
+type Mutation {
+    createTopic(topicMemo: String!): ID!
+}

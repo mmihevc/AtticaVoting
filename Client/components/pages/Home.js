@@ -11,8 +11,6 @@ import {useStyles, presidentialDescription, teeShirtDescription,
 import SubmitButton from "../utils/SubmitButton";
 import CountdownTimer from "../utils/CountdownTimer";
 
-
-
 function Home(props) {
     const [votingStep, setVotingStep] = useState(0);
 
@@ -24,8 +22,6 @@ function Home(props) {
         return <Confirmation {...props} votingStep={votingStep}/>
     }
 }
-
-
 
 
 function Voting(props) {
@@ -46,7 +42,8 @@ function Voting(props) {
 
     function searchCandidateImage({ name }) {
         let candidateName = name.split(" ");
-        return '/images/' + candidateName[0].toLowerCase() + '.jpg';
+        console.log()
+        return './images/candidates/' + candidateName[0].toLowerCase() + '.jpg';
     }
 
     function handleVote() {

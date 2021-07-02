@@ -11,15 +11,9 @@ const {
 const config = require('./config/config');
 const hederaConfig = config.hederaConfig;
 
+import {handleLog, sleep, UInt8ToString} from './utils'
 
-const {
-    handleLog,
-    sleep,
-    UInt8ToString,
-
-} = require('./utils');
-
-module.exports = class HederaClass {
+export default class HederaClass {
     
     constructor (account, key, logStatus) {
         this.logStatus = logStatus;
