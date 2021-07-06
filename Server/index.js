@@ -23,7 +23,7 @@ dotenv.config(); //loads .env file that contains passwords and such
 const confirmList = [];
 
 const  hederaClient = new HederaClass("", "", process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
-hederaClient.subscribeToMirror(confirmList)
+hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID
 
 const server = new ApolloServer({ //this is the server woohoo, the graphql server more specifically
 	typeDefs, //schema.graphql file
@@ -40,7 +40,7 @@ const server = new ApolloServer({ //this is the server woohoo, the graphql serve
 	context: async ({ req, connection }) => { //creates context, global
 		return {
 			pubsub: pubsub,
-            //hederaClient: hederaClient
+            hederaClient: hederaClient
 		};
 	}
 });

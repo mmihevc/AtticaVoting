@@ -1,14 +1,79 @@
 type Election {
     _id: ID!
     title: String
-    test: String
-
+    description: String
+    races: [Race]
+    startDate: DateTime
+    endDate: DateTime
+    votes: [Vote]
 }
 
+type Race {
+    name: String
+    description: String
+    candidates: [Candidate]
+    winner: Candidate
+    raceVotes: [RaceVote]
+}
+
+type User {
+    _id: ID
+    name: String
+    votes: [Vote]
+}
+
+interface ElectionItem {
+    _id: ID
+    name: String!
+    race: Race!
+}
+
+type Candidate implements ElectionItem {
+    _id: ID
+    name: String!
+    race: Race!
+    bio: String!
+}
+
+#teeshirts or such
+type Item implements ElectionItem {
+    _id: ID
+    name: String!
+    race: Race!
+}
+
+type Admendment implements ElectionItem {
+    _id: ID
+    name: String!
+    race: Race!
+    description: String
+    options: String
+}
+
+type Vote {
+    _id: ID
+    raceVotes: [RaceVote]
+    date: DateTime
+}
+
+type RaceVote {
+    electionItem: [ElectionItem]
+    user: User
+}
+
+scalar DateTime
+
+#read
 type Query {
-    electionLookup(_id: ID!): Election
+    electionLookup(_id: ID!, title: String): Election
+    raceLookup(_id: ID): Race #might be unnecessary
+    userLookup(_id: ID): User #a history of what the user has previously voted for?
+    electionItem(_id: ID, race: Race): ElectionItem
 }
 
-type Mutation {
+#the post requests
+type Mutation { 
     createTopic(topicMemo: String!): ID!
+    submitVote(electionItems: [ID]): Vote
+    createElection(title: String, _id: ID, races:[Race]): 
 }
