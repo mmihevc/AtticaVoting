@@ -24,7 +24,7 @@ function CandidateCard(props) {
                 boxShadow={props.checked ? 3 : undefined}>
                 <CardMedia image={props.img} title={props.candidate.name} classes={props.nameRequired ? mediaStyles : undefined}
                            style={{height: (props.nameRequired ? 300 : 350), width:'100%'}} onClick={() => props.handleSelectedCandidate()}/>
-                {props.nameRequired ? <Grid container direction='column' justify='center' alignItems='center'>
+                {props.nameRequired ? <Grid container direction='column' justifyContent={'center'} alignItems='center'>
                     <Grid item>
                         <Typography gutterBottom variant="h6" component="h2" className='candidateName'>{props.candidate.name}</Typography>
                     </Grid>
@@ -35,7 +35,7 @@ function CandidateCard(props) {
                 props.checked ?
                     <Box width={50} height={50} bgcolor={"secondary.main"} border={2} borderRadius={"50%"} style={{position: "absolute", top: -20, right: -20}}>
                         <Grid container style={{height: "100%"}}
-                              justify={"center"} alignItems={"center"}
+                              justifyContent={"center"} alignItems={"center"}
                         >
                             <CheckIcon/>
                         </Grid>

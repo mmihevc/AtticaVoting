@@ -15,7 +15,7 @@ const Login = props => {
 
     return (
         <Grid
-            container direction={"column"} justify={"center"} alignItems={"center"} alignContent={"center"}
+            container direction={"column"} justifyContent={"center"} alignItems={"center"} alignContent={"center"}
             spacing={8}
         >
             <Grid item>
@@ -26,7 +26,7 @@ const Login = props => {
                 email={props.email} setEmail={props.setEmail}
                 login={login} {...props}
             />
-            <Grid item container justify={"center"} alignItems={"center"} alignContent={"center"}>
+            <Grid item container justifyContent={"center"} alignItems={"center"} alignContent={"center"}>
                 <Grid item style={{width: "80%"}} align={"center"}>
                     <Button
                         color={"primary"} variant={"contained"} style={{width: "80%", height: "50px"}}
@@ -43,7 +43,7 @@ const Login = props => {
 const LoginFields = props => {
     return(
         <Grid
-            item container direction={"column"} justify={"center"} alignItems={"center"} alignContent={"center"}
+            item container direction={"column"} justifyContent={"center"} alignItems={"center"} alignContent={"center"}
             spacing={3} style={{width: '90%'}}
         >
             <Grid item style={{width: '100%'}}>

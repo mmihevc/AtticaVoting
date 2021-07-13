@@ -1,5 +1,5 @@
 type Election {
-    _id: ID!
+    _id: ID
     title: String
     description: String
     races: [Race]
@@ -11,7 +11,7 @@ type Election {
 type Race {
     name: String
     description: String
-    candidates: [Candidate]
+    electionItems: [ElectionItem]
     winner: Candidate
     raceVotes: [RaceVote]
 }
@@ -20,6 +20,7 @@ type User {
     _id: ID
     name: String
     votes: [Vote]
+    electionsParticipatedIn: [Election]
 }
 
 interface ElectionItem {
@@ -42,7 +43,7 @@ type Item implements ElectionItem {
     race: Race!
 }
 
-type Admendment implements ElectionItem {
+type Amendment implements ElectionItem {
     _id: ID
     name: String!
     race: Race!
@@ -65,15 +66,15 @@ scalar DateTime
 
 #read
 type Query {
-    electionLookup(_id: ID!, title: String): Election
+    electionLookup(_id: ID, title: String): Election
     raceLookup(_id: ID): Race #might be unnecessary
-    userLookup(_id: ID): User #a history of what the user has previously voted for?
-    electionItem(_id: ID, race: Race): ElectionItem
+    userLookup: User 
+    electionItem(_id: ID): ElectionItem
 }
 
 #the post requests
 type Mutation { 
     createTopic(topicMemo: String!): ID!
     submitVote(electionItems: [ID]): Vote
-    createElection(title: String, _id: ID, races:[Race]): 
+    createElection(title: String, _id: ID): Election
 }

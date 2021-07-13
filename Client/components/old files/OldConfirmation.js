@@ -35,7 +35,7 @@ function ConfirmationMessage(props) {
     return (
         <>
             <Box pt={5}>
-                <Grid container justify='center'
+                <Grid container justifyContent='center'
                       alignItems='center' alignContent='center'>
                     <Grid item>
                         <Typography variant='h3'>
@@ -190,7 +190,7 @@ function ReceiptTableMessage () {
     return (
         <>
             <Box pt={3}>
-                <Grid container justify='center'
+                <Grid container justifyContent='center'
                       alignItems='center' alignContent='center'>
                     <Typography variant='h6'>
                         Click on each term to learn more about what each term means
