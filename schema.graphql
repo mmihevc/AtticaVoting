@@ -9,6 +9,7 @@ type Election {
 }
 
 type Race {
+    _id: ID
     name: String
     description: String
     electionItems: [ElectionItem]
@@ -24,30 +25,32 @@ type User {
 }
 
 interface ElectionItem {
-    _id: ID
+    _id: ID!
     name: String!
     race: Race!
 }
 
 type Candidate implements ElectionItem {
-    _id: ID
+    _id: ID!
     name: String!
     race: Race!
-    bio: String!
+    description: String!
+    image: Url!
 }
 
 #teeshirts or such
 type Item implements ElectionItem {
-    _id: ID
+    _id: ID!
     name: String!
     race: Race!
+    image: Url!
 }
 
 type Amendment implements ElectionItem {
-    _id: ID
+    _id: ID!
     name: String!
     race: Race!
-    description: String
+    description: String!
     options: String
 }
 
@@ -63,6 +66,7 @@ type RaceVote {
 }
 
 scalar DateTime
+scalar Url
 
 #read
 type Query {

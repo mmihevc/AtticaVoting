@@ -7,6 +7,26 @@ import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 function Confirmation(props) {
 
+    function handleVote() {
+        props.setVotingStep(1);
+        sendPostRequest("submit", {
+          candidatesChosen: props.selectedCandidates,
+        }).then((r) => {
+          if (r == null) {
+            props.produceSnackBar("Server error", "error");
+          }
+          if (r.data.success) {
+            props.setVotingStep(2);
+            props.setTopic(r.data.topicId);
+            props.setHash(r.data.runningHash);
+            props.setMessage(r.data.message);
+            props.setSequence(r.data.sequence);
+          } else {
+            props.produceSnackBar("Vote Failed", "error");
+          }
+        });
+      }
+
     return (
         <>
             <Navigation {...props}/>

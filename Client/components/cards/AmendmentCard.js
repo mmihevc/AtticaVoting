@@ -6,19 +6,26 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CheckIcon from "@material-ui/icons/Check";
 
 function AmendmentCard(props) {
+
     const [expanded, setExpanded] = useState(false);
     const classes = useStyles();
-    const displayCheck = props.selectedCandidates[props.position] === props.name;
+   // const displayCheck = props.selectedCandidates[props.position] === props.name;
 
-    function handleAmendmentVote(e) {
+    /*function handleAmendmentVote(e) {
         let vote = e.currentTarget.value ;
         props.setSelectedCandidates({
             ...props.selectedCandidates,
             [props.position]: vote === 'yes' ? 'yes' : 'no'
         });
-    }
+    }*/
 
     return (
+        <p>
+            Amendment Card
+        </p>
+    )
+
+    /*return (
         <>
             <Card variant='elevation' style={{width:'300px'}}>
                 <CardContent>
@@ -86,7 +93,7 @@ function AmendmentCard(props) {
                 </CardContent>
             </Card>
         </>
-    )
+    )*/
 }
 
 export default AmendmentCard;

@@ -2,42 +2,86 @@ import React from "react";
 import { Box, Grid } from "@material-ui/core";
 
 import ElectionItemLayout from "../cards/ElectionItemLayout";
-import AdmendmentCard from "../cards/AmendmentCard";
+import AmendmentCard from "../cards/AmendmentCard";
 import ItemCard from "../cards/ItemCard";
 import CandidateCard from "../cards/CandidateCard";
 
 function Race(props) {
+    
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
 
-    function determineElectionItemCard() {
-        switch (props.race.electionItems.__typeName) {
-          case "Admendment":
-            return <AdmendmentCard race={props.race} />;
-          case "Item":
-            return <ItemCard race={props.race}/>;
-          case "Candidate":
-            return <CandidateCard race={props.race}/>;
-        }
-      }
+  const description = props.raceItemSelection[props.race._id]
+    ? props.race.electionItems.find(
+        (electionItem) => electionItem._id === props.raceItemSelection[props.race._id]
+      ).description
+    : props.race.description;
 
   return (
     <>
       <Box minHeight={626} bgcolor={props.backgroundColor}>
-        <ElectionItemLayout
-          align={props.align}
-          title={props.race.title}
-          description={props.race.description}
-        >
-         
-            {determineElectionItemCard()}     
-
+        <ElectionItemLayout align={props.align} title={props.race.title} description={description}>
+          {props.race.electionItems.map((electionItem, index) => (
+            <Grid item key={index}>
+              <DetermineElectionItemCard
+                electionItem={electionItem}
+                raceID={props.race._id}
+                raceItemSelection={props.raceItemSelection}
+                setRaceItemSelection={props.setRaceItemSelection}
+              />
+            </Grid>
+          ))}
         </ElectionItemLayout>
       </Box>
-      <WaveDivider  flip={props.flipped}/>
+      <WaveDivider flip={props.flipped} />
     </>
   );
 }
 
+function DetermineElectionItemCard(props) {
+  const checked = props.raceItemSelection[props.raceID] === props.electionItem._id;
 
+  function handleSelectedElectionItem() {
+    props.setRaceItemSelection({
+      ...props.raceItemSelection,
+      [props.raceID]: props.electionItem._id,
+    });
+  }
+
+  switch (props.electionItem.__typename) {
+    case "Amendment":
+      return (
+        <AmendmentCard
+          checked={checked}
+          amendment={props.electionItem}
+          handleSelectedAmendment={handleSelectedElectionItem}
+        />
+      );
+    case "Item":
+      return (
+        <ItemCard
+          checked={checked}
+          item={props.electionItem}
+          handleSelectedItem={handleSelectedElectionItem}
+        />
+      );
+    case "Candidate":
+      return (
+        <CandidateCard
+          checked={checked}
+          candidate={props.electionItem}
+          handleSelectedCandidate={handleSelectedElectionItem}
+        />
+      );
+  }
+
+  return null;
+}
 
 const WaveDivider = (props) => {
   return (

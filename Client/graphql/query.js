@@ -6,17 +6,23 @@ export const ElectionDisplay = gql`
       title
       description
       races {
+        _id
         name
         description
            electionItems {
               __typename
+              _id
              name
               ... on Candidate {
-                bio
+                description
+                image
               }
               ... on Amendment {
                 description
                 options
+              }
+              ... on Item {
+                image
               }
            }
       }
@@ -25,3 +31,5 @@ export const ElectionDisplay = gql`
     }
   }
 `;
+
+
