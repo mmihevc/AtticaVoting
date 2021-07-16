@@ -8,12 +8,13 @@ type Election {
     votes: [Vote]
 }
 
+
 type Race {
     _id: ID
     name: String
     description: String
-    electionItems: [ElectionItem]
-    winner: Candidate
+    electionItems: [ElectionItem] #override fields to make sure it is getting it from specific destination (electionItem and raceVote)
+    winner: ElectionItem
     raceVotes: [RaceVote]
 }
 
@@ -61,8 +62,8 @@ type Vote {
 }
 
 type RaceVote {
-    electionItem: [ElectionItem]
-    user: User
+    electionItem: ElectionItem
+    race: Race
 }
 
 scalar DateTime
@@ -73,12 +74,13 @@ type Query {
     electionLookup(_id: ID, title: String): Election
     raceLookup(_id: ID): Race #might be unnecessary
     userLookup: User 
-    electionItem(_id: ID): ElectionItem
+    electionItemLookup(_id: ID): ElectionItem
+    
 }
 
 #the post requests
 type Mutation { 
     createTopic(topicMemo: String!): ID!
-    submitVote(electionItems: [ID]): Vote
+    submitVote(raceID: [ID!]!): Vote
     createElection(title: String, _id: ID): Election
 }

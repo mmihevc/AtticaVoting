@@ -5,12 +5,12 @@ import { Skeleton } from "@material-ui/lab";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { ElectionDisplay } from "../../graphql/query";
+import { SubmitVote } from "../../graphql/mutation"
 
 import "../../static/css/global.scss";
 import Navigation from "../utils/Navigation";
 import Confirmation from "./Confirmation";
 import ScrollToButton from "../utils/ScrollToButton";
-import { electionTitle, electionDescription } from "../../static/constants";
 import SubmitButton from "../utils/SubmitButton";
 import CountdownTimer from "../utils/CountdownTimer";
 import Race from "./Race";
@@ -22,6 +22,8 @@ function Election(props) {
   const { loading, error, data } = useQuery(ElectionDisplay, {
     variables: { title: topicId },
   });
+
+  const [submitVote] = useMutation(SubmitVote)
 
   if (error) return `Error! ${error.message}`;
   if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;
@@ -56,7 +58,7 @@ function Election(props) {
           size="small"
           aria-label="scroll back to top"
           {...props}
-          onClick={() => handleVote()}
+          onClick={() => submitVote()}
         />
       </ScrollToButton>
     </>

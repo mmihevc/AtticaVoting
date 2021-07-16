@@ -6,6 +6,7 @@ import finish from '../../static/images/finish.jpg'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 function Confirmation(props) {
+    const [votingStep, setVotingStep] = useState(0);
 
     function handleVote() {
         props.setVotingStep(1);
@@ -42,7 +43,7 @@ function Confirmation(props) {
                         </Box>
                     </Grid>
                 </Hidden>
-                <DisplayMessage {...props}/>
+                <DisplayMessage votingStep={votingStep}/>
             </Grid>
         </>
     )
@@ -50,7 +51,7 @@ function Confirmation(props) {
 
 }
 
-function DisplayMessage({votingStep}) {
+function DisplayMessage(props) {
     const [learnMore, setLearnMore] = useState(false);
 
     const textBlock = useRef(null);
@@ -69,8 +70,8 @@ function DisplayMessage({votingStep}) {
 
         const doTyping = async () => {
             let page = text[0];
-            let typingForwards = votingStep === 1;
-            let typingHeader = votingStep === 1;
+            let typingForwards = props.votingStep === 1;
+            let typingHeader = props.votingStep === 1;
             const firstRun = typingForwards;
 
             do {
@@ -102,7 +103,7 @@ function DisplayMessage({votingStep}) {
             if (!firstRun) setLearnMore(prevLearnMore => !prevLearnMore);
         }
         doTyping();
-    }, [textBlock, votingStep]);
+    }, [textBlock, props.votingStep]);
 
     return (
         <Grid item lg={6} xs={12}>
