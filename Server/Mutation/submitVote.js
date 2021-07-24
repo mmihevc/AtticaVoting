@@ -1,7 +1,8 @@
 
-const submitVote = async (_, args, context, info) => {
+const SubmitVote = async (_, args, context, info) => {
 
   return {
+    success: true,
     _id: "1234",
     raceVotes: [
       {
@@ -45,4 +46,4 @@ const submitVote = async (_, args, context, info) => {
 });*/
 };
 
-export default submitVote
+export default SubmitVote

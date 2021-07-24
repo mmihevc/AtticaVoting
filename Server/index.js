@@ -23,7 +23,7 @@ dotenv.config(); //loads .env file that contains passwords and such
 const confirmList = [];
 
 const  hederaClient = new HederaClass("", "", process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
-hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID
+//hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID
 
 const server = new ApolloServer({ //this is the server woohoo, the graphql server more specifically
 	typeDefs, //schema.graphql file
@@ -51,34 +51,8 @@ server.applyMiddleware({ app }); //embeds express into graph server
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
-//TODO: convert to graph
-app.post('/api/submit', async (req,res) => {
-    try{    
-        let submittedVote = ``;
-        const id = req.body.name + req.body.email;
-        const anonID = security.hash(`${id}${Math.floor(Math.random() * 1000)}`);
 
-        submittedVote += `${anonID}~`;
-
-        const votes = JSON.stringify(req.body.candidatesChosen);
-        const encrypted = await security.encrypt(`${anonID}~${votes}`, pubKey);
-        const encoded = security.encode(encrypted);
-
-        submittedVote += `${encoded}~`;
-
-        const timestamp = Date.now();
-
-        submittedVote += `${timestamp}`
-        
-        HederaObj.sendHCSMessage(submittedVote);
-
-        log('API Submit', `Vote Submitted!\n~AnonId=${anonID}\n~EncVote=${encoded}\n~Timestamp=${timestamp}`);
-
-        confirmList.push({aid: anonID, resp: res});
-    }catch (err){
-        log('API Submit Error', err);
-    }
-});
+//moved /submit
 
 app.get('/api/candidates', async (req,res) => {
     const candidateList = JSON.parse(await fs.readFile('./server/candidates.json'));

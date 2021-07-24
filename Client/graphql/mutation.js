@@ -1,8 +1,9 @@
 import { gql } from "@apollo/client";
 
-export const submitVote = gql`
-    mutation SubmitVotes($raceID: [ID]) {
+export const SubmitVote = gql`
+    mutation SubmitVotes($raceID: [ID!]!) {
         submitVote(raceID: $raceID) {
+            success
             _id
         }
     }

@@ -3,6 +3,7 @@ import path from "path";
 
 import { gql } from "apollo-server-express";
 
+import {resolveType} from './ElectionItem/*'
 import * as mutation from './Mutation'
 import * as query from './Query'
 
@@ -12,7 +13,7 @@ const typeDefs = gql(schema);
 const resolvers = {
     Query: query,
     Mutation: mutation,
-
+    ElectionItem: {__resolveType: resolveType}
 }
 
 export {typeDefs, resolvers}

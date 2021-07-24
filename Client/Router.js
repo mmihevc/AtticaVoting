@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Switch, Route } from "react-router-dom";
-import { useHistory } from "react-router";
 
 import DLInfo from "./components/pages/DLInfo";
 import Results from "./components/pages/Results";
 import Election from "./components/pages/Election";
 import Home from "./components/pages/Home";
+import Confirmation from "./components/pages/Confirmation";
 
 const Router = (props) => {
   return (
@@ -18,6 +18,9 @@ const Router = (props) => {
       </Route>
       <Route path="/elections/:topicId">
         <Election />
+      </Route>
+      <Route>
+      <Confirmation path="/confirmation"/>
       </Route>
       <Route path="/learn-more">
         <DLInfo />

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
+import {useHistory} from "react-router";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { ElectionDisplay } from "../../graphql/query";
@@ -23,7 +24,16 @@ function Election(props) {
     variables: { title: topicId },
   });
 
-  const [submitVote] = useMutation(SubmitVote)
+  const [submitVote] = useMutation(SubmitVote, {
+    onCompleted({submitVote}) {
+      if (submitVote) {
+        console.log('vote submitted')
+        return (
+          <Confirmation success={submitVote.success}/>
+        )
+      }
+    }
+  })
 
   if (error) return `Error! ${error.message}`;
   if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;
@@ -58,7 +68,7 @@ function Election(props) {
           size="small"
           aria-label="scroll back to top"
           {...props}
-          onClick={() => submitVote()}
+          onClick={() => console.log(raceItemSelection)}//submitVote(raceItemSelection)}
         />
       </ScrollToButton>
     </>

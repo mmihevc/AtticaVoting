@@ -56,9 +56,10 @@ type Amendment implements ElectionItem {
 }
 
 type Vote {
-    _id: ID
+    _id: ID!
     raceVotes: [RaceVote]
     date: DateTime
+    success: Boolean
 }
 
 type RaceVote {
