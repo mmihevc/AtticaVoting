@@ -3,6 +3,7 @@ const {
     TopicMessageSubmitTransaction,
     TopicCreateTransaction,
     TopicMessageQuery,
+    TopicInfoQuery,
     PrivateKey,
     PublicKey
 } = require("@hashgraph/sdk");
@@ -16,6 +17,7 @@ const {
     handleLog,
     sleep,
     UInt8ToString,
+    pullVotes,
 
 } = require('./utils');
 
@@ -123,7 +125,7 @@ module.exports = class HederaClass {
     `operatorAccount`
     -------------------------------------------------------------------------
     */
-    configureAccount(account, key, client) {
+    configureAccount(account, key) {
         try {
             if(account !== "") {
                 this.operatorAccount = account;
@@ -141,5 +143,42 @@ module.exports = class HederaClass {
         } catch (error) {
             handleLog("ERROR: configureAccount()", error, this.logStatus);
         }
+    }
+
+    async pullVotes(start, end, topicID){
+        let votes = [];
+        try{
+            topicVotes = await new TopicInfoQuery()
+                .setTopicId(topicID)
+                .setStartTime(start)
+                .setEndTime(end)
+                .subscribe(
+                    this.HederaClient,
+                    (message) => votes.push(message)  
+                );
+        } catch (err) {
+            handleLog("ERROR: pullVotes()", err, this.logStatus);
+        }
+        return votes;
+    }
+    
+    async pullTopicInfo(topicID){
+        let topicInfo;
+        try {
+            let query = new TopicInfoQuery()
+                .setTopicId(topicID);
+
+            topicInfo = await query.execute(this.HederaClient);
+
+            // topicInfo = await new TopicInfoQuery()
+            //     .setTopicId(topicID)
+            //     .execute(this.HederaClient);
+        } catch (err) {
+            handleLog("ERROR: pullTopicInfo()", err, this.logStatus);
+        }
+        
+        console.log(`DEBUG1: ${topicInfo}`);
+
+        return topicInfo;
     }
 }

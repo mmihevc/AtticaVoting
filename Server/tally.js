@@ -2,19 +2,19 @@
 const inquirer = require("inquirer");
 const rp = require("request-promise");
 const {
-    ConsensusTopicInfoQuery,
     Client,
-    Ed25519PrivateKey
+    PrivateKey
 } = require("@hashgraph/sdk");
 
 /* config */
-const tallyConfig = require("../config/config.js").dragonGlassConfig;
+const tallyConfig = require("./config/config.js").dragonGlassConfig;
 
 /* utilities */
-const utils = require('../utils.js');
+const utils = require('./utils.js');
 const security = require('./security.js');
 const tallyQuestions = utils.tallyQuestions;
-const hederaConfig = require('../config/config.js').hederaConfig;
+const hederaConfig = require('./config/config.js').hederaConfig;
+const HederaClass = require("./hedera.js");
 const log = utils.handleLog;
 const populateCandidates = utils.populateCandidates;
 const pullVotes = utils.pullVotes;
@@ -28,37 +28,67 @@ Uses our two helper functions configTopicId() and pullVotes to pull the
 votes from the Dragon Glass API and store them in an array.
 -------------------------------------------------------------------------
  */
+
 async function init() {
     await inquirer.prompt(tallyQuestions).then(async function(answers) {
         try{
-            // Topic Id Set
             let topicId = answers.topic;
+            log('init()', '~Topic ID Set~', 'debug');
 
-            // Hedera client configured
-            let hClient = Client.forTestnet();
-            configureClient(answers.account, answers.key, hClient);
-            console.log(`~Hedera Client Configured~`);
+            let acctInfo = handleAnswers(answers.account, answers.key);
+            let HederaObj = new HederaClass(acctInfo.acctId, acctInfo.privKey, 'default')
+            log('init()', `~Hedera Client Configured~`, 'debug');
 
-            // Votes pulled from DragonGlass
-            let votes = await pullVotes(topicId, tallyConfig.XAPIKEY, rp, 'default');
+            // NEEDS TO BE FIXED
+            //
+            // let topicInfo = await HederaObj.pullTopicInfo(topicId);
+            let topicInfo = '00001~1614215880000~1614216180000';
+            console.log(`DEBUG2: ${topicInfo}`)
+            let topicSplit = topicInfo.split('~');
+            log('init()', '~Topic Info Pulled~', 'debug');
+
+            let votes = await HederaObj.pullVotes(topicSplit[0], topicSplit[1], topicId);
             Promise.all([votes]);
-            console.log(`~Votes Pulled~`);
+            log('init()', '~Votes Pulled~', 'debug');
 
-            // Topic info pulled from info query
-            let topicInfo = await pullTopicInfo(topicId, hClient);
-            Promise.all([topicInfo]);
-            console.log(`~Topic Info Pulled~`);
-
-            // Tally and print votes
-            let cands = await tally(votes, topicInfo, answers.pass);
-            //console.log(cands);
-            prettyPrint(cands);
-
-        } catch (error) {
-            log("ERROR: init()", error, "default");
+            console.log(`DEBUG: ${votes}`);
+        } catch (err) {
+            log('ERROR: init()', err, 'debug');
         }
     });
 }
+
+// async function init() {
+//     await inquirer.prompt(tallyQuestions).then(async function(answers) {
+//         try{
+//             // Topic Id Set
+//             let topicId = answers.topic;
+
+//             // Hedera client configured
+//             let hClient = Client.forTestnet();
+//             configureClient(answers.account, answers.key, hClient);
+//             console.log(`~Hedera Client Configured~`);
+
+//             // Votes pulled from DragonGlass
+//             let votes = await pullVotes(topicId, tallyConfig.XAPIKEY, rp, 'default');
+//             Promise.all([votes]);
+//             console.log(`~Votes Pulled~`);
+
+//             // Topic info pulled from info query
+//             let topicInfo = await pullTopicInfo(topicId, hClient);
+//             Promise.all([topicInfo]);
+//             console.log(`~Topic Info Pulled~`);
+
+//             // Tally and print votes
+//             let cands = await tally(votes, topicInfo, answers.pass);
+//             //console.log(cands);
+//             prettyPrint(cands);
+
+//         } catch (error) {
+//             log("ERROR: init()", error, "default");
+//         }
+//     });
+// }
 
 function prettyPrint(cands) {
     console.log(`-----------------------------------------\n| Candidate Name\t\t| Votes\t|\n|---------------------------------------|`);
@@ -77,7 +107,7 @@ function prettyPrint(cands) {
     console.log(`-----------------------------------------`);
 }
 
-function configureClient (account, key, client) {
+function handleAnswers (account, key) {
     let acctId, privKey;
     try {
         if(account !== "")
@@ -85,13 +115,13 @@ function configureClient (account, key, client) {
         else
             acctId = hederaConfig.account;
         if(key !== "")
-            privKey = Ed25519PrivateKey.fromString(key);
+            privKey = PrivateKey.fromString(key);
         else
-            privKey = Ed25519PrivateKey.fromString(hederaConfig.key);
-        client.setOperator(acctId, privKey);
+            privKey = PrivateKey.fromString(hederaConfig.key);
     } catch (error) {
         log("ERROR: configureClient()", error, "default");
     }
+    return {'acctId': acctId, 'privKey': privKey};
 }
 
 async function pullTopicInfo(topicId, client) {
