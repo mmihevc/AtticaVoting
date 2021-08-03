@@ -68,7 +68,7 @@ function Election(props) {
           size="small"
           aria-label="scroll back to top"
           {...props}
-          onClick={() => console.log(raceItemSelection)}//submitVote(raceItemSelection)}
+          onClick={() => submitVote(Object.entries(raceItemSelection))}
         />
       </ScrollToButton>
     </>
