@@ -10,6 +10,6 @@ export const client = new MongoClient(process.env.MONGO_URI, {
 	useUnifiedTopology: true
 });
 
-export const removeNullArgs = (args) => {
+/*export const removeNullArgs = (args) => {
 	return Object.fromEntries(Object.entries(args).filter(([_, v]) => v != null));
-};
+};*/

@@ -36,10 +36,6 @@ export const useStyles = makeStyles((theme) =>
         expandOpen: {
             transform: 'rotate(180deg)',
         },
-        formControl: {
-            margin: theme.spacing(1),
-            minWidth: 120,
-        },
         selectEmpty: {
             marginTop: theme.spacing(2),
         },
@@ -79,7 +75,22 @@ export const useStyles = makeStyles((theme) =>
             position: 'fixed',
             bottom: theme.spacing(2),
             right: theme.spacing(2),
-        }
+        },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+          },
+          selectEmpty: {
+            marginTop: theme.spacing(2),
+          },
+          select: {
+            "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: '#00000'
+              },
+              "& .MuiInputLabel-outlined.Mui-focused": {
+                color:  '#00000'
+              }
+          }
     })
 );
 

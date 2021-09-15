@@ -1,9 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const SubmitVote = gql`
-    mutation SubmitVotes($raceID: [[ID!]!]!) {
-        submitVote(raceID: $raceID) {
-            success
+    mutation SubmitVotes($electionID: ID!, $vote: [RaceVoteInput!]!) {
+        submitVote(electionID: $electionID, vote: $vote) {
             _id
         }
     }

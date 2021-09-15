@@ -11,6 +11,7 @@ import { promises as fs } from "fs";
 import HederaClass from './hedera.js';
 import mocks from "./mocking.js";
 import { typeDefs, resolvers } from "./schema.js";
+import { client } from "./db.js";
 
 const pubsub = new PubSub();
 
@@ -21,6 +22,8 @@ const serverTracing = process.env.MOCK ? true : undefined;
 dotenv.config(); //loads .env file that contains passwords and such
 
 const confirmList = [];
+
+await client.connect();
 
 const  hederaClient = new HederaClass("", "", process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
 //hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID
@@ -40,7 +43,8 @@ const server = new ApolloServer({ //this is the server woohoo, the graphql serve
 	context: async ({ req, connection }) => { //creates context, global
 		return {
 			pubsub: pubsub,
-            hederaClient: hederaClient
+            hederaClient: hederaClient,
+			db: client.db('Attica')
 		};
 	}
 });

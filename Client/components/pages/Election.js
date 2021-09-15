@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
-import {useHistory} from "react-router";
 
 import { useQuery, useMutation } from "@apollo/client";
 import { ElectionDisplay } from "../../graphql/query";
@@ -68,7 +67,7 @@ function Election(props) {
           size="small"
           aria-label="scroll back to top"
           {...props}
-          onClick={() => submitVote(Object.entries(raceItemSelection))}
+          onClick={() => submitVote(raceItemSelection)}
         />
       </ScrollToButton>
     </>
