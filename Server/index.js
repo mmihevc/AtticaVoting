@@ -4,14 +4,14 @@ import http from "http";
 import { ApolloServer, PubSub, AuthenticationError } from "apollo-server-express";
 import { express as voyagerMiddleware } from "graphql-voyager/middleware/index.js";
 
-import dotenv from "dotenv";
+import mongodb from "mongodb";
+import {client, connect} from './db';
 
 import { promises as fs } from "fs";
 
 import HederaClass from './hedera.js';
 import mocks from "./mocking.js";
 import { typeDefs, resolvers } from "./schema.js";
-import { client } from "./db.js";
 
 const pubsub = new PubSub();
 
@@ -19,11 +19,11 @@ const app = express();
 const serverMocks = process.env.MOCK ? mocks : undefined;
 const serverTracing = process.env.MOCK ? true : undefined;
 
-dotenv.config(); //loads .env file that contains passwords and such
+//dotenv.config(); //loads .env file that contains passwords and such
 
 const confirmList = [];
 
-await client.connect();
+connect();
 
 const  hederaClient = new HederaClass("", "", process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
 //hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID

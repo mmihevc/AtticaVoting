@@ -37,6 +37,7 @@ type Candidate implements ElectionItem {
     _id: ID!
     name: String!
     race: Race!
+    rank: Int
     description: String!
     image: Url!
 }
@@ -46,6 +47,7 @@ type Item implements ElectionItem {
     _id: ID!
     name: String!
     race: Race!
+    rank: Int
     image: Url!
 }
 
@@ -53,6 +55,7 @@ type Amendment implements ElectionItem {
     _id: ID!
     name: String!
     race: Race!
+    rank: Int
     description: String!
     options: String
 }
