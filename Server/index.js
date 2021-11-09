@@ -4,8 +4,7 @@ import http from "http";
 import { ApolloServer, PubSub, AuthenticationError } from "apollo-server-express";
 import { express as voyagerMiddleware } from "graphql-voyager/middleware/index.js";
 
-import mongodb from "mongodb";
-import {client, connect} from './db';
+import {client} from './db';
 
 import { promises as fs } from "fs";
 
@@ -23,7 +22,12 @@ const serverTracing = process.env.MOCK ? true : undefined;
 
 const confirmList = [];
 
-connect();
+await client.connect(err => {
+	const election = client.db("Attica").collection("Election");
+
+	console.log("connected to database");
+	
+});
 
 const  hederaClient = new HederaClass("", "", process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
 //hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID

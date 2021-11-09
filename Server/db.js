@@ -12,7 +12,7 @@ export const client = new MongoClient(uri, {
 	useUnifiedTopology: true 
 });
 
-export const connect = async () => {
+/*export const connect = async () => {
   console.log("Connecting to database");
   try {
     await client.connect();
@@ -23,8 +23,7 @@ export const connect = async () => {
   finally {
     await client.close()
   }
-}
-
+}*/
 
 /*client.connect(err => {
   const collection = client.db("Attica").collection("devices");
