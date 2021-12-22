@@ -45,7 +45,7 @@ const ClosedButton = props =>
 
     return(
         <Grid container style={{height: "100%"}}
-              justify={"center"} alignItems={"center"}
+              justifyContent={"center"} alignItems={"center"}
         >
             <HowToVoteIcon className={classes.fabIcon} style={{color: 'white'}}/>
             <Typography className={classes.fabText}>Submit Vote</Typography>

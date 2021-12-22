@@ -1,5 +1,5 @@
-/Server/config/config.js
-/Server/config/key
-/Server/config/key.pub
-/dist/*
-/node_modules/*
+.reports/
+dist/
+hint-report/
+node_modules/
+*.log

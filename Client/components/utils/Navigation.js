@@ -12,7 +12,7 @@ function Navigation(props) {
     const classes = useStyles();
     return (
         <Box p={2}>
-            <Grid container justify='space-between' alignItems='center'>
+            <Grid container justifyContent='space-between' alignItems='center'>
                 <Grid item>
                     <IconButton style={{marginLeft: 'auto', backgroundColor: 'transparent'}} target="_blank" href='https://www.atticavoting.com/'>
                         <Avatar alt='Attica Logo' src={AtticaLogo} variant='rounded'/>

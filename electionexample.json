@@ -1,0 +1,20 @@
+{
+    "title" : "CSU Student Elections",
+    "description" : "Thank you for taking the time to vote! Below you will find several different races that you can vote for such as the presidential and vice president race and the speaker of the senate race. The maybe some more information about how ranked choice voting works",
+    "races" : { 
+        "race" : {
+            "title" : "president",
+            "description" : "Here is a description for the presidential and vice president election",
+            "electionItems" : {
+                "candidate" : {
+                    "name" : "Maddie Mihevc",
+                    "description" : "Maddie believes in no more testing and free puppies for everyone"
+                }
+            }
+        }  
+    }
+        
+
+    
+
+}

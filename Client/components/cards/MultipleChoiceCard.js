@@ -21,7 +21,7 @@ function MultipleChoiceCard(props) {
         <>
             <Card variant='elevation' style={{width:'300px'}}>
                 <CardContent>
-                    <Grid container justify='center'
+                    <Grid container justifyContent={'center'}
                           alignItems='center' alignContent='center' direction='column'>
                         <Grid item>
                             <Typography gutterBottom variant="h5" component="h2" className='candidateName'>{props.name}</Typography>
@@ -32,7 +32,7 @@ function MultipleChoiceCard(props) {
                             <Grid
                                 container
                                 direction="row"
-                                justify="center"
+                                justifyContent={"center"}
                                 alignItems="center"
                             >
                                 <Typography>Click to learn more</Typography>

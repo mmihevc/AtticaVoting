@@ -12,7 +12,6 @@ export async function sendPostRequest(location, requestBody) {
 export async function sendGetRequest() {
     try {
         return await axios.get("/api/candidates");
-
     } catch(error) {
         return null;
     }

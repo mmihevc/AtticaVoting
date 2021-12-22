@@ -6,23 +6,30 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CheckIcon from "@material-ui/icons/Check";
 
 function AmendmentCard(props) {
+
     const [expanded, setExpanded] = useState(false);
     const classes = useStyles();
-    const displayCheck = props.selectedCandidates[props.position] === props.name;
+   // const displayCheck = props.selectedCandidates[props.position] === props.name;
 
-    function handleAmendmentVote(e) {
+    /*function handleAmendmentVote(e) {
         let vote = e.currentTarget.value ;
         props.setSelectedCandidates({
             ...props.selectedCandidates,
             [props.position]: vote === 'yes' ? 'yes' : 'no'
         });
-    }
+    }*/
 
     return (
+        <p>
+            Amendment Card
+        </p>
+    )
+
+    /*return (
         <>
             <Card variant='elevation' style={{width:'300px'}}>
                 <CardContent>
-                    <Grid container justify='center'
+                    <Grid container justifyContent={'center'}
                           alignItems='center' alignContent='center' direction='column'>
                         <Grid item>
                             <Typography gutterBottom variant="h5" component="h2" className='candidateName'>{props.name}</Typography>
@@ -33,7 +40,7 @@ function AmendmentCard(props) {
                             <Grid
                                 container
                                 direction="row"
-                                justify="center"
+                                justifyContent={"center"}
                                 alignItems="center"
                             >
                                 <Typography>Click to learn more</Typography>
@@ -86,7 +93,7 @@ function AmendmentCard(props) {
                 </CardContent>
             </Card>
         </>
-    )
+    )*/
 }
 
 export default AmendmentCard;

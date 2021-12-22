@@ -79,7 +79,7 @@ function Voting(props) {
             <Navigation {...props}/>
                 <Box pt={5}>
                     <Description />
-                    <Grid container spacing={5} justify='center'
+                    <Grid container spacing={5} justifyContent='center'
                           alignItems='center' alignContent='center'>
                         <DisplayHeadings {...props} heading={"Presidential Candidate"}/>
                         {candidateData.filter((item) =>
@@ -116,7 +116,7 @@ function Voting(props) {
                                                link={searchCandidateImage(item.name)}/>
                             </Grid>
                         )}
-                        <Grid container justify='center' alignItems='center' alignContent='center'>
+                        <Grid container justifyCotent='center' alignItems='center' alignContent='center'>
                             <Box pt={3} pb={3}>
                                 <Button onClick={() => handleVote()} variant="contained" color='primary'>
                                     Submit Votes
@@ -133,7 +133,7 @@ function Description() {
     return (
         <div>
             <Box pb={4} pt={3}>
-                <Grid container justify='center'
+                <Grid container justifyContent='center'
                       alignItems='center' alignContent='center'>
                     <Typography variant="h5">
                         {electionDescription}
