@@ -17,10 +17,11 @@ function Race(props) {
     return a;
   }
 
+
   function handleSelectedElectionItem() {
     props.setRaceItemSelection({
       ...props.raceItemSelection,
-      [props.raceID]: props.electionItem._id,
+      [props.raceID]: props.race.electionItems._id,
     });
   }
 
@@ -31,47 +32,35 @@ function Race(props) {
     : props.race.description;
 
 
-  //const checked = props.raceItemSelection[props.race._id] === props.electionItem._id;
-  const checked = false;
+  const checked = props.raceItemSelection[props.race._id] === props.race.electionItems._id;
 
   return (
     <>
       <Box minHeight={626} bgcolor={props.backgroundColor}>
         <ElectionItemLayout align={props.align} title={props.race.title} description={description}>
           {props.race.electionItems.filter((electionItem) => 
-            electionItem.__typename === 'president'
+            electionItem.__typename === 'Candidate'
           ).map((electionItem, index) => {
             return (
               <Grid item key={index}>
-                <RankedCandidateCard
+                <CandidateCard
                   checked={checked}
                   candidate={electionItem}
                   handleSelectedCandidate={handleSelectedElectionItem}
                 />
               </Grid>
-            )
-          }
-
-            /*<Grid item key={index}>
-              <DetermineElectionItemCard
-                electionItem={electionItem}
-                raceID={props.race._id}
-                raceItemSelection={props.raceItemSelection}
-                setRaceItemSelection={props.setRaceItemSelection}
-              />
-            </Grid>*/
+            )}
           )}
+         
         </ElectionItemLayout>
       </Box>
-      <WaveDivider flip={props.flipped} />
+      <WaveDivider flip={props.flipped}/>
     </>
   );
 }
 
 function DetermineElectionItemCard(props) {
   const checked = props.raceItemSelection[props.raceID] === props.electionItem._id;
-
-  console.log(props.electionItem.__typename);
 
   function handleSelectedElectionItem() {
     props.setRaceItemSelection({
@@ -99,7 +88,7 @@ function DetermineElectionItemCard(props) {
       );
     case "Candidate":
       return (
-        <RankedCandidateCard
+        <CandidateCard
           checked={checked}
           candidate={props.electionItem}
           handleSelectedCandidate={handleSelectedElectionItem}

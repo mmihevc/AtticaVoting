@@ -40,16 +40,16 @@ function CandidateCard(props) {
 
                 </Grid> 
             </Box>
-            {/*
+            {
                 props.checked ?
                     <Box width={50} height={50} bgcolor={"secondary.main"} border={2} borderRadius={"50%"} style={{position: "absolute", top: -20, right: -20}}>
                         <Grid container style={{height: "100%"}}
                               justifyContent={"center"} alignItems={"center"}
                         >
-                            <CheckIcon/>
+                            {rank}
                         </Grid>
                     </Box> : null
-            */}
+            }
         </Box>
     )
 }
@@ -62,24 +62,24 @@ function CandidateSelect(props) {
     };
 
     return (
-        <FormControl variant="outlined" className={classes.formControl}>
-            <InputLabel>Rank</InputLabel>
-            <Select
-                value={props.rank}
-                onChange={handleChange}
-                label="Rank"
-                className={classes.select}
-            >
-                <MenuItem value="">
-                    <em>None</em>
-                </MenuItem>
-                <MenuItem value={1}>First Choice</MenuItem>
-                <MenuItem value={2}>Second Choice</MenuItem>
-                <MenuItem value={3}>Third Choice</MenuItem>
-                <MenuItem value={4}>Fourth Choice</MenuItem>
-                <MenuItem value={5}>Fifth Choice</MenuItem>
-            </Select>
-      </FormControl>
+        <>
+            <FormControl variant="outlined" fullWidth>
+                <InputLabel>Rank</InputLabel>
+                <Select
+                    value={props.rank}
+                    onChange={handleChange}
+                    label="Rank"
+                    style={{"backgroundColor": "white"}}
+        
+                >
+                    <MenuItem value={1}>First Choice</MenuItem>
+                    <MenuItem value={2}>Second Choice</MenuItem>
+                    <MenuItem value={3}>Third Choice</MenuItem>
+                    <MenuItem value={4}>Fourth Choice</MenuItem>
+                    <MenuItem value={5}>Fifth Choice</MenuItem>
+                </Select>
+        </FormControl>
+      </>
     )
 }
 

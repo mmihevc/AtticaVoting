@@ -1,8 +1,9 @@
+import { ObjectId } from "mongodb";
+
 const electionLookup = async (_, args, context, info) => {
-    const election = {
-        _id: '12'
+    return {
+        election: context.db.collection("Election").find({}).toArray()
     }
-    return election
 }
 
 export default electionLookup;

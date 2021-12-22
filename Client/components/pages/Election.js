@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
 
 import { useQuery, useMutation } from "@apollo/client";
-import { ElectionDisplay } from "../../graphql/query";
+import { ElectionLookup } from "../../graphql/query";
 import { SubmitVote } from "../../graphql/mutation"
 
 import "../../static/css/global.scss";
@@ -19,7 +19,7 @@ function Election(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
 
-  const { loading, error, data } = useQuery(ElectionDisplay, {
+  const { loading, error, data } = useQuery(ElectionLookup, {
     variables: { title: topicId },
   });
 
@@ -33,6 +33,8 @@ function Election(props) {
       }
     }
   })
+
+  console.log(data);
 
   if (error) return `Error! ${error.message}`;
   if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;

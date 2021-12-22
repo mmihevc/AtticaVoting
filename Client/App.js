@@ -18,19 +18,11 @@ const FullApp = (props) => {
   const providerRef = useRef();
 
   const httpLink = new HttpLink({
-    uri: "/graphql",
+    uri:  "/graphql",
     credentials: "same-origin",
   });
 
-  const authLink = setContext((_, { headers }) => {
-    const token = localStorage.getItem("token");
-    return {
-      headers: {
-        ...headers,
-        authorization: token ? `Bearer ${token}` : "",
-      },
-    };
-  });
+ 
 
   const wsLink = new WebSocketLink({
     uri:
@@ -39,13 +31,7 @@ const FullApp = (props) => {
         : "wss://attica-voting.com/graphql",
     options: {
       timeout: 30000,
-      reconnect: true,
-      connectionParams: () => {
-        const token = localStorage.getItem("token");
-        return {
-          authorization: token ? `Bearer ${token}` : "",
-        };
-      },
+      reconnect: true
     },
   });
 
@@ -57,8 +43,6 @@ const FullApp = (props) => {
           if (!error.message) console.error(`An Unknown Error Has Occurred`);
           console.error(`Error: ${error.message}. Operation: ${error.path}`);
         });
-      } else if (graphQLErrors.map((error) => error.extensions.code).includes("UNAUTHENTICATED")) {
-        window.location.href = "/";
       } else {
         console.error(graphQLErrors);
       }
@@ -71,7 +55,7 @@ const FullApp = (props) => {
       return definition.kind === "OperationDefinition" && definition.operation === "subscription";
     },
     wsLink,
-    authLink.concat(httpLink)
+    httpLink
   );
 
   const additiveLink = from([errorLink, splitLink]);

@@ -82,7 +82,7 @@ scalar Url
 #read
 type Query {
     electionLookup(_id: ID, title: String): Election
-    raceLookup(_id: ID): Race #might be unnecessary
+    raceLookup(_id: ID): Race #might be unnecessary 
     userLookup: User #
     electionItemLookup(_id: ID): ElectionItem
     

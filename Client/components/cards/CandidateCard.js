@@ -8,6 +8,7 @@ function CandidateCard(props) {
     const mediaStyles = useSlopeCardMediaStyles();
     const classes = useStyles();
 
+
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
