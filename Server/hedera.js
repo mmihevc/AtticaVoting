@@ -4,12 +4,12 @@ const {
     TopicCreateTransaction,
     TopicMessageQuery,
     PrivateKey,
-    PublicKey
 } = require("@hashgraph/sdk");
 
-//const {hederaConfig} = require('./config/config.js');
-const config = require('./config/config');
-const hederaConfig = config.hederaConfig;
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+const ACCOUNT_ID = process.env.ACCOUNT_ID
+
+require("dotenv").config();
 
 import {handleLog, sleep, UInt8ToString} from './utils'
 
@@ -57,11 +57,8 @@ export default class HederaClass {
             new TopicMessageQuery()
                 .setTopicId(this.topicId)
                 .subscribe(this.HederaClient, res => {
-                    //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
                     let encMsg = Buffer.from(res.contents, "utf8").toString();
                     let anonID = encMsg.split('~')[0];
-                    // let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
-                    // let uidHash = encMsg.split(specialChar)[0];
                     handleLog("TopicMessageQuery()", "OldConfirmation Received", this.logStatus);
 
                     confirmList.find(({aid}) => aid === anonID)
@@ -122,12 +119,12 @@ export default class HederaClass {
             if(account !== "") {
                 this.operatorAccount = account;
             }else {
-                this.operatorAccount = hederaConfig.account;
+                this.operatorAccount = ACCOUNT_ID;
             }
             if(key !== "") {
                 this.operatorKey = PrivateKey.fromString(key);
             } else {
-                this.operatorKey = PrivateKey.fromString(hederaConfig.key);
+                this.operatorKey = PrivateKey.fromString(PRIVATE_KEY);
             }
 
             this.HederaClient.setOperator(this.operatorAccount, this.operatorKey);
