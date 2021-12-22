@@ -11,14 +11,13 @@ import mocks from "./mocking.js";
 import { typeDefs, resolvers } from "./schema.js";
 
 import {client} from './db';
+require("dotenv").config();
 
 const pubsub = new PubSub();
 
 const app = express();
 const serverMocks = process.env.MOCK ? mocks : undefined;
 const serverTracing = process.env.MOCK ? true : undefined;
-
-//dotenv.config(); //loads .env file that contains passwords and such
 
 await client.connect(err => {
     const election = client.db("Attica").collection("Election");
@@ -27,8 +26,7 @@ await client.connect(err => {
 
 const confirmList = [];
 
-const  hederaClient = new HederaClass("", "", process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
-//hederaClient.subscribeToMirror(confirmList) //hedera api function, sets up connection with mirror nodes on network when provided with topicID
+const  hederaClient = new HederaClass(process.env.ACCOUNT_ID, process.env.PRIVATE_KEY, process.env.NODE_ENV === 'development' ? "default" : "debug") //load global Hedera object
 
 const server = new ApolloServer({ //this is the server woohoo, the graphql server more specifically
 	typeDefs, //schema.graphql file
