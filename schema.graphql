@@ -12,10 +12,19 @@ type Election {
 type Race {
     _id: ID
     name: String
+    title: String
     description: String
-    electionItems: [ElectionItem] #override fields to make sure it is getting it from specific destination (electionItem and raceVote)
-    winner: ElectionItem
-    raceVotes: [RaceVote]
+    candidates: [Candidate]
+    amendments: [Amendment]
+    items: [Item]
+}
+
+type Candidate {
+    _id: ID
+    name: String
+    rank: Int
+    description: String
+    image: Url
 }
 
 type User {
@@ -25,25 +34,11 @@ type User {
     electionsParticipatedIn: [Election]
 }
 
-interface ElectionItem {
-    _id: ID!
-    name: String!
-    race: Race!
-    rank: Int
-}
 
 
-type Candidate implements ElectionItem {
-    _id: ID!
-    name: String!
-    race: Race!
-    rank: Int
-    description: String!
-    image: Url!
-}
 
 #teeshirts or such
-type Item implements ElectionItem {
+type Item  {
     _id: ID!
     name: String!
     race: Race!
@@ -51,7 +46,7 @@ type Item implements ElectionItem {
     image: Url!
 }
 
-type Amendment implements ElectionItem {
+type Amendment {
     _id: ID!
     name: String!
     race: Race!
@@ -67,7 +62,7 @@ type Vote {
 }
 
 type RaceVote {
-    electionItem: ElectionItem
+  
     race: Race
 }
 
@@ -81,10 +76,10 @@ scalar Url
 
 #read
 type Query {
-    electionLookup(_id: ID, title: String): Election
+    electionLookup(title: String!): Election
     raceLookup(_id: ID): Race #might be unnecessary 
     userLookup: User #
-    electionItemLookup(_id: ID): ElectionItem
+
     
 }
 

@@ -23,6 +23,8 @@ function Election(props) {
     variables: { title: topicId },
   });
 
+  console.log(data);
+
   const [submitVote] = useMutation(SubmitVote, {
     onCompleted({submitVote}) {
       if (submitVote) {
@@ -33,8 +35,6 @@ function Election(props) {
       }
     }
   })
-
-  console.log(data);
 
   if (error) return `Error! ${error.message}`;
   if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;

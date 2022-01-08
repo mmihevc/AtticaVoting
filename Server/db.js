@@ -12,3 +12,8 @@ export const client = new MongoClient(uri, {
 	useUnifiedTopology: true 
 });
 
+
+export const removeNullArgs = (args) => {
+	return Object.fromEntries(Object.entries(args).filter(([_, v]) => v != null));
+};
+

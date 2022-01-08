@@ -25,27 +25,29 @@ function Race(props) {
     });
   }
 
+  console.log(props.race.candidates)
+
   const description = props.raceItemSelection[props.race._id]
-    ? props.race.electionItems.find(
-        (electionItem) => electionItem._id === props.raceItemSelection[props.race._id]
+    ? props.race.candidates.find(
+        (candidate) => candidate._id === props.raceItemSelection[props.race._id]
       ).description
     : props.race.description;
 
 
-  const checked = props.raceItemSelection[props.race._id] === props.race.electionItems._id;
+  
+  //const checked = props.raceItemSelection[props.race._id] === props.race.candidates._id;
+  const checked = false;
 
   return (
     <>
       <Box minHeight={626} bgcolor={props.backgroundColor}>
         <ElectionItemLayout align={props.align} title={props.race.title} description={description}>
-          {props.race.electionItems.filter((electionItem) => 
-            electionItem.__typename === 'Candidate'
-          ).map((electionItem, index) => {
+          {props.race.candidates.map((candidate, index) => {
             return (
               <Grid item key={index}>
                 <CandidateCard
                   checked={checked}
-                  candidate={electionItem}
+                  candidate={candidate}
                   handleSelectedCandidate={handleSelectedElectionItem}
                 />
               </Grid>
@@ -59,45 +61,6 @@ function Race(props) {
   );
 }
 
-function DetermineElectionItemCard(props) {
-  const checked = props.raceItemSelection[props.raceID] === props.electionItem._id;
-
-  function handleSelectedElectionItem() {
-    props.setRaceItemSelection({
-      ...props.raceItemSelection,
-      [props.raceID]: props.electionItem._id,
-    });
-  }
-
-  switch (props.electionItem.__typename) {
-    case "Amendment":
-      return (
-        <AmendmentCard
-          checked={checked}
-          amendment={props.electionItem}
-          handleSelectedAmendment={handleSelectedElectionItem}
-        />
-      );
-    case "Item":
-      return (
-        <ItemCard
-          checked={checked}
-          item={props.electionItem}
-          handleSelectedItem={handleSelectedElectionItem}
-        />
-      );
-    case "Candidate":
-      return (
-        <CandidateCard
-          checked={checked}
-          candidate={props.electionItem}
-          handleSelectedCandidate={handleSelectedElectionItem}
-        />
-      );
-  }
-
-  return null;
-}
 
 const WaveDivider = (props) => {
   return (

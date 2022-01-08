@@ -20,10 +20,7 @@ const serverTracing = process.env.MOCK ? true : undefined;
 
 //dotenv.config(); //loads .env file that contains passwords and such
 
-await client.connect(err => {
-    const election = client.db("Attica").collection("Election");
-    
-});
+await client.connect();
 
 const confirmList = [];
 
