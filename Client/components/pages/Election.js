@@ -23,7 +23,7 @@ function Election(props) {
     variables: { title: topicId },
   });
 
-  console.log(data);
+  if(!loading && !error) console.log(data);
 
   const [submitVote] = useMutation(SubmitVote, {
     onCompleted({submitVote}) {

@@ -34,9 +34,6 @@ type User {
     electionsParticipatedIn: [Election]
 }
 
-
-
-
 #teeshirts or such
 type Item  {
     _id: ID!

@@ -17,6 +17,11 @@ export const ElectionLookup = gql`
           description 
           image
         }
+        items {
+          _id
+          name
+          image
+        }
       }
       startDate
       endDate
