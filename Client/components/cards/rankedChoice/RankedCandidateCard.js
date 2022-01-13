@@ -22,7 +22,7 @@ function CandidateCard(props) {
                  onClick={props.handleSelectedCandidate} className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
                 <div onClick={() => handleSelectRank()}>
-                    <CardMedia image={props.candidate.image} title={props.candidate.name} classes={mediaStyles}
+                    <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
                         style={{height: 300, width:'100%', filter: filter}} onClick={() => props.handleSelectedCandidate()}/>
                     {selectRank ? 
                         <Box width={100} height={100} style={{position: "absolute", top: 100, left: 90}}>

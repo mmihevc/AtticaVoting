@@ -11,14 +11,17 @@ export const ElectionLookup = gql`
         name
         description
         title
+        raceType
         candidates {
           _id
+          type
           name
           description 
           image
         }
         items {
           _id
+          type
           name
           image
         }

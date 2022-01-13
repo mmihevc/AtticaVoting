@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid } from "@material-ui/core";
+import { Box, Grid, Typography } from "@material-ui/core";
 
 import ElectionItemLayout from "../cards/ElectionItemLayout";
 import AmendmentCard from "../cards/AmendmentCard";
@@ -18,14 +18,27 @@ function Race(props) {
   }
 
 
-  function handleSelectedElectionItem() {
+  function handleSelectedCandidate() {
     props.setRaceItemSelection({
       ...props.raceItemSelection,
-      [props.raceID]: props.race.electionItems._id,
+      [props.race._id]: props.race.candidates._id,
     });
   }
 
-  console.log(props.race.candidates)
+  function handleSelectedItem() {
+    props.setRaceItemSelection({
+      ...props.raceItemSelection,
+      [props.race._id]: props.race.items._id,
+    });
+  }
+
+  function searchCandidateImage(name) {
+    let candidateName = name.split(" ");
+    return '/images/candidates/' + candidateName[0].toLowerCase() + '.jpg';
+  }
+
+  
+  //const checked = false;
 
   const description = props.raceItemSelection[props.race._id]
     ? props.race.candidates.find(
@@ -33,27 +46,60 @@ function Race(props) {
       ).description
     : props.race.description;
 
+  function DetermineDisplay() {
+    if (props.race.candidates) {
+      const checkedCandidate = props.raceItemSelection[props.race._id] === props.race.candidates._id;
 
-  
-  //const checked = props.raceItemSelection[props.race._id] === props.race.candidates._id;
-  const checked = false;
+      console.log(props.raceItemSelection)
+      console.log(props.race.candidates._id)
+      
+
+      return (
+        props.race.candidates.map((candidate, index) => {
+          return (
+            <Grid item key={index}>
+              <CandidateCard
+                checked={checkedCandidate}
+                candidate={candidate}
+                image={searchCandidateImage(candidate.name)}
+                handleSelectedCandidate={handleSelectedCandidate}
+              />
+            </Grid>
+          )}
+        )
+      )
+    }
+    else if (props.race.items){
+      const checkedItem = props.raceItemSelection[props.race._id] === props.race.items._id;
+      return (
+        props.race.items.map((item, index) => {
+          return (
+            <Grid item key={index}>
+              <ItemCard
+                checked={checkedItem}
+                item={item}
+                image={searchCandidateImage(item.name)}
+                handleSelectedItem={handleSelectedItem}
+              />
+            </Grid>
+          )
+        })
+      )
+    }
+    else {
+      return (
+        <>
+          <Typography>other card</Typography>
+        </>
+      )
+    }
+  }
 
   return (
     <>
       <Box minHeight={626} bgcolor={props.backgroundColor}>
         <ElectionItemLayout align={props.align} title={props.race.title} description={description}>
-          {props.race.candidates.map((candidate, index) => {
-            return (
-              <Grid item key={index}>
-                <CandidateCard
-                  checked={checked}
-                  candidate={candidate}
-                  handleSelectedCandidate={handleSelectedElectionItem}
-                />
-              </Grid>
-            )}
-          )}
-         
+          <DetermineDisplay/>
         </ElectionItemLayout>
       </Box>
       <WaveDivider flip={props.flipped}/>

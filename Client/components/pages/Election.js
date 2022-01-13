@@ -23,7 +23,7 @@ function Election(props) {
     variables: { title: topicId },
   });
 
-  if(!loading && !error) console.log(data);
+  //if(!loading && !error) console.log(data);
 
   const [submitVote] = useMutation(SubmitVote, {
     onCompleted({submitVote}) {
@@ -89,7 +89,7 @@ function HeaderBar(props) {
           {props.description}
         </Typography>
       </Box>
-      <CountdownTimer />
+      {/*<CountdownTimer />*/}
     </Grid>
   );
 }
