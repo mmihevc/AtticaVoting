@@ -16,6 +16,13 @@ function CandidateCard(props) {
         setSelectRank(!selectRank);
     }
 
+    function handleSelectedCandidate() {
+        props.setRaceItemSelection({
+          ...props.raceItemSelection,
+          [props.raceID]: props.candidate._id,
+        });
+      }
+
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
@@ -23,7 +30,7 @@ function CandidateCard(props) {
                 boxShadow={props.checked ? 3 : undefined}>
                 <div onClick={() => handleSelectRank()}>
                     <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
-                        style={{height: 300, width:'100%', filter: filter}} onClick={() => props.handleSelectedCandidate()}/>
+                        style={{height: 300, width:'100%', filter: filter}} onClick={() => handleSelectedCandidate()}/>
                     {selectRank ? 
                         <Box width={100} height={100} style={{position: "absolute", top: 100, left: 90}}>
                             <Grid container style={{height: "100%"}}

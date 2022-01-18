@@ -18,12 +18,14 @@ export const ElectionLookup = gql`
           name
           description 
           image
+          race
         }
         items {
           _id
           type
           name
           image
+          race
         }
       }
       startDate

@@ -7,13 +7,20 @@ import {useStyles} from "../../static/constants";
 function ItemCard(props) {
     const classes = useStyles();
 
+    function handleSelectedItem() {
+        props.setRaceItemSelection({
+          ...props.raceItemSelection,
+          [props.raceID]: props.item._id,
+        });
+      }
+
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
                  onClick={props.handleSelectedCandidate} className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
                     <CardMedia image={props.image} 
-                        style={{height: 300, width:'100%'}} onClick={() => props.handleSelectedItem()}/>
+                        style={{height: 300, width:'100%'}} onClick={() => handleSelectedItem()}/>
             </Box>
             {
                 props.checked ?

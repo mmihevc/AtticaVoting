@@ -27,6 +27,7 @@ type Candidate {
     rank: Int
     description: String
     image: Url
+    race: String
 }
 
 type User {
@@ -41,9 +42,9 @@ type Item  {
     _id: ID!
     type: String
     name: String!
-    race: Race!
     rank: Int
     image: Url!
+    race: String
 }
 
 type Amendment {
@@ -78,9 +79,7 @@ scalar Url
 type Query {
     electionLookup(title: String!): Election
     raceLookup(_id: ID): Race #might be unnecessary 
-    userLookup: User #
-
-    
+    userLookup: User # 
 }
 
 
