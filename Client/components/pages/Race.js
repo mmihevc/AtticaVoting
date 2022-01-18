@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { Box, Grid, Typography } from "@material-ui/core";
 
 import ElectionItemLayout from "../cards/ElectionItemLayout";
@@ -8,20 +8,21 @@ import CandidateCard from "../cards/CandidateCard";
 import RankedCandidateCard from "../cards/rankedChoice/RankedCandidateCard"
 
 function Race(props) {
-    
-  function shuffle(a) {
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
 
   function searchCandidateImage(name) {
     let candidateName = name.split(" ");
     return '/images/candidates/' + candidateName[0].toLowerCase() + '.jpg';
   }
 
+  function shuffle(electionItem) {
+    return (
+      electionItem
+      .map((value) => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)
+    )
+  }
+  
 
   /*const description = props.raceItemSelection[props.race._id]
     ? props.race.candidates.find(
@@ -33,10 +34,10 @@ function Race(props) {
 
   function DetermineDisplay() {
     if (props.race.candidates) {
-
+      const shuffled = shuffle(props.race.candidates)
       return (
         <>
-          {props.race.candidates.map((candidate, index) => {
+          {shuffled.map((candidate, index) => {
             const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
             return (
               <Grid item key={index}>
@@ -52,13 +53,12 @@ function Race(props) {
             )}
           )}
         </>
-    
-        
       )
     }
     else if (props.race.items){
+      const shuffled = shuffle(props.race.items)
       return (
-        props.race.items.map((item, index) => {
+        shuffled.map((item, index) => {
           const checkedItem = props.raceItemSelection[props.race._id] === item._id;
           return (
             <Grid item key={index}>

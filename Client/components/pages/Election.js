@@ -18,6 +18,7 @@ import Race from "./Race";
 function Election(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
+  const [candidateData, setCandidateData] = useState([]);
 
   const { loading, error, data } = useQuery(ElectionLookup, {
     variables: { title: topicId },
