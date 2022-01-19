@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
@@ -19,6 +19,7 @@ function Election(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
   const [candidateData, setCandidateData] = useState([]);
+  
 
   const { loading, error, data } = useQuery(ElectionLookup, {
     variables: { title: topicId },
@@ -39,6 +40,10 @@ function Election(props) {
 
   if (error) return `Error! ${error.message}`;
   if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;
+
+  /*useEffect(() => {
+    
+  }, [])*/
 
   return (
     <>
