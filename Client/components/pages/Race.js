@@ -10,12 +10,12 @@ import RankedCandidateCard from "../cards/rankedChoice/RankedCandidateCard"
 function Race(props) {
   const [shuffledCandidates, setShuffledCandidates] = useState([]);
   const [shuffledItems, setShuffledItems] = useState([]);
+  const [itemClicked, setItemClicked] = useState(false);
 
   function searchCandidateImage(name) {
     let candidateName = name.split(" ");
     return '/images/candidates/' + candidateName[0].toLowerCase() + '.jpg';
   }
-
 
   function shuffle(a){
     for (let i = a.length - 1; i > 0; i--) {
@@ -31,13 +31,12 @@ function Race(props) {
     if (props.race.items)
       setShuffledItems(shuffle(Object.values(props.race.items)))
   }, [])
-  
-  /*const description = props.raceItemSelection[props.race._id]
+
+  const description = props.raceItemSelection[props.race._id] && !itemClicked
     ? props.race.candidates.find(
         (candidate) => candidate._id === props.raceItemSelection[props.race._id]
       ).description
-    : props.race.description;*/
-    const description = props.race.description;
+    : props.race.description;
 
   function DetermineDisplay() {
     if (props.race.candidates) {
@@ -69,6 +68,7 @@ function Race(props) {
                 checked={checkedItem}
                 raceID={props.race._id}
                 item={item}
+                setItemClicked={setItemClicked}
                 image={searchCandidateImage(item.name)}
                 raceItemSelection={props.raceItemSelection}
                 setRaceItemSelection={props.setRaceItemSelection}

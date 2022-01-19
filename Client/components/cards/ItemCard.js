@@ -8,6 +8,7 @@ function ItemCard(props) {
     const classes = useStyles();
 
     function handleSelectedItem() {
+        props.setItemClicked(true);
         props.setRaceItemSelection({
           ...props.raceItemSelection,
           [props.raceID]: props.item._id,
