@@ -6,7 +6,7 @@ import finish from '../../static/images/finish.jpg'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 
 function Confirmation(props) {
-    const [votingStep, setVotingStep] = useState(0);
+    //const [votingStep, setVotingStep] = useState(0);
 
     return (
         <>
@@ -23,7 +23,7 @@ function Confirmation(props) {
                         </Box>
                     </Grid>
                 </Hidden>
-                <DisplayMessage votingStep={votingStep}/>
+                <DisplayMessage votingStep={props.votingStep}/>
             </Grid>
         </>
     )
@@ -47,6 +47,7 @@ function DisplayMessage(props) {
             "Processing|Please Wait",
             "Submitted|Thank you for voting!"
         ];
+
 
         const doTyping = async () => {
             let page = text[0];

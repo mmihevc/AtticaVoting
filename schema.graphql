@@ -92,7 +92,7 @@ type Query {
 
 #the post requests
 type Mutation { 
-    submitVote(electionID: ID!, winners: [SubmitInput]): Vote
+    submitVote(electionID: ID!, winners: [SubmitInput]): Boolean
     createTopic(topicMemo: String!): ID! #move from schema
     createElection(title: String, _id: ID): Election
 }

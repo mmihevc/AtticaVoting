@@ -16,6 +16,19 @@ import CountdownTimer from "../utils/CountdownTimer";
 import Race from "./Race";
 
 function Election(props) {
+  const [votingStep, setVotingStep] = useState(0);
+  const [success, setSuccess] = useState();
+
+  if (votingStep === 0) {
+    return <Voting setSuccess={setSuccess} setVotingStep={setVotingStep}/>
+  }
+  else {
+    return <Confirmation votingStep={votingStep}  success={success}/>
+  }
+
+}
+
+function Voting(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
   const [winners, setWinners] = useState({});
@@ -32,9 +45,8 @@ function Election(props) {
     onCompleted({submitVote}) {
       if (submitVote) {
         console.log('vote submitted')
-        return (
-          <Confirmation success={submitVote.success}/>
-        )
+        props.setSuccess(submitVote.success)
+        props.setVotingStep(2)
       }
     }
   })
@@ -52,6 +64,7 @@ function Election(props) {
       }
       winnerArray.push(raceObj)
     }
+    props.setVotingStep(1)
     submitVote({variables: {electionID, winnerArray}})
   }
 

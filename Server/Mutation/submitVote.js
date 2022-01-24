@@ -1,21 +1,9 @@
 
 const SubmitVote = async (_, args, context, info) => {
 
-  return {
-    success: true,
-    _id: "1234",
-    raceVotes: [
-      {
-        electionItem: {
-          _id: "5678",
-          name: "name",
-          race: {
-
-          }
-        }
-      }
-    ]
-  }
+  return true
+    
+  
  
   /*app.post('/api/submit', async (req,res) => {
     try{    
