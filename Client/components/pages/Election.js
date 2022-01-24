@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
@@ -64,8 +64,9 @@ function Voting(props) {
       }
       winnerArray.push(raceObj)
     }
+    console.log(winnerArray)
     props.setVotingStep(1)
-    submitVote({variables: {electionID, winnerArray}})
+    submitVote({variables: {electionID: electionID, winners: winnerArray}})
   }
 
   return (

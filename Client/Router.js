@@ -11,13 +11,13 @@ const Router = (props) => {
   return (
     <Switch>
       <Route exact path={"/"}>
-        <Home />
+        <Home {...props} />
       </Route>
       <Route exact path="/elections">
-        <Home />
+        <Home {...props} />
       </Route>
       <Route path="/elections/:topicId">
-        <Election />
+        <Election {...props} />
       </Route>
       <Route>
       <Confirmation path="/confirmation"/>
