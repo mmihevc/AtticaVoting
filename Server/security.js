@@ -3,10 +3,12 @@ const openpgp = require('openpgp');
 const crypto = require('crypto');
 const fsp = require('fs').promises;
 
-const config = require('./config/config.js').securityConfig;
-const pubKeyFile = './Server/config/' + config.pub;
-const privKeyFile = './Server/config/' + config.priv;
-
+const securityConfig = {
+    "pub": "./key.pub",
+    "priv": "./key"
+}
+const pubKeyFile = './Server/config/' + securityConfig.pub;
+const privKeyFile = './Server/config/' + securityConfig.priv;
 /*
 -------------------------------------------------------------------------
 encrypt()
