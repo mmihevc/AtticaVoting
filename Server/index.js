@@ -19,10 +19,11 @@ const app = express();
 const serverMocks = process.env.MOCK ? mocks : undefined;
 const serverTracing = process.env.MOCK ? true : undefined;
 
-await client.connect(err => {
-    const election = client.db("Attica").collection("Election");
-    
-});
+
+//dotenv.config(); //loads .env file that contains passwords and such
+
+await client.connect();
+
 
 const confirmList = [];
 

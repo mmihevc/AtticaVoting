@@ -13,7 +13,6 @@ const typeDefs = gql(schema);
 const resolvers = {
     Query: query,
     Mutation: mutation,
-    ElectionItem: {__resolveType: resolveType}
 }
 
 export {typeDefs, resolvers}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
@@ -16,8 +16,26 @@ import CountdownTimer from "../utils/CountdownTimer";
 import Race from "./Race";
 
 function Election(props) {
+  const [votingStep, setVotingStep] = useState(0);
+  const [success, setSuccess] = useState();
+
+  if (votingStep === 0) {
+    return <Voting setSuccess={setSuccess} setVotingStep={setVotingStep}/>
+  }
+  else {
+    return <Confirmation votingStep={votingStep}  success={success}/>
+  }
+
+}
+
+function Voting(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
+  const [winners, setWinners] = useState({});
+  const [ballotType, setBallotType] = useState('');
+  const winnerArray = []
+  let electionID = null;
+  
 
   const { loading, error, data } = useQuery(ElectionLookup, {
     variables: { title: topicId },
@@ -27,17 +45,28 @@ function Election(props) {
     onCompleted({submitVote}) {
       if (submitVote) {
         console.log('vote submitted')
-        return (
-          <Confirmation success={submitVote.success}/>
-        )
+        props.setSuccess(submitVote.success)
+        props.setVotingStep(2)
       }
     }
   })
 
-  console.log(data);
-
   if (error) return `Error! ${error.message}`;
-  if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;
+  if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"}/>;
+
+  function createSubmitItems() {
+    electionID = data.electionLookup._id
+    for (const winner in winners) {
+      const raceObj = {
+        raceName: winner,
+        ballotType: ballotType,
+        winners: [winners[winner]]
+      }
+      winnerArray.push(raceObj)
+    }
+    props.setVotingStep(1)
+    submitVote({variables: {electionID, winnerArray}})
+  }
 
   return (
     <>
@@ -56,6 +85,9 @@ function Election(props) {
                 flipped={!isEven}
                 race={race}
                 key={index}
+                setBallotType={setBallotType}
+                winners={winners}
+                setWinners={setWinners}
                 raceItemSelection={raceItemSelection}
                 setRaceItemSelection={setRaceItemSelection}
               />
@@ -69,7 +101,7 @@ function Election(props) {
           size="small"
           aria-label="scroll back to top"
           {...props}
-          onClick={() => submitVote(raceItemSelection)}
+          onClick={() => createSubmitItems()}
         />
       </ScrollToButton>
     </>
@@ -89,7 +121,7 @@ function HeaderBar(props) {
           {props.description}
         </Typography>
       </Box>
-      <CountdownTimer />
+      {/*<CountdownTimer />*/}
     </Grid>
   );
 }

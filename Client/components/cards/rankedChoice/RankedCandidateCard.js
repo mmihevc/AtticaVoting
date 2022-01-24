@@ -10,10 +10,20 @@ function CandidateCard(props) {
     const [filter, setFilter] = useState('');
     const [selectRank, setSelectRank] = useState(false);
     const [rank, setRank] = useState();
+    
+    
 
     function handleSelectRank() {
         setFilter('blur(10px)')
         setSelectRank(!selectRank);
+    }
+
+    function handleSelectedCandidate() {
+        props.setBallotType('RCV');
+        props.setRaceItemSelection({
+          ...props.raceItemSelection,
+          [props.raceID]: props.candidate._id,
+        });
     }
 
     return (
@@ -22,8 +32,8 @@ function CandidateCard(props) {
                  onClick={props.handleSelectedCandidate} className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
                 <div onClick={() => handleSelectRank()}>
-                    <CardMedia image={props.candidate.image} title={props.candidate.name} classes={mediaStyles}
-                        style={{height: 300, width:'100%', filter: filter}} onClick={() => props.handleSelectedCandidate()}/>
+                    <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
+                        style={{height: 300, width:'100%', filter: filter}} onClick={() => handleSelectedCandidate()}/>
                     {selectRank ? 
                         <Box width={100} height={100} style={{position: "absolute", top: 100, left: 90}}>
                             <Grid container style={{height: "100%"}}
@@ -72,11 +82,11 @@ function CandidateSelect(props) {
                     style={{"backgroundColor": "white"}}
         
                 >
-                    <MenuItem value={1}>First Choice</MenuItem>
-                    <MenuItem value={2}>Second Choice</MenuItem>
-                    <MenuItem value={3}>Third Choice</MenuItem>
-                    <MenuItem value={4}>Fourth Choice</MenuItem>
-                    <MenuItem value={5}>Fifth Choice</MenuItem>
+                    <MenuItem value={1}>First</MenuItem>
+                    <MenuItem value={2}>Second</MenuItem>
+                    <MenuItem value={3}>Third</MenuItem>
+                    <MenuItem value={4}>Fourth</MenuItem>
+                    <MenuItem value={5}>Fifth</MenuItem>
                 </Select>
         </FormControl>
       </>

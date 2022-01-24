@@ -1,30 +1,32 @@
 import { gql } from "@apollo/client";
 
 export const ElectionLookup = gql`
-  query ElectionLookup($_id: ID) {
-    electionLookup(_id: $_id) {
+ query ElectionLookup($title: String!) {
+    electionLookup(title: $title) {
       title
       description
+      _id
       races {
         _id
         name
         description
-           electionItems {
-              __typename
-              _id
-             name
-              ... on Candidate {
-                description
-                image
-              }
-              ... on Amendment {
-                description
-                options
-              }
-              ... on Item {
-                image
-              }
-           }
+        title
+        raceType
+        candidates {
+          _id
+          type
+          name
+          description 
+          image
+          race
+        }
+        items {
+          _id
+          type
+          name
+          image
+          race
+        }
       }
       startDate
       endDate

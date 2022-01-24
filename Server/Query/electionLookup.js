@@ -1,9 +1,8 @@
-import { ObjectId } from "mongodb";
+import { removeNullArgs } from "../db.js";
 
 const electionLookup = async (_, args, context, info) => {
-    return {
-        election: context.db.collection("Election").find({}).toArray()
-    }
+
+    return context.db.collection("Election").findOne({"title": args.title})
 }
 
 export default electionLookup;
