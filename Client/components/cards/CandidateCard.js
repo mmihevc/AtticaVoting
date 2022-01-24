@@ -8,12 +8,19 @@ function CandidateCard(props) {
     const mediaStyles = useSlopeCardMediaStyles();
     const classes = useStyles();
 
+    
 
   function handleSelectedCandidate() {
+    props.setBallotType('SPV');
     props.setRaceItemSelection({
       ...props.raceItemSelection,
       [props.raceID]: props.candidate._id,
     });
+
+    props.setWinners({
+        ...props.winners,
+        [props.title]: props.candidate.name
+    })
   }
 
   

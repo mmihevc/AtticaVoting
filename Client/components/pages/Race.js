@@ -42,20 +42,24 @@ function Race(props) {
     if (props.race.candidates) {
       return (
         shuffledCandidates.map((candidate, index) => {
-            const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
-            return (
-              <Grid item key={index}>
-                <CandidateCard
-                  raceID={props.race._id}
-                  checked={checkedCandidate}
-                  candidate={candidate}
-                  image={searchCandidateImage(candidate.name)}
-                  raceItemSelection={props.raceItemSelection}
-                  setRaceItemSelection={props.setRaceItemSelection}
-                />
-              </Grid>
-            )}
-          )
+          const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
+          return (
+            <Grid item key={index}>
+              <CandidateCard
+                raceID={props.race._id}
+                title={props.race.title}
+                checked={checkedCandidate}
+                candidate={candidate}
+                image={searchCandidateImage(candidate.name)}
+                setBallotType={props.setBallotType}
+                winners={props.winners}
+                setWinners={props.setWinners}
+                raceItemSelection={props.raceItemSelection}
+                setRaceItemSelection={props.setRaceItemSelection}
+              />
+            </Grid>
+          )}
+        )
       )
     }
     else if (props.race.items){
@@ -67,7 +71,11 @@ function Race(props) {
               <ItemCard
                 checked={checkedItem}
                 raceID={props.race._id}
+                title={props.race.title}
                 item={item}
+                setBallotType={props.setBallotType}
+                winners={props.winners}
+                setWinners={props.setWinners}
                 setItemClicked={setItemClicked}
                 image={searchCandidateImage(item.name)}
                 raceItemSelection={props.raceItemSelection}

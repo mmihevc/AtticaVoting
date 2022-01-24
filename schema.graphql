@@ -72,6 +72,13 @@ input RaceVoteInput {
     electionItemID: ID!
 }
 
+input SubmitInput {
+    raceName: String,
+    ballotType: String,
+    winners: [String]
+}
+
+
 scalar DateTime
 scalar Url
 
@@ -85,8 +92,8 @@ type Query {
 
 #the post requests
 type Mutation { 
+    submitVote(electionID: ID!, winners: [SubmitInput]): Vote
     createTopic(topicMemo: String!): ID! #move from schema
-    submitVote(electionID: ID!, vote: [RaceVoteInput!]!): Vote
     createElection(title: String, _id: ID): Election
 }
 

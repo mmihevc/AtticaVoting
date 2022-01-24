@@ -18,14 +18,15 @@ import Race from "./Race";
 function Election(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
-  const [candidateData, setCandidateData] = useState([]);
+  const [winners, setWinners] = useState({});
+  const [ballotType, setBallotType] = useState('');
+  const winnerArray = []
+  let electionID = null;
   
 
   const { loading, error, data } = useQuery(ElectionLookup, {
     variables: { title: topicId },
   });
-
-  //if(!loading && !error) console.log(data);
 
   const [submitVote] = useMutation(SubmitVote, {
     onCompleted({submitVote}) {
@@ -39,11 +40,20 @@ function Election(props) {
   })
 
   if (error) return `Error! ${error.message}`;
-  if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"} />;
+  if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"}/>;
 
-  /*useEffect(() => {
-    
-  }, [])*/
+  function createSubmitItems() {
+    electionID = data.electionLookup._id
+    for (const winner in winners) {
+      const raceObj = {
+        raceName: winner,
+        ballotType: ballotType,
+        winners: [winners[winner]]
+      }
+      winnerArray.push(raceObj)
+    }
+    submitVote({variables: {electionID, winnerArray}})
+  }
 
   return (
     <>
@@ -62,6 +72,9 @@ function Election(props) {
                 flipped={!isEven}
                 race={race}
                 key={index}
+                setBallotType={setBallotType}
+                winners={winners}
+                setWinners={setWinners}
                 raceItemSelection={raceItemSelection}
                 setRaceItemSelection={setRaceItemSelection}
               />
@@ -75,7 +88,7 @@ function Election(props) {
           size="small"
           aria-label="scroll back to top"
           {...props}
-          onClick={() => submitVote(raceItemSelection)}
+          onClick={() => createSubmitItems()}
         />
       </ScrollToButton>
     </>

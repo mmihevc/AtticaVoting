@@ -10,6 +10,8 @@ function CandidateCard(props) {
     const [filter, setFilter] = useState('');
     const [selectRank, setSelectRank] = useState(false);
     const [rank, setRank] = useState();
+    
+    
 
     function handleSelectRank() {
         setFilter('blur(10px)')
@@ -17,11 +19,12 @@ function CandidateCard(props) {
     }
 
     function handleSelectedCandidate() {
+        props.setBallotType('RCV');
         props.setRaceItemSelection({
           ...props.raceItemSelection,
           [props.raceID]: props.candidate._id,
         });
-      }
+    }
 
     return (
         <Box style={{position: "relative"}}>
@@ -79,11 +82,11 @@ function CandidateSelect(props) {
                     style={{"backgroundColor": "white"}}
         
                 >
-                    <MenuItem value={1}>First Choice</MenuItem>
-                    <MenuItem value={2}>Second Choice</MenuItem>
-                    <MenuItem value={3}>Third Choice</MenuItem>
-                    <MenuItem value={4}>Fourth Choice</MenuItem>
-                    <MenuItem value={5}>Fifth Choice</MenuItem>
+                    <MenuItem value={1}>First</MenuItem>
+                    <MenuItem value={2}>Second</MenuItem>
+                    <MenuItem value={3}>Third</MenuItem>
+                    <MenuItem value={4}>Fourth</MenuItem>
+                    <MenuItem value={5}>Fifth</MenuItem>
                 </Select>
         </FormControl>
       </>

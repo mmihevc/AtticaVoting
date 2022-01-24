@@ -7,12 +7,19 @@ import {useStyles} from "../../static/constants";
 function ItemCard(props) {
     const classes = useStyles();
 
+    
+
     function handleSelectedItem() {
+        props.setBallotType('SPV');
         props.setItemClicked(true);
         props.setRaceItemSelection({
           ...props.raceItemSelection,
-          [props.raceID]: props.item._id,
+          [props.raceID]: props.item._id
         });
+        props.setWinners({
+            ...props.winners,
+            [props.title]: props.item.name
+        })
       }
 
     return (
