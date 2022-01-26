@@ -18,7 +18,6 @@ const utils = require('./utils.js');
 const initQuestions = utils.initQuestions;
 const connQuestions = utils.connectQuestions;
 const secondsToDate = utils.secondsToDate;
-const log = utils.handleLog;
 const sleep = utils.sleep;
 const convert = (from, to) => str => Buffer.from(str, from).toString(to);
 const hexToStr = convert('hex', 'utf8');
@@ -33,8 +32,10 @@ const newElectionConfig = require('./config/electionConfig.json');
 /* security */
 const security = require("./security.js");
 
-const HederaClass = require('./hedera');
+const HederaClass = require('./hedera.js');
 const { encrypt } = require("openpgp");
+
+import {handleLog} from './utils' 
 
 /* init variables */
 // const mirrorNodeAddress = new MirrorClient(
@@ -44,16 +45,10 @@ const specialChar = "~";
 let topicId = "";
 let logStatus = "Default";
 let topicMemo = "";
-let uidList = [[],[]];
-let electionId = 0;
-let startDate;
-let endDate;
 let HederaObj;
 let confirmList = []; // [(uidHash1, res), (uidHash2, res), ...]
-let candidateList;
 
 let secure = false;
-
 
 let webServer;
 
@@ -62,13 +57,10 @@ async function init() {
     if(process.argv.find(({arg}) => arg === '-dev') !== null) {
         try{
             logStatus = 'debug';
-            HederaObj = new HederaClass("", "", logStatus);
-            configureServer();
-            configureTopicMemo();
             await createTopic();
             runServer();
         } catch (error) {
-            log('ERROR: init()', error, logStatus);
+            handleLog('ERROR: init()', error, logStatus);
             process.exit(1);
         }
     }else{
@@ -76,9 +68,7 @@ async function init() {
             try {
                 logStatus = answers.status;
                 HederaObj = new HederaClass(answers.account, answers.key, logStatus);
-                configureServer();
                 if (answers.start.includes("start")) {
-                    configureTopicMemo();
                     await createTopic();
                 } else {
                     await connectTopic();
@@ -86,7 +76,7 @@ async function init() {
                 /* run & serve the express app */
                 runServer();
             } catch (error) {
-                log("ERROR: init()", error, logStatus);
+                handleLog("ERROR: init()", error, logStatus);
                 process.exit(1);
             }
         });
@@ -103,176 +93,22 @@ submissions) and formats the message to be submitted to HCS.
 -------------------------------------------------------------------------
  */
 function runServer() {
-    log('runServer()', 'Server Starting...', logStatus);
+    handleLog('runServer()', 'Server Starting...', logStatus);
     //loadUidList('./uid_list.txt');                             // FIXME: Change to config variable??
     if(secure){
         webServer.listen(443, () => {
-            log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
+            handleLog('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
         });
     }else{
         webServer.listen(80, () => {
-            log('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
+            handleLog('runServer()', `webServer listening on ${webServer.address().port}`, logStatus);
         });
     }
     HederaObj.subscribeToMirror(confirmList);
 }
 
-async function configureServer() {
 
-    const pubKey = await security.getPublicKey();
 
-    app.use(bodyParser.json());
-    app.use(express.urlencoded({extended: false}));
-    app.use(express.static("dist/public"));
-    app.use(express.static("Server/public"));
-
-    app.post('/api/submit', async (req,res) => {
-        try{    
-            let submittedVote = ``;
-            const id = '123456789';
-            const anonID = security.hash(`${id}${Math.floor(Math.random() * 1000)}`);
-
-            submittedVote += `${anonID}~`;
-
-            const votes = JSON.stringify(req.body.candidatesChosen);
-            const encrypted = await security.encrypt(`${anonID}~${votes}`, pubKey);
-            const encoded = security.encode(encrypted);
-
-            submittedVote += `${encoded}~`;
-
-            const timestamp = Date.now();
-
-            submittedVote += `${timestamp}`
-            
-            HederaObj.sendHCSMessage(submittedVote);
-
-            log('API Submit', `Vote Submitted!\n~AnonId=${anonID}\n~EncVote=${encoded}\n~Timestamp=${timestamp}`, logStatus);
-
-            confirmList.push({aid: anonID, resp: res});
-        }catch (err){
-            log('API Submit Error', err, logStatus);
-        }
-    });
-
-    app.get('/api/candidates', (req,res) => {
-        res.send(candidateList);
-    });
-
-    if(secure){
-        const options = {
-            key: fs.readFileSync(`./Server/config/${httpsConfig.key}`),
-            cert: fs.readFileSync(`./Server/config/${httpsConfig.cert}`)
-        };
-
-        app.use(function (req, res, next) {
-            res.setHeader('Access-Control-Allow-Origin', '*');
-            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-            res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-            res.setHeader('Access-Control-Allow-Credentials', true);
-            next();
-        });
-
-        webServer = https.createServer(options,app);
-    } else {
-        webServer = http.createServer(app);
-    }
-
-    getCandidateList();
-
-    log('configureServer()', 'Server Configured!', logStatus);
-}
-
-function getCandidateList(){
-    let file_data = fs.readFileSync('./Server/candidates.json');
-    candidateList = JSON.parse(file_data);
-}
-
-function loadUidList(fileName) {
-    let data = fs.readFileSync(fileName, 'utf8');
-    temp = data.split('\n');
-    for(let i=0; i < temp.length; i++){
-        uidList[0][i] = temp[i].split(',')[0];
-        uidList[1][i] = temp[i].split(',')[1];
-    }
-    log('Loaded UID list from', fileName, logStatus);
-}
-
-function checkUidList(uid, email){
-    if(uidList[0].includes(uid)){
-        log('Matching  UID found...', `\'${email.trim()}\' === \'${uidList[1][uidList[0].indexOf(uid)].trim()}\'`, logStatus);
-        if(uidList[1][uidList[0].indexOf(uid)].trim() === email.trim()){
-            log('Matching Email To UID...', '', logStatus);
-            return true;
-        }
-        else
-            return false;
-    }
-    else
-        return false;
-}
-
-// Returns true if no votes exist for that uid or a vote exists with the same email
-async function checkExistingVotes(uid, email) {
-    console.log('Checking existing votes');
-    try {
-        let votes = await utils.pullVotes(topicId, tallyConfig.XAPIKEY, rp, logStatus);
-        let uidHash = security.hash(uid);
-
-        for(let i = 0; i < votes.length; i++) {
-            if(votes[i].split('~')[0] === uidHash){
-                let emailHash = security.hash(email);
-                if(votes[i].split('~')[3] === emailHash)
-                    return true;
-                else
-                    return false;
-            }
-        }
-        return true;
-    } catch (err) {
-        log('checkExistingVotes()', err, logStatus);
-    }
-}
-
-/*
--------------------------------------------------------------------------
-configureTopicMemo()
--------------------------------------------------------------------------
-Takes in the newElectionConfig data and stores it as Dates and strings
-accordingly in global variables.
--------------------------------------------------------------------------
- */
-function configureTopicMemo() {
-    startDate = new Date(newElectionConfig.startDate);
-    endDate = new Date(newElectionConfig.endDate);
-    electionId = newElectionConfig.electionId;
-    topicMemo = `${electionId}${specialChar}${startDate.getTime()}${specialChar}${endDate.getTime()}`
-}
-
-/*
--------------------------------------------------------------------------
-createTopic()
--------------------------------------------------------------------------
-Calls upon the configureTopicMemo() and createTopicTransaction() functions to
-create a new topic and store the new topic ID to `topicId`.
--------------------------------------------------------------------------
-*/
-async function createTopic() {
-    try {
-        log("createTopic()", "Creating New Topic...", logStatus);
-        log(
-            "ConsensusTopicCreateTransaction()",
-            "waiting for new HCS Topic & mirror node (it may take a few seconds)",
-            logStatus
-        );
-        topicId = await HederaObj.createTopicTransaction(topicMemo);
-        log("createTopic()", `New Topic Created, ID = ${topicId}`, logStatus);
-        await sleep(9000);
-        return;
-    } catch (error) {
-        log("ERROR: createTopic() failed", error, logStatus);
-        process.exit(1);
-    }
-}
 
 /*
 -------------------------------------------------------------------------
@@ -281,7 +117,7 @@ connectTopic()
 Prompts the user for the topic ID to connect to, checks if the length
 of the topic ID is valid and creates a ConsensusTopicId from the
 */
-async function connectTopic() {
+/*async function connectTopic() {
     await inquirer.prompt(connQuestions).then(function(answers) {
         try {
             const topicIdStr = answers.topic;
@@ -292,6 +128,6 @@ async function connectTopic() {
             process.exit(1);
         }
     });
-}
+}*/
 
 init(); // process arguments & handoff to runChat()

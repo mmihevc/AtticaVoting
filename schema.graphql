@@ -1,0 +1,100 @@
+type Election {
+    _id: ID!
+    title: String
+    description: String
+    races: [Race]
+    startDate: DateTime
+    endDate: DateTime
+    votes: [Vote]
+}
+
+#need to add parameter for the number choices 
+type Race {
+    _id: ID
+    raceType: String
+    name: String
+    title: String
+    description: String
+    candidates: [Candidate]
+    amendments: [Amendment]
+    items: [Item]
+}
+
+type Candidate {
+    _id: ID
+    type: String
+    name: String
+    rank: Int
+    description: String
+    image: Url
+    race: String
+}
+
+type User {
+    _id: ID!
+    name: String
+    votes: [Vote]
+    electionsParticipatedIn: [Election]
+}
+
+#teeshirts or such
+type Item  {
+    _id: ID!
+    type: String
+    name: String!
+    rank: Int
+    image: Url!
+    race: String
+}
+
+type Amendment {
+    _id: ID!
+    name: String!
+    race: Race!
+    rank: Int
+    description: String!
+    options: String
+}
+
+type Vote {
+    _id: ID!
+    raceVotes: [RaceVote]
+    date: DateTime
+}
+
+type RaceVote {
+  
+    race: Race
+}
+
+input RaceVoteInput {
+    raceID: ID!
+    electionItemID: ID!
+}
+
+input SubmitInput {
+    raceName: String,
+    ballotType: String,
+    winners: [String]
+}
+
+
+scalar DateTime
+scalar Url
+
+#read
+type Query {
+    electionLookup(title: String!): Election
+    raceLookup(_id: ID): Race #might be unnecessary 
+    userLookup: User # 
+}
+
+
+#the post requests
+type Mutation { 
+    submitVote(electionID: ID!, winners: [SubmitInput!]!): Boolean
+    createTopic(topicMemo: String!): ID! #move from schema
+    createElection(title: String, _id: ID): Election
+}
+
+#everything in the schema should be front end driven/user driven

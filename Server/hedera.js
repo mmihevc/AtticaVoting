@@ -4,22 +4,16 @@ const {
     TopicCreateTransaction,
     TopicMessageQuery,
     PrivateKey,
-    PublicKey
 } = require("@hashgraph/sdk");
 
-//const {hederaConfig} = require('./config/config.js');
-const config = require('./config/config');
-const hederaConfig = config.hederaConfig;
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+const ACCOUNT_ID = process.env.ACCOUNT_ID
 
+require("dotenv").config();
 
-const {
-    handleLog,
-    sleep,
-    UInt8ToString,
+import {handleLog, sleep, UInt8ToString} from './utils'
 
-} = require('./utils');
-
-module.exports = class HederaClass {
+export default class HederaClass {
     
     constructor (account, key, logStatus) {
         this.logStatus = logStatus;
@@ -36,10 +30,10 @@ module.exports = class HederaClass {
     configured TopicID
     -------------------------------------------------------------------------
     */
-    async sendHCSMessage(msg) {
+    async sendHCSMessage(msg, topicID) {
         try {
             await new TopicMessageSubmitTransaction({
-                topicId: this.topicId,
+                topicId: topicID,
                 message: msg
             }).execute(this.HederaClient);
 
@@ -63,12 +57,9 @@ module.exports = class HederaClass {
             new TopicMessageQuery()
                 .setTopicId(this.topicId)
                 .subscribe(this.HederaClient, res => {
-                    //log('DEBUG:', `${res['runningHash']}\nDEBUG: ${typeof res['runningHash']}`, logStatus);
                     let encMsg = Buffer.from(res.contents, "utf8").toString();
                     let anonID = encMsg.split('~')[0];
-                    // let confMsg = formatConfirmationMessage(encMsg, res.sequenceNumber, UInt8ToString(res['runningHash']));
-                    // let uidHash = encMsg.split(specialChar)[0];
-                    handleLog("TopicMessageQuery()", "Confirmation Received", this.logStatus);
+                    handleLog("TopicMessageQuery()", "OldConfirmation Received", this.logStatus);
 
                     confirmList.find(({aid}) => aid === anonID)
                         .resp.send({
@@ -128,12 +119,12 @@ module.exports = class HederaClass {
             if(account !== "") {
                 this.operatorAccount = account;
             }else {
-                this.operatorAccount = hederaConfig.account;
+                this.operatorAccount = ACCOUNT_ID;
             }
             if(key !== "") {
                 this.operatorKey = PrivateKey.fromString(key);
             } else {
-                this.operatorKey = PrivateKey.fromString(hederaConfig.key);
+                this.operatorKey = PrivateKey.fromString(PRIVATE_KEY);
             }
 
             this.HederaClient.setOperator(this.operatorAccount, this.operatorKey);
