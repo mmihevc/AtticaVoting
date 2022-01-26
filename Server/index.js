@@ -57,6 +57,16 @@ server.applyMiddleware({ app }); //embeds express into graph server
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
+if(await client.db('Attica').collection("Election").findOne({"title": "CSU"}).topicID == undefined){
+
+	let topicID = await hederaClient.createTopicTransaction("Election Test");
+	
+	client.db('Attica').collection("Election").updateOne({"title": "CSU"}, { $set: {"topicID": topicID}});
+	
+	console.log(`Topic ID Set! ${topicID}`);
+	
+}
+
 
 //moved /submit
 

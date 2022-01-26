@@ -26,6 +26,8 @@ function CandidateCard(props) {
         });
     }
 
+    //console.log(selectRank)
+
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
@@ -66,6 +68,7 @@ function CandidateCard(props) {
 
 function CandidateSelect(props) {
     const classes = useStyles();
+    console.log("in select")
 
     const handleChange = (event) => {
         props.setRank(event.target.value);
