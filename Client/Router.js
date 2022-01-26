@@ -19,9 +19,6 @@ const Router = (props) => {
       <Route path="/elections/:topicId">
         <Election {...props} />
       </Route>
-      <Route>
-      <Confirmation path="/confirmation"/>
-      </Route>
       <Route path="/learn-more">
         <DLInfo />
       </Route>

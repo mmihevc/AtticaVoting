@@ -42,6 +42,7 @@ function DisplayProcessing() {
                 ]}
                 typeSpeed={75}
                 multiTextDelay={500}
+                cursorColor={'#C8C372'}
             />
         </>
     )
@@ -49,13 +50,11 @@ function DisplayProcessing() {
 
 function DisplaySubmitted() {
     return (
-        <>
             <TypeWriterEffect
                 text={"Submitted, thank you for voting!"}
                 typeSpeed={50}
+                cursorColor={'#C8C372'}
             />
-
-        </>
     )
 }
 
