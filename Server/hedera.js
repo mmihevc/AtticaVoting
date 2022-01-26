@@ -30,10 +30,10 @@ export default class HederaClass {
     configured TopicID
     -------------------------------------------------------------------------
     */
-    async sendHCSMessage(msg) {
+    async sendHCSMessage(msg, topicID) {
         try {
             await new TopicMessageSubmitTransaction({
-                topicId: this.topicId,
+                topicId: topicID,
                 message: msg
             }).execute(this.HederaClient);
 

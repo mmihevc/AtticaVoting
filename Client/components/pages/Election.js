@@ -65,7 +65,8 @@ function Voting(props) {
       winnerArray.push(raceObj)
     }
     props.setVotingStep(1)
-    submitVote({variables: {electionID, winnerArray}})
+    console.log(winnerArray)
+    submitVote({variables: {electionID: electionID, winners: winnerArray}})
   }
 
   return (

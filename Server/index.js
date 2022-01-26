@@ -51,6 +51,15 @@ const server = new ApolloServer({ //this is the server woohoo, the graphql serve
 	}
 });
 
+let election = await client.db('Attica').collection("Election").findOne({"title": "CSU"});
+if(election.topicID == undefined || election.topicID instanceof Object){
+	console.log('Topic ID Undefined!')
+	let topicID = await hederaClient.createTopicTransaction("Election Test");
+	client.db('Attica').collection("Election").updateOne({"title": "CSU"}, { $set: {"topicID": `${topicID}`}});
+}else console.log('Topic ID is Defined!');
+election = await client.db('Attica').collection("Election").findOne({"title": "CSU"});
+console.log(`Topic ID: ${election.topicID}`);
+
 server.start();
 server.applyMiddleware({ app }); //embeds express into graph server
 
