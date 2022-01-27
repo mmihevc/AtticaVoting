@@ -45,7 +45,7 @@ function Race(props) {
           const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
           return (
             <Grid item key={index}>
-              <CandidateCard
+              <RankedCandidateCard
                 raceID={props.race._id}
                 title={props.race.title}
                 checked={checkedCandidate}

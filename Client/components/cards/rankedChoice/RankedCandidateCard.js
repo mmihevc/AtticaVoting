@@ -1,10 +1,10 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { useSlopeCardMediaStyles } from '@mui-treasury/styles/cardMedia/slope';
 import { Box, Grid, Typography, CardMedia, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import CheckIcon from "@material-ui/icons/Check";
 import { useStyles } from "../../../static/constants";
 
-function CandidateCard(props) {
+function RankedCandidateCard(props) {
     const mediaStyles = useSlopeCardMediaStyles();
     const classes = useStyles();
     const [filter, setFilter] = useState('');
@@ -14,8 +14,10 @@ function CandidateCard(props) {
     
 
     function handleSelectRank() {
+        console.log("in handleSelectRank")
         setFilter('blur(10px)')
-        setSelectRank(!selectRank);
+        setSelectRank(true);
+        //console.log(selectRank)
     }
 
     function handleSelectedCandidate() {
@@ -26,14 +28,14 @@ function CandidateCard(props) {
         });
     }
 
-    //console.log(selectRank)
+    console.log(selectRank)
 
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
-                 onClick={props.handleSelectedCandidate} className={props.checked ? undefined : classes.candidateCard}
+                onClick={() => setSelectRank(true)} className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
-                <div onClick={() => handleSelectRank()}>
+                <div >
                     <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
                         style={{height: 300, width:'100%', filter: filter}} onClick={() => handleSelectedCandidate()}/>
                     {selectRank ? 
@@ -96,4 +98,4 @@ function CandidateSelect(props) {
     )
 }
 
-export default CandidateCard;
+export default RankedCandidateCard;

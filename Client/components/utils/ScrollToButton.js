@@ -15,9 +15,6 @@ function ScrollToButton(props) {
         threshold: document.documentElement.scrollHeight > 1500 ?  document.documentElement.scrollHeight - 2200 : document.documentElement.scrollHeight - 1100
     });
 
-    console.log(document.documentElement.scrollHeight)
-
-
     const handleClick = (event) => {
         const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');
 
