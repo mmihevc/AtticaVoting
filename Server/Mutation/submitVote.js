@@ -2,20 +2,18 @@ var ObjectID = require('mongodb').ObjectID;
 
 const SubmitVote = async (_, args, context, info) => {
 
-    console.log('Submitting vote...')
+  console.log('Submitting vote...')
 
-    let election = await context.db.collection("Election").findOne({_id: ObjectID(args.electionID)});
-    
-    let topicID = election.topicID;
+  let election = await context.db.collection("Election").findOne({_id: ObjectID(args.electionID)});
 
-    context.hederaClient.sendHCSMessage(`${JSON.stringify(args.winners)}`, topicID);
+  let topicID = election.topicID;
 
-    console.log('Vote Submitted!')
+  context.hederaClient.sendHCSMessage(`${JSON.stringify(args.winners)}`, topicID);
+
+  console.log('Vote Submitted!')
 
 
   return true
-    
-  
 };
 
 export default SubmitVote
