@@ -23,6 +23,9 @@ async function main(){
     let results = tallyAll(races);
     console.log(results);
 
+    let winners = pickWinner(results);
+    console.log(winners);
+
     process.exit(1);
 }
 
@@ -34,7 +37,21 @@ function tallyAll(races){
         else
             results[key] = tallyRCV(races[key].votes, 0.5)
     }
+
     return results;
+}
+
+function pickWinner(results){
+    let winners = {}
+    for(let key in results){
+        let top = {name: '', count: 0}
+        for(let cand in results[key]){
+            if(results[key][cand] > top.count)
+                top = {name: cand, count: results[key][cand]}
+        }
+        winners[key] = top;
+    }
+    return winners;
 }
 
 function sortBallots(ballots){
