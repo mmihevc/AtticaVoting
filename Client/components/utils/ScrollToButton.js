@@ -12,9 +12,8 @@ function ScrollToButton(props) {
     const trigger = useScrollTrigger({
         target: window ? window() : undefined,
         disableHysteresis: true,
-        threshold: document.documentElement.scrollHeight - 1100
+        threshold: document.documentElement.scrollHeight > 1500 ?  document.documentElement.scrollHeight - 2200 : document.documentElement.scrollHeight - 1100
     });
-
 
     const handleClick = (event) => {
         const anchor = (event.target.ownerDocument || document).querySelector('#back-to-top-anchor');

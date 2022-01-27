@@ -4,9 +4,9 @@ import {Grid, Box, Typography, Hidden, Button} from "@material-ui/core";
 import vote from '../../static/images/voting.gif';
 import finish from '../../static/images/finish.jpg'
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import TypeWriterEffect from 'react-typewriter-effect';
 
 function Confirmation(props) {
-    //const [votingStep, setVotingStep] = useState(0);
 
     return (
         <>
@@ -23,7 +23,8 @@ function Confirmation(props) {
                         </Box>
                     </Grid>
                 </Hidden>
-                <DisplayMessage votingStep={props.votingStep}/>
+                {props.votingStep === 1 ? <DisplayProcessing/> : <DisplaySubmitted /> } 
+                {props.votingStep === 2 ? <LearnMore icon={ArrowForwardIosIcon}/> : null}
             </Grid>
         </>
     )
@@ -31,75 +32,30 @@ function Confirmation(props) {
 
 }
 
-function DisplayMessage(props) {
-    const [learnMore, setLearnMore] = useState(false);
-
-    const textBlock = useRef(null);
-
-    useEffect(() => {
-        if (!textBlock || !textBlock.current) return;
-
-        const element = textBlock.current;
-        const header = element.getElementsByTagName("h2")[0];
-        const secondary = element.getElementsByTagName("h4")[0];
-
-        const text = [
-            "Processing|Please Wait",
-            "Submitted|Thank you for voting!"
-        ];
-
-
-        const doTyping = async () => {
-            let page = text[0];
-            let typingForwards = props.votingStep === 1;
-            let typingHeader = props.votingStep === 1;
-            const firstRun = typingForwards;
-
-            do {
-                if (firstRun && firstRun !== typingForwards) break;
-                let prevData = { letter: null, iterations: 0};
-                for (let k = 0; k < page.length; k++) {
-                    if (prevData.iterations > 2) break;
-                    if ((typingForwards ? page.charAt(k) : page.charAt(page.length - 1 - k)) === "|") {
-                        typingHeader = !typingHeader;
-                        (typingForwards ? header : secondary).classList.remove("cursor");
-                        (typingForwards ? secondary : header).classList.add("cursor");
-                    } else {
-                        const currentTypingElement = typingHeader ? header : secondary;
-                        currentTypingElement.innerText = typingForwards ?
-                            currentTypingElement.innerText + page.charAt(k) :
-                            currentTypingElement.innerText.substring(0, currentTypingElement.innerText.length - 1);
-                        const lastLetter = currentTypingElement.innerText.length > 0 ?
-                            currentTypingElement.innerText[currentTypingElement.innerText.length - 1] :
-                            null;
-                        if (prevData.letter === lastLetter) prevData.iterations += 1;
-                        else prevData.iterations = 0;
-                        prevData.letter = lastLetter;
-                    }
-                    await new Promise(r => setTimeout(r, 175));
-                }
-                page = text[1];
-                typingForwards = !typingForwards;
-            } while(firstRun !== typingForwards)
-            if (!firstRun) setLearnMore(prevLearnMore => !prevLearnMore);
-        }
-        doTyping();
-    }, [textBlock, props.votingStep]);
-
+function DisplayProcessing() {
     return (
-        <Grid item lg={6} xs={12}>
-            <div className='output' id='output' ref={textBlock}>
-                <Typography variant='h2' className='cursor'/>
-                <Box pt={2} pb={2}>
-                    <Typography variant='h4'/>
-                </Box>
-                {learnMore ?
-                    <LearnMore icon={ArrowForwardIosIcon}/>:
-                    null
-                }
-            </div>
-        </Grid>
-    );
+        <>
+            <TypeWriterEffect
+                multiText={[
+                    "Processing",
+                    "Please Wait"
+                ]}
+                typeSpeed={75}
+                multiTextDelay={500}
+                cursorColor={'#C8C372'}
+            />
+        </>
+    )
+}
+
+function DisplaySubmitted() {
+    return (
+            <TypeWriterEffect
+                text={"Submitted, thank you for voting!"}
+                typeSpeed={50}
+                cursorColor={'#C8C372'}
+            />
+    )
 }
 
 const LearnMore = props =>
@@ -123,5 +79,6 @@ const LearnMore = props =>
     )
 
 }
+
 
 export default Confirmation;

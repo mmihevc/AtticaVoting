@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Typography, Grid } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { Skeleton } from "@material-ui/lab";
@@ -34,8 +34,6 @@ function Voting(props) {
   const [winners, setWinners] = useState({});
   const [ballotType, setBallotType] = useState('');
   const winnerArray = []
-  let electionID = null;
-  
 
   const { loading, error, data } = useQuery(ElectionLookup, {
     variables: { title: topicId },
@@ -55,7 +53,7 @@ function Voting(props) {
   if (loading) return <Skeleton variant="rect" width={"100%"} height={"100%"}/>;
 
   function createSubmitItems() {
-    electionID = data.electionLookup._id
+    const electionID = data.electionLookup._id
     for (const winner in winners) {
       const raceObj = {
         raceName: winner,
@@ -64,6 +62,7 @@ function Voting(props) {
       }
       winnerArray.push(raceObj)
     }
+    console.log(winnerArray)
     props.setVotingStep(1)
     submitVote({variables: {electionID: electionID, winners: winnerArray}})
   }

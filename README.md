@@ -75,5 +75,5 @@ Our project provides consensus validation for every vote casts and administratio
 ## Authors
 - Derek Larkins
 - Waylon Jepsen
-- Maddie Mihivc
+- Maddie Mihevc
 - Christian Ferguson

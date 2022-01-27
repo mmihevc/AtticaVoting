@@ -79,8 +79,8 @@ const FullApp = (props) => {
 const App = () => {
   const theme = createTheme({
     palette: {
-      primary: { main: "#0D72BA" },
-      secondary: { main: "#C1912D" },
+      primary: { main: "#1E4D2B" },
+      secondary: { main: "#C8C372" },
       neutral: { main: "#FFFFFF", light: grey[100], dark: grey[200] },
     },
   });
