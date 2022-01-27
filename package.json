@@ -3,14 +3,15 @@
   "version": "1.1.21",
   "description": "Blockchain based voting application",
   "scripts": {
-    "startWebsite": "webpack serve --config client/webpack.website.config.mjs",
-    "server": "webpack --watch --config ./server/webpack.server.config.mjs",
+    "startWebsite": "webpack serve --config Client/webpack.website.config.mjs",
+    "server": "webpack --watch --config ./Server/webpack.server.config.mjs",
     "mockServer": "MOCK=true npm run server",
     "start": "concurrently --kill-others-on-fail \"npm:server\" \"npm:startWebsite\"",
     "mockStart": "concurrently --kill-others-on-fail \"npm:mockServer\" \"npm:startWebsite\"",
-    "buildServer": "webpack --config server/webpack.server.config.mjs",
-    "buildWebsite": "webpack --config client/webpack.website.config.mjs",
-    "build": "concurrently --kill-others-on-fail \"npm:buildServer\" \"npm:buildWebsite\""
+    "buildServer": "webpack --config Server/webpack.server.config.mjs",
+    "buildWebsite": "webpack --config Client/webpack.website.config.mjs",
+    "build": "concurrently --kill-others-on-fail \"npm:buildServer\" \"npm:buildWebsite\"",
+    "tally": "node ./Server/tally/tally.js"
   },
   "repository": {
     "type": "git",

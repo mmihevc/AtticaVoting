@@ -1,17 +1,15 @@
-const {
+import {
     Client,
     TopicMessageSubmitTransaction,
     TopicCreateTransaction,
     TopicMessageQuery,
     PrivateKey,
-} = require("@hashgraph/sdk");
+} from "@hashgraph/sdk";
 
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 const ACCOUNT_ID = process.env.ACCOUNT_ID
 
-require("dotenv").config();
-
-import {handleLog, sleep, UInt8ToString} from './utils'
+import "dotenv/config";
 
 export default class HederaClass {
     
@@ -37,11 +35,32 @@ export default class HederaClass {
                 message: msg
             }).execute(this.HederaClient);
 
-            handleLog("ConsensusSubmitMessageTransaction()", msg, this.logStatus);
+            console.log("ConsensusSubmitMessageTransaction() ", msg);
         } catch (error) {
-            handleLog("ERROR: ConsensusSubmitMessageTransaction()", error, this.logStatus);
+            console.log("ERROR: ConsensusSubmitMessageTransaction() ", error);
             process.exit(1);
         }
+    }
+
+    async pullHCSMessages(topicID){
+        let ballots = [];
+        try{
+            await new TopicMessageQuery()
+                .setTopicId(topicID)
+                .setStartTime(0)
+                .setEndTime(Date.now() + 1000)
+                .subscribe(
+                    this.HederaClient,
+                    (message) => {
+                        //console.log(JSON.parse(Buffer.from(message.contents, "utf8").toString()))
+                        ballots.push(JSON.parse(Buffer.from(message.contents, "utf8").toString()));
+                    })
+        } catch(err) {
+            handleLog("ERROR: pullHCSMessages()", err, this.logStatus);
+            return null;
+        }
+        console.log(ballots);
+        return ballots;
     }
 
     /*

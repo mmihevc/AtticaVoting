@@ -11,7 +11,7 @@ import CopyPlugin from "copy-webpack-plugin";
 const output = "../dist/website";
 
 export default {
-	entry: "./client/index.js",
+	entry: "./Client/index.js",
 	devServer: {
 		contentBase: path.resolve(__dirname, output),
 		port: 3000,
@@ -68,13 +68,13 @@ export default {
 	output: { filename: "bundle.js", path: path.join(__dirname, output), publicPath: "/" },
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: "./client/static/template/index.html",
-			favicon: "./client/static/template/favicon.ico",
+			template: "./Client/static/template/index.html",
+			favicon: "./Client/static/template/favicon.ico",
 			title: "Attica Voting"
 		}),
 		new CopyPlugin({
 			patterns: [
-				{ from: "./client/static/images", to: "./images" }
+				{ from: "./Client/static/images", to: "./images" }
 			]
 		}),
 		new webpack.HotModuleReplacementPlugin(),

@@ -11,7 +11,7 @@ import nodeExternals from "webpack-node-externals";
 const output = "../dist";
 
 export default {
-	entry: "./server/index.js",
+	entry: "./Server/index.js",
 	experiments: {
 		topLevelAwait: true
 	},
