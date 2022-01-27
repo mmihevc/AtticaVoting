@@ -1,66 +1,55 @@
-let ballots = [];
+import HederaClass from './hedera.js';
+import {client} from './db.js';
 
-let candidates = {
-    president: ['alpha', 'bravo', 'charlie', 'delta'],
-    speaker: ['whiskey', 'tango', 'foxtrot'],
-    tshirt: ['a', 'b', 'c']
-}
+import "dotenv/config"
 
-function main(){
-    let ballots = generateBallots(10000);
+function wait(ms){ return new Promise(res => setTimeout(res, ms))};
+
+async function main(){
+    await client.connect();
+
+    let hClient = new HederaClass(process.env.ACCOUNT_ID, process.env.PRIVATE_KEY, process.env.NODE_ENV === 'development' ? "default" : "debug");
+    let election = await client.db('Attica').collection('Election').findOne({'title': "CSU"});
+    let topicID = election.topicID;
+
+    let ballots = await hClient.pullHCSMessages(topicID);
+    await wait(1000);
+    console.log(`Ballots received!`);
+    //console.log(ballots);
 
     let races = sortBallots(ballots);
+    //console.log(races);
 
-    console.log(ballots[0]);
+    let results = tallyAll(races);
+    console.log(results);
 
-    let presidentTally = tallyRCV(races.president.ballots, 0.5);
-
-    // let speakerTally = tallyRCV(races.speaker.ballots, 0.5);
-
-    // let tshirtTally = tallySPV(races.tshirt.ballots);
-
-    console.log(presidentTally);
-    // console.log(speakerTally);
-    // console.log(tshirtTally);
+    process.exit(1);
 }
 
-function generateBallots(num){
-    let retArr = [];
-    for(let i = 0; i < num; i++){
-        let ballot = {}
-        ballot.president = randomRanking(candidates.president);
-        ballot.speaker = randomRanking(candidates.speaker);
-        ballot.tshirt = candidates.tshirt[Math.floor(Math.random() * 3)]
-        retArr.push(ballot);
+function tallyAll(races){
+    let results = {}
+    for(let key in races){
+        if(races[key].ballotType == "SPV")
+            results[key] = tallySPV(races[key].votes);
+        else
+            results[key] = tallyRCV(races[key].votes, 0.5)
     }
-    return retArr;
-}
-
-function randomRanking(cands){
-    let retArr = [];
-    let temp = [...cands];
-    for(let i = cands.length; i > 0; i--){
-        let index = Math.floor(Math.random() * i)
-        retArr.push(temp[index])
-        temp.splice(index, 1);
-    }
-    return retArr;
+    return results;
 }
 
 function sortBallots(ballots){
     let races = {};
-    for (let key in ballots[0]){
-        if(Array.isArray(ballots[0][key]))
-            races[key] = {type: 'RCV', ballots: []}
-        else
-            races[key] = {type: 'SPV', ballots: []}
-    }
     ballots.forEach((ballot) => {
-        for (let key in ballot){
-            races[key].ballots.push(ballot[key])
-        }
+        ballot.forEach((vote) => {
+            if(races[vote.raceName] == undefined)
+                races[vote.raceName] = {
+                    raceName: vote.raceName,
+                    ballotType: vote.ballotType,
+                    votes: []
+                }
+            races[vote.raceName].votes.push(vote.winners);
+        });
     });
-
     return races;
 }
 

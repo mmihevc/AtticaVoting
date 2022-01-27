@@ -10,7 +10,8 @@
     "mockStart": "concurrently --kill-others-on-fail \"npm:mockServer\" \"npm:startWebsite\"",
     "buildServer": "webpack --config Server/webpack.server.config.mjs",
     "buildWebsite": "webpack --config Client/webpack.website.config.mjs",
-    "build": "concurrently --kill-others-on-fail \"npm:buildServer\" \"npm:buildWebsite\""
+    "build": "concurrently --kill-others-on-fail \"npm:buildServer\" \"npm:buildWebsite\"",
+    "tally": "node ./Server/tally/tally.js"
   },
   "repository": {
     "type": "git",
