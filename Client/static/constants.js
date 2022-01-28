@@ -2,20 +2,10 @@ import {makeStyles, TableCell, TableRow, withStyles} from "@material-ui/core";
 import {green, red} from "@material-ui/core/colors";
 
 export const title = 'Attica Voting';
-export const electionTitle = 'Temporary Election Title';
-export const electionDescription = 'this is the temporary description. In this description the rules for the election are ' +
-    'defined along with any thing else that people should know before proceeding.';
+
 export const electionStart = new Date(2021, 3, 25);
 export const electionEnd = new Date(2021, 4, 27);
 
-export const presidentialDescription = 'The president is the person in charge, that has the ultimate say in the end' +
-    'there are is some more information about what a presidents role is';
-
-export const teeShirtDescription = 'Please select your favorite shirt that you would like as next years official shirt' +
-    'or some other information';
-
-export const cuteDogDescription  = 'We know that all dogs are adorable but we are asking you to make a hard decision' +
-    ' and vote for which dog you think is the cutest';
 
 const buttonDims = {width: 185, height: 65};
 export const scale = {x: 2, y: 3.5};
@@ -61,7 +51,7 @@ export const useStyles = makeStyles((theme) =>
         },
         fabText: { fontSize: 15, fontWeight: 600, color: 'white' },
         fabIcon: { fontSize: 25, marginRight: theme.spacing(1) },
-        menuText: { fontSize: 21, fontWeight: 600 },
+        menuText: { fontSize: 21, fontWeight: 600, color: 'white' },
         menuWidth: {width: buttonDims.width * scale.x, height: buttonDims.height * scale.y},
         cancelButton: {
             backgroundColor: red[500],
