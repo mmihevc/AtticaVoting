@@ -18,6 +18,7 @@ require("dotenv").config();
 const pubsub = new PubSub();
 
 const app = express();
+app.use(cors());
 const serverMocks = process.env.MOCK ? mocks : undefined;
 const serverTracing = process.env.MOCK ? true : undefined;
 
@@ -65,7 +66,6 @@ console.log(`Topic ID: ${election.topicID}`);
 server.start();
 server.applyMiddleware({ app }); //embeds express into graph server
 
-app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
