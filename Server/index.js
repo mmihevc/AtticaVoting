@@ -10,6 +10,8 @@ import HederaClass from './hedera.js';
 import mocks from "./mocking.js";
 import { typeDefs, resolvers } from "./schema.js";
 
+import cors from 'cors';
+
 import {client} from './db';
 require("dotenv").config();
 
@@ -63,6 +65,7 @@ console.log(`Topic ID: ${election.topicID}`);
 server.start();
 server.applyMiddleware({ app }); //embeds express into graph server
 
+app.use(cors());
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true }));
 
