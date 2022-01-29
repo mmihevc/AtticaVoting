@@ -57,7 +57,7 @@ function Voting(props) {
     for (const winner in winners) {
       const raceObj = {
         raceName: winner,
-        ballotType: ballotType,
+        ballotType: data.electionLookup.races.find((race) => race.title === winner).ballotType,
         winners: [winners[winner]]
       }
       winnerArray.push(raceObj)

@@ -23,8 +23,6 @@ function CandidateCard(props) {
     })
   }
 
-  
-
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}

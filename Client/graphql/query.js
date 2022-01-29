@@ -12,6 +12,7 @@ export const ElectionLookup = gql`
         description
         title
         raceType
+        ballotType
         candidates {
           _id
           type

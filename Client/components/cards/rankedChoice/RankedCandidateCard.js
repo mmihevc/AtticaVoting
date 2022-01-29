@@ -1,25 +1,15 @@
 import React, {useEffect, useState} from "react";
 import { useSlopeCardMediaStyles } from '@mui-treasury/styles/cardMedia/slope';
-import { Box, Grid, Typography, CardMedia, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { Box, Grid, Typography, CardMedia } from "@material-ui/core";
+import { Select, MenuItem, FormControl, FormHelperText  } from '@mui/material'
 import CheckIcon from "@material-ui/icons/Check";
 import { useStyles } from "../../../static/constants";
 
 function RankedCandidateCard(props) {
     const mediaStyles = useSlopeCardMediaStyles();
     const classes = useStyles();
-    const [filter, setFilter] = useState('');
-    const [selectRank, setSelectRank] = useState(false);
-    const [rank, setRank] = useState();
+    const [rank, setRank] = useState('');
     
-    
-
-    function handleSelectRank() {
-        console.log("in handleSelectRank")
-        setFilter('blur(10px)')
-        setSelectRank(true);
-        //console.log(selectRank)
-    }
-
     function handleSelectedCandidate() {
         props.setBallotType('RCV');
         props.setRaceItemSelection({
@@ -28,21 +18,19 @@ function RankedCandidateCard(props) {
         });
     }
 
-    console.log(selectRank)
-
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
-                onClick={() => setSelectRank(true)} className={props.checked ? undefined : classes.candidateCard}
+                 className={props.checked ? undefined : classes.candidateCard}
                 boxShadow={props.checked ? 3 : undefined}>
                 <div >
                     <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
-                        style={{height: 300, width:'100%', filter: filter}} onClick={() => handleSelectedCandidate()}/>
-                    {selectRank ? 
+                        style={{height: 300, width:'100%', filter: props.checked ? 'blur(10px)' : null}} onClick={() => handleSelectedCandidate()}/>
+                    {props.checked ? 
                         <Box width={100} height={100} style={{position: "absolute", top: 100, left: 90}}>
                             <Grid container style={{height: "100%"}}
                               justifyContent={"center"} alignItems={"center"}>
-                                <CandidateSelect {...props} rank={rank} setRank={setRank}/>
+                                <CandidateSelect {...props} size={props.size} rank={rank} setRank={setRank}/>
                             </Grid>
                         </Box> 
                     : null}
@@ -54,44 +42,54 @@ function RankedCandidateCard(props) {
 
                 </Grid> 
             </Box>
-            {
-                props.checked ?
-                    <Box width={50} height={50} bgcolor={"secondary.main"} border={2} borderRadius={"50%"} style={{position: "absolute", top: -20, right: -20}}>
+            <Box width={50} height={50} bgcolor={"secondary.main"} border={2} borderRadius={"50%"} style={{position: "absolute", top: -20, right: -20}}>
                         <Grid container style={{height: "100%"}}
                               justifyContent={"center"} alignItems={"center"}
                         >
                             {rank}
                         </Grid>
-                    </Box> : null
-            }
+            </Box>
         </Box>
     )
 }
 
 function CandidateSelect(props) {
     const classes = useStyles();
-    console.log("in select")
 
     const handleChange = (event) => {
         props.setRank(event.target.value);
     };
 
+    let menuItems = [];
+
+    for (let i = 0; i < props.size; i++) {
+        let value = i + 1;
+        if (value === 1) {
+           menuItems.push({value: value, label: value + 'st'})
+        }
+        else if (value === 2) {
+            menuItems.push({value: value, label: value + 'nd'})
+        }
+        else if (value === 3) {
+            menuItems.push({value: value, label: value + 'rd'})
+        }
+        else {
+            menuItems.push({value: value, label: value + 'th'})
+        }
+    }
+
     return (
         <>
             <FormControl variant="outlined" fullWidth>
-                <InputLabel>Rank</InputLabel>
                 <Select
-                    value={props.rank}
+                    value={props.rank ?? " "}
                     onChange={handleChange}
-                    label="Rank"
+                    displayEmpty
                     style={{"backgroundColor": "white"}}
-        
+                    inputProps={{ 'aria-label': 'Select Rank' }}
                 >
-                    <MenuItem value={1}>First</MenuItem>
-                    <MenuItem value={2}>Second</MenuItem>
-                    <MenuItem value={3}>Third</MenuItem>
-                    <MenuItem value={4}>Fourth</MenuItem>
-                    <MenuItem value={5}>Fifth</MenuItem>
+                    <MenuItem value={''}><em>Rank</em></MenuItem>
+                    {menuItems.map(({value, label}, index) => <MenuItem key={index} value={value}>{label}</MenuItem>)}
                 </Select>
         </FormControl>
       </>
