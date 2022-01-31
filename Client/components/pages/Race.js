@@ -43,21 +43,28 @@ function Race(props) {
       return (
         shuffledCandidates.map((candidate, index) => {
           const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
+          const customProps = {
+                raceID: props.race._id,
+                title: props.race.title,
+                checked: checkedCandidate,
+                candidate: candidate,
+                image: searchCandidateImage(candidate.name)
+          }
           return (
             <Grid item key={index}>
-              <RankedCandidateCard 
-                raceID={props.race._id}
-                size={props.race.candidates.length}
-                title={props.race.title}
-                checked={checkedCandidate}
-                candidate={candidate}
-                image={searchCandidateImage(candidate.name)}
-                setBallotType={props.setBallotType}
-                winners={props.winners}
-                setWinners={props.setWinners}
-                raceItemSelection={props.raceItemSelection}
-                setRaceItemSelection={props.setRaceItemSelection}
+              {
+                props.race.ballotType === 'RCV' ?
+                <RankedCandidateCard 
+                  size={props.race.candidates.length}
+                  {...customProps}
+                  {...props}
+                /> :
+                <CandidateCard 
+                  {...customProps}
+                  {...props}
               />
+              }
+              
             </Grid>
           )}
         )
@@ -74,13 +81,9 @@ function Race(props) {
                 raceID={props.race._id}
                 title={props.race.title}
                 item={item}
-                setBallotType={props.setBallotType}
-                winners={props.winners}
-                setWinners={props.setWinners}
                 setItemClicked={setItemClicked}
                 image={searchCandidateImage(item.name)}
-                raceItemSelection={props.raceItemSelection}
-                setRaceItemSelection={props.setRaceItemSelection}
+                {...props}
               />
             </Grid>
           )

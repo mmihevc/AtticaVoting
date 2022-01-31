@@ -32,7 +32,6 @@ function Voting(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
   const [winners, setWinners] = useState({});
-  const [ballotType, setBallotType] = useState('');
   const winnerArray = []
 
   const { loading, error, data } = useQuery(ElectionLookup, {
@@ -84,7 +83,6 @@ function Voting(props) {
                 flipped={!isEven}
                 race={race}
                 key={index}
-                setBallotType={setBallotType}
                 winners={winners}
                 setWinners={setWinners}
                 raceItemSelection={raceItemSelection}

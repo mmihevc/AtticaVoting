@@ -11,7 +11,6 @@ function RankedCandidateCard(props) {
     const [rank, setRank] = useState('');
     
     function handleSelectedCandidate() {
-        props.setBallotType('RCV');
         props.setRaceItemSelection({
           ...props.raceItemSelection,
           [props.raceID]: props.candidate._id,

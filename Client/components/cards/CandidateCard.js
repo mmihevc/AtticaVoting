@@ -11,7 +11,6 @@ function CandidateCard(props) {
     
 
   function handleSelectedCandidate() {
-    props.setBallotType('SPV');
     props.setRaceItemSelection({
       ...props.raceItemSelection,
       [props.raceID]: props.candidate._id,
