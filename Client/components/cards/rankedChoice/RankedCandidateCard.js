@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
 import { useSlopeCardMediaStyles } from '@mui-treasury/styles/cardMedia/slope';
 import { Box, Grid, Typography, CardMedia } from "@material-ui/core";
-import { Select, MenuItem, FormControl, FormHelperText  } from '@mui/material'
-import CheckIcon from "@material-ui/icons/Check";
+import { Select, MenuItem, FormControl } from '@mui/material'
 import { useStyles } from "../../../static/constants";
 
 function RankedCandidateCard(props) {
@@ -11,17 +10,26 @@ function RankedCandidateCard(props) {
     const [rank, setRank] = useState('');
     
     function handleSelectedCandidate() {
-        props.setRaceItemSelection({
-          ...props.raceItemSelection,
-          [props.raceID]: props.candidate._id,
-        });
+
+        if (props.raceItemSelectionRanked[props.raceID] === undefined || !props.raceItemSelectionRanked[props.raceID].includes(props.candidate._id)) {
+            props.setRaceItemSelectionRanked({
+                [props.raceID]: ([...props.raceItemSelectionRanked[props.raceID], props.candidate._id])
+            });
+        }
+
+        props.setWinners({
+            ...props.winner,
+            [props.title]: {rank: rank, name: props.candidate.name}
+        })
     }
+
+    console.log(props.checked)
 
     return (
         <Box style={{position: "relative"}}>
             <Box width={275} height={350} border={props.checked ? 2 : undefined}
                  className={props.checked ? undefined : classes.candidateCard}
-                boxShadow={props.checked ? 3 : undefined}>
+                 boxShadow={props.checked ? 3 : undefined}>
                 <div >
                     <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
                         style={{height: 300, width:'100%', filter: props.checked ? 'blur(10px)' : null}} onClick={() => handleSelectedCandidate()}/>
@@ -41,13 +49,17 @@ function RankedCandidateCard(props) {
 
                 </Grid> 
             </Box>
-            <Box width={50} height={50} bgcolor={"secondary.main"} border={2} borderRadius={"50%"} style={{position: "absolute", top: -20, right: -20}}>
-                        <Grid container style={{height: "100%"}}
-                              justifyContent={"center"} alignItems={"center"}
-                        >
-                            {rank}
-                        </Grid>
-            </Box>
+            {props.checked ? 
+                <Box width={50} height={50} bgcolor={"secondary.main"} border={2} borderRadius={"50%"} style={{position: "absolute", top: -20, right: -20}}>
+                <Grid container style={{height: "100%"}}
+                    justifyContent={"center"} alignItems={"center"}
+                >
+                    {rank}
+                </Grid>
+                </Box> 
+                : null
+            }
+            
         </Box>
     )
 }

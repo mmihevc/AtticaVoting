@@ -32,21 +32,33 @@ function Race(props) {
       setShuffledItems(shuffle(Object.values(props.race.items)))
   }, [])
 
-  const description = props.raceItemSelection[props.race._id] && !itemClicked
+ /* const description = props.raceItemSelection[props.race._id] && !itemClicked
     ? props.race.candidates.find(
         (candidate) => candidate._id === props.raceItemSelection[props.race._id]
       ).description
-    : props.race.description;
+    : props.race.description;*/
+
+  const description = 'here is a description'
 
   function DetermineDisplay() {
     if (props.race.candidates) {
       return (
         shuffledCandidates.map((candidate, index) => {
           const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
+          let checkedRankedCandidate = false;
+
+          if (props.raceItemSelectionRanked[props.race._id]) {
+            checkedRankedCandidate = props.raceItemSelectionRanked[props.race._id].filter(id => {
+              return id !== undefined
+            }).includes(candidate._id)
+          }
+
+          console.log(props.raceItemSelectionRanked[props.race._id])
+
           const customProps = {
                 raceID: props.race._id,
                 title: props.race.title,
-                checked: checkedCandidate,
+                checked: props.race.ballotType === 'RCV' ? checkedRankedCandidate : checkedCandidate,
                 candidate: candidate,
                 image: searchCandidateImage(candidate.name)
           }

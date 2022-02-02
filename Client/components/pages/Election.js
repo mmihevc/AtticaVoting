@@ -31,6 +31,7 @@ function Election(props) {
 function Voting(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
+  const [raceItemSelectionRanked, setRaceItemSelectionRanked] = useState({});
   const [winners, setWinners] = useState({});
   const winnerArray = []
 
@@ -61,7 +62,7 @@ function Voting(props) {
       }
       winnerArray.push(raceObj)
     }
-    console.log(winnerArray)
+    //console.log(winnerArray)
     props.setVotingStep(1)
     submitVote({variables: {electionID: electionID, winners: winnerArray}})
   }
@@ -87,6 +88,8 @@ function Voting(props) {
                 setWinners={setWinners}
                 raceItemSelection={raceItemSelection}
                 setRaceItemSelection={setRaceItemSelection}
+                raceItemSelectionRanked={raceItemSelectionRanked}
+                setRaceItemSelectionRanked={setRaceItemSelectionRanked}
               />
             );
           })}
