@@ -39,13 +39,13 @@ function Race(props) {
     : props.race.description;*/
 
   const description = 'here is a description'
+  let checkedRankedCandidate = false;
 
   function DetermineDisplay() {
     if (props.race.candidates) {
       return (
         shuffledCandidates.map((candidate, index) => {
           const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
-          let checkedRankedCandidate = false;
 
           if (props.raceItemSelectionRanked[props.race._id]) {
             checkedRankedCandidate = props.raceItemSelectionRanked[props.race._id].filter(id => {
