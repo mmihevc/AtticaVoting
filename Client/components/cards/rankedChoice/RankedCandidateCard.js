@@ -11,19 +11,21 @@ function RankedCandidateCard(props) {
     
     function handleSelectedCandidate() {
 
+
         if (props.raceItemSelectionRanked[props.raceID] === undefined || !props.raceItemSelectionRanked[props.raceID].includes(props.candidate._id)) {
             props.setRaceItemSelectionRanked({
                 [props.raceID]: ([...props.raceItemSelectionRanked[props.raceID], props.candidate._id])
             });
         }
+        console.log(props.checked)
+
+        //props.setCheckedRCV([...props.checkedRCV, {cID: props.candidate._id, checked: true}])
 
         props.setWinners({
             ...props.winner,
             [props.title]: {rank: rank, name: props.candidate.name}
         })
     }
-
-    console.log(props.checked)
 
     return (
         <Box style={{position: "relative"}}>

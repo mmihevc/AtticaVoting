@@ -11,6 +11,7 @@ function Race(props) {
   const [shuffledCandidates, setShuffledCandidates] = useState([]);
   const [shuffledItems, setShuffledItems] = useState([]);
   const [itemClicked, setItemClicked] = useState(false);
+  const [checkedRCV, setCheckedRCV] = useState([])
 
   function searchCandidateImage(name) {
     let candidateName = name.split(" ");
@@ -40,6 +41,7 @@ function Race(props) {
 
   const description = 'here is a description'
   let checkedRankedCandidate = false;
+  
 
   function DetermineDisplay() {
     if (props.race.candidates) {
@@ -52,8 +54,6 @@ function Race(props) {
               return id !== undefined
             }).includes(candidate._id)
           }
-
-          console.log(props.raceItemSelectionRanked[props.race._id])
 
           const customProps = {
                 raceID: props.race._id,
@@ -68,6 +68,8 @@ function Race(props) {
                 props.race.ballotType === 'RCV' ?
                 <RankedCandidateCard 
                   size={props.race.candidates.length}
+                  setCheckedRCV={setCheckedRCV}
+                  checkedRCV={checkedRCV}
                   {...customProps}
                   {...props}
                 /> :
