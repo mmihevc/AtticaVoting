@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 import { createTheme, responsiveFontSizes, ThemeProvider } from "@material-ui/core/styles";
-import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache, HttpLink } from "@apollo/client";
 import { from, split, HttpLink } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
@@ -59,6 +59,10 @@ const FullApp = (props) => {
   );
 
   const additiveLink = from([errorLink, splitLink]);
+
+  const graphLink = new HttpLink({
+    uri: "http://localhost:8000/graphql"
+  })
 
   const client = new ApolloClient({
     link: additiveLink,
