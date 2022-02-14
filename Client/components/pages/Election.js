@@ -67,6 +67,7 @@ function Voting(props) {
     submitVote({variables: {electionID: electionID, winners: winnerArray}})
   }
 
+
   return (
     <>
       <Navigation {...props} />

@@ -20,6 +20,7 @@ export const ElectionLookup = gql`
           description 
           image
           race
+          rank
         }
         items {
           _id

@@ -11,7 +11,8 @@ function Race(props) {
   const [shuffledCandidates, setShuffledCandidates] = useState([]);
   const [shuffledItems, setShuffledItems] = useState([]);
   const [itemClicked, setItemClicked] = useState(false);
-  const [checkedRCV, setCheckedRCV] = useState([])
+  const [rID, setRID] = useState([])
+  const [checked, setChecked] = useState(false);
 
   function searchCandidateImage(name) {
     let candidateName = name.split(" ");
@@ -26,11 +27,21 @@ function Race(props) {
     return a;
   }
 
+
   useEffect(() => {
     if (props.race.candidates) 
       setShuffledCandidates(shuffle(Object.values(props.race.candidates)))
     if (props.race.items)
       setShuffledItems(shuffle(Object.values(props.race.items)))
+
+    
+    if (props.race.candidates) {
+      for (let i = 0; i < props.race.candidates.length; i++) {
+        if (!rID.includes(props.race.candidates[i]._id)) {
+          setRID(rID => [...rID, {cID: props.race.candidates[i]._id, checked: false}])
+        }
+      }
+    }
   }, [])
 
  /* const description = props.raceItemSelection[props.race._id] && !itemClicked
@@ -49,31 +60,36 @@ function Race(props) {
         shuffledCandidates.map((candidate, index) => {
           const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
 
+
           if (props.raceItemSelectionRanked[props.race._id]) {
             checkedRankedCandidate = props.raceItemSelectionRanked[props.race._id].filter(id => {
               return id !== undefined
             }).includes(candidate._id)
           }
 
+
           const customProps = {
                 raceID: props.race._id,
                 title: props.race.title,
-                checked: props.race.ballotType === 'RCV' ? checkedRankedCandidate : checkedCandidate,
+                //checked: props.race.ballotType === 'RCV' ? checkedRankedCandidate : checkedCandidate,
                 candidate: candidate,
                 image: searchCandidateImage(candidate.name)
           }
+
           return (
             <Grid item key={index}>
               {
                 props.race.ballotType === 'RCV' ?
                 <RankedCandidateCard 
                   size={props.race.candidates.length}
-                  setCheckedRCV={setCheckedRCV}
-                  checkedRCV={checkedRCV}
+                  rID={rID}
+                  checked={checkedRankedCandidate}
+                  setChecked={setChecked}
                   {...customProps}
                   {...props}
                 /> :
                 <CandidateCard 
+                  checked={checkedCandidate}
                   {...customProps}
                   {...props}
               />

@@ -25,7 +25,7 @@ type Candidate {
     _id: ID
     type: String
     name: String
-    rank: Int
+    rank: String
     description: String
     image: Url
     race: String
