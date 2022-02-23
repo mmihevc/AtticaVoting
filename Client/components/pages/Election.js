@@ -73,7 +73,7 @@ function Voting(props) {
       <Navigation {...props} />
       <Box width={"100vw"} height={"100vh"} style={{ scrollBehavior: "smooth" }}>
         <Box width={"100%"} height={"100%"}>
-          <Box minHeight={500} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
+          <Box minHeight={400} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
             <HeaderBar title={data.electionLookup.title} description={data.electionLookup.description}/>
           </Box>
           {data.electionLookup.races.map((race, index) => {
