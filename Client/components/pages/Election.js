@@ -36,7 +36,7 @@ function Voting(props) {
   const winnerArray = []
 
   const { loading, error, data } = useQuery(ElectionLookup, {
-    variables: { param: topicId },
+    variables: { title: topicId },
   });
 
   const [submitVote] = useMutation(SubmitVote, {
@@ -74,7 +74,7 @@ function Voting(props) {
       <Box width={"100vw"} height={"100vh"} style={{ scrollBehavior: "smooth" }}>
         <Box width={"100%"} height={"100%"}>
           <Box minHeight={400} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
-            <HeaderBar title={data.electionLookup.title} description={data.electionLookup.description}/>
+            <HeaderBar title={data.electionLookup.electionTitle} description={data.electionLookup.description}/>
           </Box>
           {data.electionLookup.races.map((race, index) => {
             const isEven = index % 2 === 0;

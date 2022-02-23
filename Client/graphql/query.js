@@ -1,10 +1,10 @@
 import { gql } from "@apollo/client";
 
 export const ElectionLookup = gql`
- query ElectionLookup($param: String!) {
-    electionLookup(param: $param) {
+ query ElectionLookup($title: String!) {
+    electionLookup(title: $title) {
       title
-      param
+      electionTitle
       description
       _id
       races {
