@@ -44,16 +44,14 @@ function Race(props) {
     }
   }, [])
 
- /* const description = props.raceItemSelection[props.race._id] && !itemClicked
+  const description = props.raceItemSelection[props.race._id] && !itemClicked
     ? props.race.candidates.find(
         (candidate) => candidate._id === props.raceItemSelection[props.race._id]
       ).description
-    : props.race.description;*/
+    : props.race.description;
 
-  const description = 'here is a description'
   let checkedRankedCandidate = false;
   
-
   function DetermineDisplay() {
     if (props.race.candidates) {
       return (
@@ -67,10 +65,10 @@ function Race(props) {
             }).includes(candidate._id)
           }
 
-
           const customProps = {
                 raceID: props.race._id,
                 title: props.race.title,
+                category: props.race.name,
                 //checked: props.race.ballotType === 'RCV' ? checkedRankedCandidate : checkedCandidate,
                 candidate: candidate,
                 image: searchCandidateImage(candidate.name)

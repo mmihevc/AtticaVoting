@@ -36,7 +36,7 @@ function Voting(props) {
   const winnerArray = []
 
   const { loading, error, data } = useQuery(ElectionLookup, {
-    variables: { title: topicId },
+    variables: { param: topicId },
   });
 
   const [submitVote] = useMutation(SubmitVote, {

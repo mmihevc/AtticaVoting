@@ -1,6 +1,7 @@
 type Election {
     _id: ID!
     title: String
+    param: String
     description: String
     races: [Race]
     startDate: DateTime
@@ -85,7 +86,7 @@ scalar Url
 
 #read
 type Query {
-    electionLookup(title: String!): Election
+    electionLookup(param: String!): Election
     raceLookup(_id: ID): Race #might be unnecessary 
     userLookup: User # 
 }

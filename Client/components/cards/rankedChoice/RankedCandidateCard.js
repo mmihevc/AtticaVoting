@@ -20,6 +20,8 @@ function RankedCandidateCard(props) {
     }
   }
 
+  console.log(props.winners)
+
   return (
     <Box style={{ position: "relative" }}>
       <Box
@@ -87,18 +89,37 @@ function RankedCandidateCard(props) {
 }
 
 function displayRank(props) {
-  if (props.winners[props.title] !== undefined) return props.winners[props.title].rank;
+  if (Object.keys(props.winners).length !== 0) {
+    for (const [key, value] of Object.entries(props.winners)) {
+      for (const [k, v] of Object.entries(value)) {
+        if (v === props.candidate._id) {
+          for (const [ke, val] of Object.entries(value)) {
+            if (ke === 'rank') {
+              console.log(val)
+              return val
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 function CandidateSelect(props) {
   //debugger;
 
   const handleChange = (event) => {
-    props.setWinners(
-        [...props.winners, {[props.title]: {cID: props.candidate._id, rank: event.target.value, name: props.candidate.name }}]
-    );
 
-    
+    if (Object.keys(props.winners).length === 0) {
+      props.setWinners({[props.title]: { cID: props.candidate._id, rank: event.target.value, name: props.candidate.name }})
+    } 
+    else {
+      props.setWinners(
+        [...props.winners, {[props.title]: { cID: props.candidate._id, rank: event.target.value, name: props.candidate.name }}]
+      ); 
+    }
+   
+   
   };
 
   let menuItems = [];
