@@ -45,25 +45,12 @@ Our project provides consensus validation for every vote casts and administratio
 
 - (optional) Fill out `config.js` with your Hedera operator ID and private key for quick startup
 
-
-
 ### Starting an Election 
 
 - Run the script `npm run bundle`
 
 - Start the script with `npm run start`
 
-- Follow the menu prompts and select "Start new election" when prompted
-
-- Write down and store the ID of the topic created after the previous step in the console
-
-### Maintaining an Election
-
-- In the event that the server needs to be restarted or crashes, run `npm run start` again.
-
-- Follow the menu prompts and select "Continue an on-going election"
-
-- Input the topic ID for the election
 
 ### Finishing an Election
 
