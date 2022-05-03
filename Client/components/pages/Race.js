@@ -11,6 +11,8 @@ function Race(props) {
   const [shuffledCandidates, setShuffledCandidates] = useState([]);
   const [shuffledItems, setShuffledItems] = useState([]);
   const [itemClicked, setItemClicked] = useState(false);
+  const [rID, setRID] = useState([])
+  const [checked, setChecked] = useState(false);
 
   function searchCandidateImage(name) {
     let candidateName = name.split(" ");
@@ -25,11 +27,21 @@ function Race(props) {
     return a;
   }
 
+
   useEffect(() => {
     if (props.race.candidates) 
       setShuffledCandidates(shuffle(Object.values(props.race.candidates)))
     if (props.race.items)
       setShuffledItems(shuffle(Object.values(props.race.items)))
+
+    
+    if (props.race.candidates) {
+      for (let i = 0; i < props.race.candidates.length; i++) {
+        if (!rID.includes(props.race.candidates[i]._id)) {
+          setRID(rID => [...rID, {cID: props.race.candidates[i]._id, checked: false}])
+        }
+      }
+    }
   }, [])
 
   const description = props.raceItemSelection[props.race._id] && !itemClicked
@@ -38,25 +50,49 @@ function Race(props) {
       ).description
     : props.race.description;
 
+  let checkedRankedCandidate = false;
+  
   function DetermineDisplay() {
     if (props.race.candidates) {
       return (
         shuffledCandidates.map((candidate, index) => {
           const checkedCandidate = props.raceItemSelection[props.race._id] === candidate._id;
+
+
+          if (props.raceItemSelectionRanked[props.race._id]) {
+            checkedRankedCandidate = props.raceItemSelectionRanked[props.race._id].filter(id => {
+              return id !== undefined
+            }).includes(candidate._id)
+          }
+
+          const customProps = {
+                raceID: props.race._id,
+                title: props.race.title,
+                category: props.race.name,
+                //checked: props.race.ballotType === 'RCV' ? checkedRankedCandidate : checkedCandidate,
+                candidate: candidate,
+                image: searchCandidateImage(candidate.name)
+          }
+
           return (
             <Grid item key={index}>
-              <CandidateCard
-                raceID={props.race._id}
-                title={props.race.title}
-                checked={checkedCandidate}
-                candidate={candidate}
-                image={searchCandidateImage(candidate.name)}
-                setBallotType={props.setBallotType}
-                winners={props.winners}
-                setWinners={props.setWinners}
-                raceItemSelection={props.raceItemSelection}
-                setRaceItemSelection={props.setRaceItemSelection}
+              {
+                props.race.ballotType === 'RCV' ?
+                <RankedCandidateCard 
+                  size={props.race.candidates.length}
+                  rID={rID}
+                  checked={checkedRankedCandidate}
+                  setChecked={setChecked}
+                  {...customProps}
+                  {...props}
+                /> :
+                <CandidateCard 
+                  checked={checkedCandidate}
+                  {...customProps}
+                  {...props}
               />
+              }
+              
             </Grid>
           )}
         )
@@ -73,13 +109,9 @@ function Race(props) {
                 raceID={props.race._id}
                 title={props.race.title}
                 item={item}
-                setBallotType={props.setBallotType}
-                winners={props.winners}
-                setWinners={props.setWinners}
                 setItemClicked={setItemClicked}
                 image={searchCandidateImage(item.name)}
-                raceItemSelection={props.raceItemSelection}
-                setRaceItemSelection={props.setRaceItemSelection}
+                {...props}
               />
             </Grid>
           )

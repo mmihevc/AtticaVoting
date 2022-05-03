@@ -1,6 +1,7 @@
 type Election {
     _id: ID!
     title: String
+    electionTitle: String
     description: String
     races: [Race]
     startDate: DateTime
@@ -15,6 +16,7 @@ type Race {
     name: String
     title: String
     description: String
+    ballotType: String
     candidates: [Candidate]
     amendments: [Amendment]
     items: [Item]
@@ -24,7 +26,7 @@ type Candidate {
     _id: ID
     type: String
     name: String
-    rank: Int
+    rank: String
     description: String
     image: Url
     race: String

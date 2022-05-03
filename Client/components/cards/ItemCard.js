@@ -10,7 +10,6 @@ function ItemCard(props) {
     
 
     function handleSelectedItem() {
-        props.setBallotType('SPV');
         props.setItemClicked(true);
         props.setRaceItemSelection({
           ...props.raceItemSelection,

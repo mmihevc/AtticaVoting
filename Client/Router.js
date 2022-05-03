@@ -5,7 +5,6 @@ import DLInfo from "./components/pages/DLInfo";
 import Results from "./components/pages/Results";
 import Election from "./components/pages/Election";
 import Home from "./components/pages/Home";
-import Confirmation from "./components/pages/Confirmation";
 
 const Router = (props) => {
   return (

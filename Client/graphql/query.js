@@ -4,6 +4,7 @@ export const ElectionLookup = gql`
  query ElectionLookup($title: String!) {
     electionLookup(title: $title) {
       title
+      electionTitle
       description
       _id
       races {
@@ -12,6 +13,7 @@ export const ElectionLookup = gql`
         description
         title
         raceType
+        ballotType
         candidates {
           _id
           type
@@ -19,6 +21,7 @@ export const ElectionLookup = gql`
           description 
           image
           race
+          rank
         }
         items {
           _id

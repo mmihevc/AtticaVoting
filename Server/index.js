@@ -70,10 +70,10 @@ app.use(express.urlencoded({ extended: true }));
 
 //moved /submit
 
-app.get('/api/candidates', async (req,res) => {
+/*app.get('/api/candidates', async (req,res) => {
     const candidateList = JSON.parse(await fs.readFile('./server/candidates.json'));
     res.send(candidateList);
-});
+});*/
 
 console.log(__dirname + "/website/index.html")
 if (process.env.NODE_ENV === "development") {

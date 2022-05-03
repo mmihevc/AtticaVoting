@@ -11,7 +11,6 @@ function CandidateCard(props) {
     
 
   function handleSelectedCandidate() {
-    props.setBallotType('SPV');
     props.setRaceItemSelection({
       ...props.raceItemSelection,
       [props.raceID]: props.candidate._id,
@@ -23,7 +22,7 @@ function CandidateCard(props) {
     })
   }
 
-  
+  console.log()
 
     return (
         <Box style={{position: "relative"}}>
@@ -33,10 +32,14 @@ function CandidateCard(props) {
                     <CardMedia image={props.image} title={props.candidate.name} classes={mediaStyles}
                         style={{height: 300, width:'100%'}} onClick={() => handleSelectedCandidate()}/>
                 <Grid container direction='column' justifyContent={'center'} alignItems='center'>
-                    <Grid item>
-                        <Typography gutterBottom variant="h6" component="h2" className='candidateName'>{props.candidate.name}</Typography>
-                    </Grid>
-
+                    {props.category === 'president' ? 
+                        <Grid item>
+                            <Typography gutterBottom component="h2" className='candidateName'>{props.candidate.name}</Typography>
+                        </Grid> :
+                        <Grid item>
+                            <Typography gutterBottom variant="h6" component="h2" className='candidateName'>{props.candidate.name}</Typography>
+                        </Grid>
+                    }
                 </Grid> 
             </Box>
             {

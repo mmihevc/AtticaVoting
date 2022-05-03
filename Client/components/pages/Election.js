@@ -31,8 +31,8 @@ function Election(props) {
 function Voting(props) {
   const { topicId } = useParams();
   const [raceItemSelection, setRaceItemSelection] = useState({});
+  const [raceItemSelectionRanked, setRaceItemSelectionRanked] = useState({});
   const [winners, setWinners] = useState({});
-  const [ballotType, setBallotType] = useState('');
   const winnerArray = []
 
   const { loading, error, data } = useQuery(ElectionLookup, {
@@ -57,23 +57,24 @@ function Voting(props) {
     for (const winner in winners) {
       const raceObj = {
         raceName: winner,
-        ballotType: ballotType,
+        ballotType: data.electionLookup.races.find((race) => race.title === winner).ballotType,
         winners: [winners[winner]]
       }
       winnerArray.push(raceObj)
     }
-    console.log(winnerArray)
+    //console.log(winnerArray)
     props.setVotingStep(1)
     submitVote({variables: {electionID: electionID, winners: winnerArray}})
   }
+
 
   return (
     <>
       <Navigation {...props} />
       <Box width={"100vw"} height={"100vh"} style={{ scrollBehavior: "smooth" }}>
         <Box width={"100%"} height={"100%"}>
-          <Box minHeight={500} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
-            <HeaderBar title={data.electionLookup.title} description={data.electionLookup.description}/>
+          <Box minHeight={400} display={"flex"} flexDirection={"column"} bgcolor={"primary.main"}>
+            <HeaderBar title={data.electionLookup.electionTitle} description={data.electionLookup.description}/>
           </Box>
           {data.electionLookup.races.map((race, index) => {
             const isEven = index % 2 === 0;
@@ -84,11 +85,12 @@ function Voting(props) {
                 flipped={!isEven}
                 race={race}
                 key={index}
-                setBallotType={setBallotType}
                 winners={winners}
                 setWinners={setWinners}
                 raceItemSelection={raceItemSelection}
                 setRaceItemSelection={setRaceItemSelection}
+                raceItemSelectionRanked={raceItemSelectionRanked}
+                setRaceItemSelectionRanked={setRaceItemSelectionRanked}
               />
             );
           })}
